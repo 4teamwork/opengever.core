@@ -37,6 +37,8 @@ class OGDSItemSerializer(object):
 
 class OGDSSyncer(object):
 
+    filter = None
+
     def __init__(self, engine, metadata):
         self.engine = engine
         self.metadata = metadata
@@ -49,7 +51,10 @@ class OGDSSyncer(object):
 
     def get_ogds_items(self):
         distinct_attr = getattr(self.model, self.key)
-        return self.model.query.distinct(distinct_attr).all()
+        query = self.model.query
+        if self.filter is not None:
+            query = query.filter(self.filter)
+        return query.distinct(distinct_attr).all()
 
     def truncate(self):
         with self.engine.begin() as conn:
@@ -216,8 +221,7 @@ class MeetingSerializer(OGDSItemSerializer):
         state_mapping = {
             'pending': 'IN_PREPARATION',
             'held': 'IN_PROGRESS',
-            'closed': 'COMPLETED',
-            'cancelled': 'CLOSED',
+            'closed': 'CLOSED',
         }
         return state_mapping.get(self.item.workflow_state)
 
@@ -235,6 +239,7 @@ class MeetingSerializer(OGDSItemSerializer):
 class MeetingSyncer(OGDSSyncer):
 
     table = 'meetings'
+    filter = Meeting.workflow_state != 'cancelled'
     model = Meeting
     key = 'meeting_id'
     serializer = MeetingSerializer
