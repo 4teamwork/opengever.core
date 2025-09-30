@@ -229,8 +229,7 @@ class MeetingSerializer(OGDSItemSerializer):
         return []
 
     def objsecchange(self):
-        members = self.item.committee.get_active_members()
-        return [member.email for member in members]
+        return []
 
     def objsecread(self):
         return []
