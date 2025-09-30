@@ -14,6 +14,7 @@ from sqlalchemy import func
 from sqlalchemy import Index
 from sqlalchemy import String
 from sqlalchemy import Table
+from sqlalchemy import Text
 from sqlalchemy.orm import backref
 from sqlalchemy.orm import relation
 from sqlalchemy.orm import relationship
@@ -28,7 +29,24 @@ groups_users = Table(
            ForeignKey('groups.groupid'), primary_key=True),
     Column('userid', String(USER_ID_LENGTH),
            ForeignKey('users.userid'), primary_key=True),
+    Column("note", Text, nullable=True),
 )
+
+
+class GroupMembership(Base):
+
+    __table__ = groups_users
+
+    group = relationship(
+        "Group",
+        back_populates="memberships",
+        primaryjoin="foreign(GroupMembership.groupid)==Group.groupid",
+    )
+    user = relationship(
+        "User",
+        back_populates="memberships",
+        primaryjoin="foreign(GroupMembership.userid)==User.userid",
+    )
 
 
 def create_additional_groups_users_indexes(table, connection, *args, **kw):
@@ -72,6 +90,15 @@ class Group(Base):
 
     users = relation(User, secondary=groups_users, order_by='User.lastname',
                      backref=backref('groups', order_by='Group.groupid'))
+
+    memberships = relationship(
+        "GroupMembership",
+        back_populates="group",
+        cascade="all, delete-orphan",
+        lazy="selectin",
+        primaryjoin="Group.groupid == foreign(GroupMembership.groupid)",
+        order_by="GroupMembership.userid",
+    )
     teams = relationship(Team, back_populates="group")
 
     column_names_to_sync = {'groupid', 'groupname', 'external_id', 'active', 'title'}
