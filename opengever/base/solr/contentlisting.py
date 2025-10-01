@@ -5,6 +5,7 @@ from opengever.base.brain import supports_translated_title
 from opengever.base.contentlisting import OpengeverCatalogContentListingObject
 from opengever.base.interfaces import IOGSolrDocument
 from opengever.base.utils import get_preferred_language_code
+from opengever.base.utils import to_safe_html
 from Products.CMFPlone.utils import safe_unicode
 from zope.globalrequest import getRequest
 from zope.interface import implementer
@@ -71,6 +72,10 @@ class OGSolrDocument(SolrDocument):
 class OGSolrContentListing(SolrContentListing):
 
     doc_type = OGSolrDocument
+
+    def _add_snippets(self, doc):
+        super(OGSolrContentListing, self)._add_snippets(doc)
+        doc['_snippets_'] = to_safe_html(doc.get('_snippets_', ''))
 
 
 class OGSolrContentListingObject(
