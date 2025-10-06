@@ -268,21 +268,21 @@ class TestSolrSearchGet(SolrIntegrationTestCase):
               u'external_reference': IDossier(self.dossier).external_reference}],
             browser.json[u'items'])
 
-    @skip("Seems this does not behave very consistently in the moment."
-          "Returns empty list in some cases, list of empty strings in others")
     @browsing
-    def test_returns_snippets(self, browser):
-        """Snippets do not really seem to work??
-        """
+    def test_snippets_are_escaped_for_xss(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        url = u'{}/@solrsearch?q=Foo&fl=UID,Title,snippets'.format(
+        self.document.title = 'Dangerous - <image/src/onerror="prompt(1)">'
+        self.document.reindexObject(idxs=['Title'])
+        self.commit_solr()
+
+        url = u'{}/@solrsearch?hl=on&q=Dangerous&fl=UID,Title,snippets'.format(
             self.portal.absolute_url())
         browser.open(url, method='GET', headers=self.api_headers)
 
         self.assertEqual(
-            ['' for i in range(3)],
-            [item["snippets"] for item in browser.json[u'items']])
+            u'<em>Dangerous</em> - srconerror="prompt(1)"&gt;',
+            browser.json[u'items'][0]["snippets"])
 
     @browsing
     def test_returns_facets_with_labels(self, browser):
