@@ -1,5 +1,7 @@
 from datetime import datetime
 from ftw.testbrowser import browsing
+from opengever.base.model import create_session
+from opengever.ogds.models.group import GroupMembership
 from opengever.testing import IntegrationTestCase
 from openpyxl import load_workbook
 from tempfile import NamedTemporaryFile
@@ -308,6 +310,22 @@ class TestOGDSGroupsMembershipReporter(IntegrationTestCase):
         # Login as an administrator to access the report
         self.login(self.administrator, browser=browser)
 
+        payload = {
+            "userid": u'nicole.kohler',
+            "groupid": u'fa_users',
+            "note": 'Example Note',
+        }
+
+        response = browser.open(
+            self.portal,
+            view="@membership-notes",
+            data=json.dumps(payload),
+            method="POST",
+            headers=self.api_headers,
+        )
+
+        self.assertEqual(200, response.status_code)
+
         browser.open(view='group-memberships-report')
 
         # Ensure the response status is 200 (OK)
@@ -321,42 +339,43 @@ class TestOGDSGroupsMembershipReporter(IntegrationTestCase):
 
         # Check the headers/columns in the Excel sheet
         self.assertSequenceEqual(
-            [u'Username', u'Name', u'Group title', u'Group name'],
+            [u'Username', u'Name', u'Group title', u'Group name', u'Note'],
             [cell.value for cell in list(workbook.active.rows)[0]]
         )
 
         # Get the rows (skip the first row which contains headers)
         rows = list(workbook.active.rows)[1:]
         expected_values = [
-            [u'kathi.barfuss', u'B\xe4rfuss K\xe4thi', u'fa Users Group', u'fa_users'],
-            [u'jurgen.fischer', u'Fischer J\xfcrgen', u'fa Users Group', u'fa_users'],
-            [u'ramon.flucht', u'Flucht Ramon', u'fa Users Group', u'fa_users'],
-            [u'gunther.frohlich', u'Fr\xf6hlich G\xfcnther', u'fa Users Group', u'fa_users'],
-            [u'faivel.fruhling', u'Fr\xfchling F\xe4ivel', u'fa Users Group', u'fa_users'],
-            [u'fridolin.hugentobler', u'Hugentobler Fridolin', u'fa Users Group', u'fa_users'],
-            [u'maja.harzig', u'H\xe4rzig Maja', u'fa Users Group', u'fa_users'],
-            [u'herbert.jager', u'J\xe4ger Herbert', u'fa Users Group', u'fa_users'],
-            [u'nicole.kohler', u'Kohler Nicole', u'fa Users Group', u'fa_users'],
-            [u'jurgen.konig', u'K\xf6nig J\xfcrgen', u'fa Users Group', u'fa_users'],
-            [u'propertysheets.manager', u'Manager PropertySheets', u'fa Users Group', u'fa_users'],
-            [u'webaction.manager', u'Manager WebAction', u'fa Users Group', u'fa_users'],
-            [u'david.meier', u'Meier David', u'fa Users Group', u'fa_users'],
-            [u'franzi.muller', u'M\xfcller Fr\xe4nzi', u'fa Users Group', u'fa_users'],
-            [u'hans.peter', u'Peter Hans', u'fa Users Group', u'fa_users'],
-            [u'beatrice.schrodinger', u'Schr\xf6dinger B\xe9atrice', u'fa Users Group', u'fa_users'],
-            [u'committee.secretary', u'Secretary C\xf6mmittee', u'fa Users Group', u'fa_users'],
-            [u'service.user', u'User Service', u'fa Users Group', u'fa_users'],
-            [u'robert.ziegler', u'Ziegler Robert', u'fa Users Group', u'fa_users'],
-            [u'kathi.barfuss', u'B\xe4rfuss K\xe4thi', u'Projekt A', u'projekt_a'],
-            [u'robert.ziegler', u'Ziegler Robert', u'Projekt A', u'projekt_a'],
-            [u'james.bond', u'B\xf6nd James', u'rk Users Group', u'rk_users'],
-            [u'herbert.jager', u'J\xe4ger Herbert', u'Projekt B', u'projekt_b'],
-            [u'franzi.muller', u'M\xfcller Fr\xe4nzi', u'Projekt B', u'projekt_b'],
-            [u'nicole.kohler', u'Kohler Nicole', u'Gruppe Rechnungspr\xfcfungskommission', u'committee_rpk_group'],
-            [u'franzi.muller', u'M\xfcller Fr\xe4nzi', u'Gruppe Rechnungspr\xfcfungskommission', u'committee_rpk_group'],
-            [u'nicole.kohler', u'Kohler Nicole', u'Gruppe Kommission f\xfcr Verkehr', u'committee_ver_group'],
-            [u'franzi.muller', u'M\xfcller Fr\xe4nzi', u'Gruppe Kommission f\xfcr Verkehr', u'committee_ver_group'],
-            [u'jurgen.konig', u'K\xf6nig J\xfcrgen', u'fa Inbox Users Group', u'fa_inbox_users']
+            [u'jurgen.fischer', u'Fischer J\xfcrgen', u'fa Users Group', u'fa_users', None],
+            [u'beatrice.schrodinger', u'Schr\xf6dinger B\xe9atrice', u'fa Users Group', u'fa_users', None],
+            [u'committee.secretary', u'Secretary C\xf6mmittee', u'fa Users Group', u'fa_users', None],
+            [u'franzi.muller', u'M\xfcller Fr\xe4nzi', u'fa Users Group', u'fa_users', None],
+            [u'faivel.fruhling', u'Fr\xfchling F\xe4ivel', u'fa Users Group', u'fa_users', None],
+            [u'fridolin.hugentobler', u'Hugentobler Fridolin', u'fa Users Group', u'fa_users', None],
+            [u'gunther.frohlich', u'Fr\xf6hlich G\xfcnther', u'fa Users Group', u'fa_users', None],
+            [u'hans.peter', u'Peter Hans', u'fa Users Group', u'fa_users', None],
+            [u'jurgen.konig', u'K\xf6nig J\xfcrgen', u'fa Users Group', u'fa_users', None],
+            [u'maja.harzig', u'H\xe4rzig Maja', u'fa Users Group', u'fa_users', None],
+            [u'herbert.jager', u'J\xe4ger Herbert', u'fa Users Group', u'fa_users', None],
+            [u'david.meier', u'Meier David', u'fa Users Group', u'fa_users', None],
+            [u'nicole.kohler', u'Kohler Nicole', u'fa Users Group', u'fa_users', u'Example Note'],
+            [u'propertysheets.manager', u'Manager PropertySheets', u'fa Users Group', u'fa_users', None],
+            [u'ramon.flucht', u'Flucht Ramon', u'fa Users Group', u'fa_users', None],
+            [u'kathi.barfuss', u'B\xe4rfuss K\xe4thi', u'fa Users Group', u'fa_users', None],
+            [u'robert.ziegler', u'Ziegler Robert', u'fa Users Group', u'fa_users', None],
+            [u'service.user', u'User Service', u'fa Users Group', u'fa_users', None],
+            [u'webaction.manager', u'Manager WebAction', u'fa Users Group', u'fa_users', None],
+            [u'franzi.muller', u'M\xfcller Fr\xe4nzi', u'Projekt B', u'projekt_b', None],
+            [u'herbert.jager', u'J\xe4ger Herbert', u'Projekt B', u'projekt_b', None],
+            [u'franzi.muller', u'M\xfcller Fr\xe4nzi', u'Gruppe Rechnungspr\xfcfungskommission', u'committee_rpk_group',
+             None],
+            [u'nicole.kohler', u'Kohler Nicole', u'Gruppe Rechnungspr\xfcfungskommission', u'committee_rpk_group', None],
+            [u'franzi.muller', u'M\xfcller Fr\xe4nzi', u'Gruppe Kommission f\xfcr Verkehr', u'committee_ver_group', None],
+            [u'nicole.kohler', u'Kohler Nicole', u'Gruppe Kommission f\xfcr Verkehr', u'committee_ver_group', None],
+            [u'james.bond', u'B\xf6nd James', u'rk Users Group', u'rk_users', None],
+            [u'jurgen.konig', u'K\xf6nig J\xfcrgen', u'fa Inbox Users Group', u'fa_inbox_users', None],
+            [u'kathi.barfuss', u'B\xe4rfuss K\xe4thi', u'Projekt A', u'projekt_a', None],
+            [u'robert.ziegler', u'Ziegler Robert', u'Projekt A', u'projekt_a', None]
         ]
         for row, expected_row in zip(rows, expected_values):
             self.assertSequenceEqual(

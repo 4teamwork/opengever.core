@@ -1,6 +1,7 @@
 from datetime import datetime
 from opengever.api.ogdslistingbase import OGDSListingBaseService
 from opengever.base.visible_users_and_groups_filter import visible_users_and_groups_filter
+from opengever.ogds.models.group import GroupMembership
 from opengever.ogds.models.group import groups_users
 from opengever.ogds.models.user import User
 import re
@@ -34,6 +35,13 @@ class OGDSUserListingGet(OGDSListingBaseService):
     model_class = User
     default_state_filter = tuple()
     pattern = re.compile(r"^(\d{4}-\d{2}-\d{2}) TO (\d{4}-\d{2}-\d{2})")
+
+    def reply(self):
+        result = super(OGDSUserListingGet, self).reply()
+        filters = self.request.form.get('filters', {})
+
+        self._augment_items_with_membership_note(result, filters)
+        return result
 
     def needs_join_with_groups_users(self, filters):
         return bool(filters.get('groupid', False))
@@ -75,3 +83,31 @@ class OGDSUserListingGet(OGDSListingBaseService):
                 visible_users_and_groups_filter.get_whitelisted_principals()))
 
         return query
+
+    def _augment_items_with_membership_note(self, result, filters):
+        groupid = filters.get('groupid', None)
+        items = result.get('items') or []
+
+        userids = list({item.get('userid') for item in items})
+        if not userids:
+            return
+
+        rows = (
+            GroupMembership.query
+            .with_entities(GroupMembership.userid, GroupMembership.note)
+            .filter(
+                GroupMembership.groupid == groupid,
+                GroupMembership.userid.in_(userids),
+                GroupMembership.note.isnot(None),
+            )
+            .all()
+        )
+        notes_by_userid = dict(rows)
+
+        for item in items:
+            uid = item.get('userid')
+            if not uid:
+                continue
+            note = notes_by_userid.get(uid)
+            if note:
+                item['note'] = note
