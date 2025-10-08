@@ -145,6 +145,11 @@ msgstr "Last name"
 msgid "label_main_task"
 msgstr "Main task"
 
+#. Default: "Note"
+#: ./opengever/globalindex/browser/report.py
+msgid "label_membership_note"
+msgstr "Note"
+
 #: ./opengever/globalindex/browser/report.py
 msgid "label_organization"
 msgstr "Organization"
