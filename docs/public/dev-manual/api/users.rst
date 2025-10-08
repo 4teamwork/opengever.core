@@ -427,3 +427,42 @@ Mit dem ``@kub`` Endpoint können Kontakte aus dem KuB geholt werden. Der Endpoi
         "title": "",
         "urls": []
       }
+
+
+Vermerk Mitgliedschaften
+========================
+
+Mit dem ``@membership-notes`` Endpoint können Vermerke bei den Mitgliedschaften editiert werden.
+Der Endpoint steht nur auf Stufe PloneSiteRoot zur Verfügung und erwartet als Pfad Parameter:
+
+- ID des Users
+- ID der Gruppe
+- Vermerk als String
+
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+      POST /@membership-notes HTTP/1.1
+      Accept: application/json
+
+      {
+        "userid": "hugo.boss",
+        "groupid": "test_group",
+        "note": "Example Note"
+      }
+
+**Beispiel-Response**:
+
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Content-Type: application/json
+
+      {
+        "userid": "hugo.boss",
+        "groupid": "test_group",
+        "note": "Example Note"
+      }
