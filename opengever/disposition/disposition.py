@@ -103,11 +103,11 @@ class DossierDispositionInformation(object):
 
     @property
     def docs_count(self):
-        return self.stats['docs_count']
+        return self.stats.get('docs_count', 0)
 
     @property
     def docs_size(self):
-        return self.stats['docs_size']
+        return self.stats.get('docs_size', 0)
 
     def get_grouping_key(self):
         return self.parent
