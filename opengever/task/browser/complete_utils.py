@@ -7,6 +7,8 @@ from opengever.globalindex.model.task import Task
 from opengever.tabbedview.helper import linked
 from opengever.task import _
 from opengever.task import util
+from plone import api
+from StringIO import StringIO
 from z3c.relationfield import RelationValue
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
@@ -112,6 +114,26 @@ def complete_task_and_deliver_documents(
                 '',
                 linked(doc, doc.Title()),
                 _(u'label_related_items', default=u"Related Items"))
+
+    if api.content.get_state(task) == predecessor.review_state:
+        # If the successor task is already in the same state as the predecessor
+        # (e.g. both are closed), we skip changing the predecessor's state.
+        #
+        # This situation can occur after a conflict error during the initial
+        # commit of the local transition. The transaction manager retries the
+        # request, but the remote task may already have been closed and committed
+        # to the OGDS. This is usually not an issue, but it's possible that
+        # the current user does no longer have permission to access the predecessor
+        # task, which would lead to an Unauthorized error and the local transition
+        # would be aborted. Means, the predecessor remains closed, but the local
+        # successor task is still open and cannot be closed anymore.
+        #
+        # When the retry attempts to close the local task again, we
+        # detect that the predecessor is already closed as well and avoid
+        # performing the transition on the remote admin unit a second time.
+        #
+        # Fixes https://4teamwork.atlassian.net/browse/TI-1633
+        return StringIO('OK')
 
     request_data = {'data': json.dumps(data)}
     response = dispatch_request(
