@@ -36,6 +36,6 @@
       handler=".hooks.avoid_profile_reinstallation"
       />
 
-  <i18n:registerTranslations directory="locales" />
+  <include file="locales.zcml" />
 
 </configure>
