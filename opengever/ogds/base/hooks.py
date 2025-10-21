@@ -4,7 +4,7 @@ from opengever.base.model import Session
 from opengever.ogds.base.setup import create_example_client
 from opengever.ogds.base.setup import create_sql_tables
 from opengever.ogds.models.group import Group
-from opengever.ogds.models.group import groups_users
+from opengever.ogds.models.group_membership import groups_users
 from opengever.ogds.models.org_unit import OrgUnit
 from opengever.ogds.models.user import User
 import transaction

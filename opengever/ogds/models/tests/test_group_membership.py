@@ -1,12 +1,38 @@
-from opengever.ogds.models.group import GroupMembership
+from opengever.ogds.models.group import Group
+from opengever.ogds.models.group_membership import GroupMembership
 from opengever.ogds.models.tests.base import OGDSTestCase
+from opengever.ogds.models.user import User
+from sqlalchemy.orm import selectinload
 
 
 class TestGroupMembershipModel(OGDSTestCase):
 
+    def _load_group_with_memberships(self, group):
+        return (
+            self.session.query(Group)
+            .options(
+                selectinload(Group.memberships)
+                .selectinload(GroupMembership.user)
+            )
+            .filter_by(groupid=group.groupid)
+            .one()
+        )
+
+    def _load_user_with_memberships(self, user):
+        return (
+            self.session.query(User)
+            .options(
+                selectinload(User.memberships)
+                .selectinload(GroupMembership.group)
+            )
+            .filter_by(userid=user.userid)
+            .one()
+        )
+
     def test_create_membership_with_optional_note(self):
-        self.assertNotIn(self.john, self.members_b.users)
-        self.assertEqual(2, len(self.members_b.memberships))
+        self.member_b = self._load_group_with_memberships(self.members_b)
+        self.assertNotIn(self.john, self.member_b.users)
+        self.assertEqual(2, len(self.member_b.memberships))
 
         member_john = GroupMembership(
             groupid=self.members_b.groupid, userid=self.john.userid, note="Test Note"
@@ -14,10 +40,11 @@ class TestGroupMembershipModel(OGDSTestCase):
 
         self.session.add(member_john)
         self.session.flush()
-        self.session.expire(self.members_b, ["memberships", "users"])
+        self.session.expire(self.members_b, ['memberships', 'users'])
+        self.member_b = self._load_group_with_memberships(self.members_b)
         self.session.expire(self.john, ["groups"])
 
-        self.assertEqual(3, len(self.members_b.memberships))
+        self.assertEqual(3, len(self.member_b.memberships))
         self.assertEqual("Test Note", member_john.note)
 
         self.assertIn(self.john, self.members_b.users)
@@ -29,6 +56,7 @@ class TestGroupMembershipModel(OGDSTestCase):
         self.session.add_all([m1, m2])
         self.session.flush()
 
+        self.members_a = self._load_group_with_memberships(self.members_a)
         self.members_a.memberships.remove(m1)
         self.session.flush()
 
@@ -48,6 +76,7 @@ class TestGroupMembershipModel(OGDSTestCase):
             .one()
         )
 
+        self.peter = self._load_user_with_memberships(self.peter)
         self.peter.memberships.remove(member_peter)
         self.session.flush()
         self.session.expire(self.members_b, ["memberships", "users"])

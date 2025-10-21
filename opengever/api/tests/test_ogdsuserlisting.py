@@ -1,6 +1,6 @@
 from datetime import date
 from ftw.testbrowser import browsing
-from opengever.ogds.models.group import GroupMembership
+from opengever.ogds.models.group_membership import GroupMembership
 from opengever.ogds.models.service import ogds_service
 from opengever.ogds.models.user import User
 from opengever.testing import IntegrationTestCase

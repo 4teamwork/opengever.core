@@ -1,5 +1,5 @@
 from opengever.base.model import create_session
-from opengever.ogds.models.group import GroupMembership
+from opengever.ogds.models.group_membership import GroupMembership
 from plone.restapi.deserializer import json_body
 from plone.restapi.services import Service
 from sqlalchemy import and_

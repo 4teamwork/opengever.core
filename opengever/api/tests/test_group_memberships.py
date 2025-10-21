@@ -1,6 +1,6 @@
 from ftw.testbrowser import browsing
 from opengever.base.model import create_session
-from opengever.ogds.models.group import GroupMembership
+from opengever.ogds.models.group_membership import GroupMembership
 from opengever.testing import IntegrationTestCase
 import json
 
