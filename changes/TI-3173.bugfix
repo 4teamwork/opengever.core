@@ -1,0 +1,1 @@
+Fix loading of i18n overrides in Docker image. [buchi]

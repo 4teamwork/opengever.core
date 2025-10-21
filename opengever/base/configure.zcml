@@ -33,7 +33,7 @@
   <include file="schema.zcml" />
   <include file="widgets.zcml" />
 
-  <i18n:registerTranslations directory="locales" />
+  <include file="locales.zcml" />
 
   <genericsetup:registerProfile
       name="default"

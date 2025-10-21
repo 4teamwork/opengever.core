@@ -9,6 +9,10 @@
   <include package="Products.Five" />
   <meta:redefinePermission from="zope2.Public" to="zope.Public" />
 
+  <!-- Load i18n overrides as early as possible -->
+  <include package="opengever.base" file="locales.zcml" />
+  <include package="opengever.core" file="locales.zcml" />
+
   <!-- Load patches as early as possible -->
   <include package="opengever.base.monkey" />
 
