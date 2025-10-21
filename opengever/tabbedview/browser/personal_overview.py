@@ -12,7 +12,7 @@ from opengever.meeting.model.proposal import Proposal
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.models.group import Group
-from opengever.ogds.models.group import groups_users
+from opengever.ogds.models.group_membership import groups_users
 from opengever.ogds.models.service import ogds_service
 from opengever.ogds.models.team import Team
 from opengever.tabbedview import _

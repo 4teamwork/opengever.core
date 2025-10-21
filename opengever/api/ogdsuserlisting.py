@@ -1,8 +1,8 @@
 from datetime import datetime
 from opengever.api.ogdslistingbase import OGDSListingBaseService
 from opengever.base.visible_users_and_groups_filter import visible_users_and_groups_filter
-from opengever.ogds.models.group import GroupMembership
-from opengever.ogds.models.group import groups_users
+from opengever.ogds.models.group_membership import GroupMembership
+from opengever.ogds.models.group_membership import groups_users
 from opengever.ogds.models.user import User
 import re
 

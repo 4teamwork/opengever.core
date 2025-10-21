@@ -3,7 +3,7 @@ from opengever.ogds.base.sources import AllFilteredGroupsSourcePrefixed
 from opengever.ogds.base.sources import AllTeamsSource
 from opengever.ogds.base.sources import AssignedUsersSource
 from opengever.ogds.base.sources import BaseMultipleSourcesQuerySource
-from opengever.ogds.models.group import groups_users
+from opengever.ogds.models.group_membership import groups_users
 from opengever.ogds.models.service import ogds_service
 from opengever.ogds.models.user import User
 from opengever.workspace import is_workspace_feature_enabled

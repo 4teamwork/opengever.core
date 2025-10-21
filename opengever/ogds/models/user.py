@@ -6,6 +6,7 @@ from opengever.base.model import LASTNAME_LENGTH
 from opengever.base.model import USER_ID_LENGTH
 from opengever.base.query import BaseQuery
 from opengever.base.types import UnicodeCoercingText
+from opengever.ogds.models.group_membership import GroupMembership
 from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import Date
@@ -106,9 +107,9 @@ class User(Base):
         "GroupMembership",
         back_populates="user",
         cascade="all, delete-orphan",
-        lazy="selectin",
-        primaryjoin="User.userid == foreign(GroupMembership.userid)",
-        order_by="GroupMembership.groupid",
+        lazy="noload",
+        order_by=lambda: GroupMembership.groupid,
+        passive_deletes=True
     )
 
     # A classmethod property needs to be defined on the metaclass

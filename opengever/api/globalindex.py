@@ -5,7 +5,7 @@ from opengever.base.helpers import display_name
 from opengever.globalindex.model.task import AVOID_DUPLICATES_STRATEGY_LOCAL
 from opengever.globalindex.model.task import Task
 from opengever.ogds.models.group import Group
-from opengever.ogds.models.group import groups_users
+from opengever.ogds.models.group_membership import groups_users
 from opengever.ogds.models.team import Team
 from opengever.task.helper import task_type_value_helper
 from plone.restapi.interfaces import ISerializeToJson

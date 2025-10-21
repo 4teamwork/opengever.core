@@ -20,8 +20,8 @@ from opengever.dossier.utils import supports_is_subdossier
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.models.admin_unit import AdminUnit
 from opengever.ogds.models.group import Group
-from opengever.ogds.models.group import GroupMembership
-from opengever.ogds.models.group import groups_users
+from opengever.ogds.models.group_membership import GroupMembership
+from opengever.ogds.models.group_membership import groups_users
 from opengever.ogds.models.org_unit import OrgUnit
 from opengever.ogds.models.team import Team
 from opengever.ogds.models.user import User

@@ -10,7 +10,7 @@ from opengever.globalindex import _
 from opengever.globalindex.utils import get_selected_items
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.models.group import Group
-from opengever.ogds.models.group import GroupMembership
+from opengever.ogds.models.group_membership import GroupMembership
 from opengever.ogds.models.service import ogds_service
 from opengever.task.helper import task_type_value_helper
 from Products.statusmessages.interfaces import IStatusMessage
