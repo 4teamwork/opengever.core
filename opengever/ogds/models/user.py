@@ -6,6 +6,7 @@ from opengever.base.model import LASTNAME_LENGTH
 from opengever.base.model import USER_ID_LENGTH
 from opengever.base.query import BaseQuery
 from opengever.base.types import UnicodeCoercingText
+from opengever.ogds.models.group_membership import GroupMembership
 from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import Date
@@ -13,6 +14,7 @@ from sqlalchemy import event
 from sqlalchemy import func
 from sqlalchemy import Index
 from sqlalchemy import String
+from sqlalchemy.orm import relationship
 
 
 class UserQuery(BaseQuery):
@@ -100,6 +102,15 @@ class User(Base):
         'username',
         'zip_code',
     }
+
+    memberships = relationship(
+        "GroupMembership",
+        back_populates="user",
+        cascade="all, delete-orphan",
+        lazy="noload",
+        order_by=lambda: GroupMembership.groupid,
+        passive_deletes=True
+    )
 
     # A classmethod property needs to be defined on the metaclass
     class __metaclass__(type(Base)):

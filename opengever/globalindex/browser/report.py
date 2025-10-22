@@ -10,6 +10,7 @@ from opengever.globalindex import _
 from opengever.globalindex.utils import get_selected_items
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.models.group import Group
+from opengever.ogds.models.group_membership import GroupMembership
 from opengever.ogds.models.service import ogds_service
 from opengever.task.helper import task_type_value_helper
 from Products.statusmessages.interfaces import IStatusMessage
@@ -182,23 +183,30 @@ class OGDSGroupsMembershipReporter(BaseReporterView):
             {'id': 'user_fullname', 'title': _('label_fullname')},
             {'id': 'group_title', 'title': _('label_group_title')},
             {'id': 'group_name', 'title': _('label_groupname')},
+            {"id": 'membership_note', 'title': _('label_membership_note')},
 
         ]
 
     def __call__(self):
         session = create_session()
-        query = session.query(Group).options(joinedload(Group.users)).filter(Group.active == true())
+        query = (
+            session.query(Group)
+            .options(joinedload(Group.memberships).joinedload(GroupMembership.user))
+            .filter(Group.active == true())
+        )
         groups_with_users = []
 
         for group in query.all():
-            for user in group.users:
+            for membership in group.memberships:
+                user = membership.user
                 if not user.active:
                     continue
                 group_info = {
                     'group_name': group.groupname,
                     'group_title': group.title,
-                    "user_name": user.username,
-                    "user_fullname": user.fullname()
+                    'user_name': user.username,
+                    'user_fullname': user.fullname(),
+                    'membership_note': membership.note or u'',
                 }
                 groups_with_users.append(group_info)
 

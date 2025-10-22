@@ -12,6 +12,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- ``@membership-notes``: Add endpoint to update a note on a membership.
 
 
 2025.8.0 (2025-08-22)

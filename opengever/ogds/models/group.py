@@ -2,48 +2,22 @@ from opengever.base.model import Base
 from opengever.base.model import create_session
 from opengever.base.model import GROUP_ID_LENGTH
 from opengever.base.model import GROUP_TITLE_LENGTH
-from opengever.base.model import USER_ID_LENGTH
 from opengever.base.query import BaseQuery
+from opengever.ogds.models.group_membership import GroupMembership
+from opengever.ogds.models.group_membership import groups_users
 from opengever.ogds.models.team import Team
 from opengever.ogds.models.user import User
 from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import event
-from sqlalchemy import ForeignKey
 from sqlalchemy import func
 from sqlalchemy import Index
 from sqlalchemy import String
-from sqlalchemy import Table
 from sqlalchemy.orm import backref
 from sqlalchemy.orm import relation
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import select
 from sqlalchemy.sql.expression import true
-
-
-# association table
-groups_users = Table(
-    'groups_users', Base.metadata,
-    Column('groupid', String(GROUP_ID_LENGTH),
-           ForeignKey('groups.groupid'), primary_key=True),
-    Column('userid', String(USER_ID_LENGTH),
-           ForeignKey('users.userid'), primary_key=True),
-)
-
-
-def create_additional_groups_users_indexes(table, connection, *args, **kw):
-    engine = connection.engine
-    if engine.dialect.name != 'sqlite':
-        # SQLite 3.7 (as used on Jenkins) doesn't support the syntax yet
-        # that SQLAlchemy produces for this functional index
-        ix = Index('ix_groups_users_userid_lower',
-                   func.lower(groups_users.c.userid))
-        ix.create(engine)
-
-
-event.listen(
-    groups_users, 'after_create',
-    create_additional_groups_users_indexes)
 
 
 class GroupQuery(BaseQuery):
@@ -71,7 +45,17 @@ class Group(Base):
     is_local = Column(Boolean, default=False, nullable=True)
 
     users = relation(User, secondary=groups_users, order_by='User.lastname',
+                     lazy="selectin",
                      backref=backref('groups', order_by='Group.groupid'))
+
+    memberships = relationship(
+        "GroupMembership",
+        back_populates="group",
+        cascade="all, delete-orphan",
+        lazy="noload",
+        order_by=lambda: GroupMembership.userid,
+        passive_deletes=True
+    )
     teams = relationship(Team, back_populates="group")
 
     column_names_to_sync = {'groupid', 'groupname', 'external_id', 'active', 'title'}

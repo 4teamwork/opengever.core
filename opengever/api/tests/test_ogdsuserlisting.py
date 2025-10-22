@@ -1,5 +1,6 @@
 from datetime import date
 from ftw.testbrowser import browsing
+from opengever.ogds.models.group_membership import GroupMembership
 from opengever.ogds.models.service import ogds_service
 from opengever.ogds.models.user import User
 from opengever.testing import IntegrationTestCase
@@ -375,3 +376,34 @@ class TestOGDSUserListingGet(IntegrationTestCase):
         self.assertEqual(
             sorted([user.userid for user in group.users], reverse=True),
             [user['userid'] for user in browser.json['items']])
+
+    @browsing
+    def test_note_included_for_group_members_with_non_null_note(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        groupid = 'projekt_a'
+        group = ogds_service().fetch_group(groupid)
+        self.assertGreaterEqual(len(group.users), 1)
+
+        user_with_note = group.users[0].userid
+
+        other_userids = [u.userid for u in group.users if u.userid != user_with_note]
+
+        m = GroupMembership.query.filter_by(groupid=groupid, userid=user_with_note).one()
+        m.note = u'Test Note'
+
+        browser.open(
+            self.portal,
+            view='@ogds-user-listing?filters.groupid:record=projekt_a&sort_on=lastname',
+            headers=self.api_headers,
+        )
+        self.assertEqual(200, browser.status_code)
+
+        items_by_userid = {it['userid']: it for it in browser.json.get('items', [])}
+
+        self.assertIn(user_with_note, items_by_userid)
+        self.assertEqual(u'Test Note', items_by_userid[user_with_note]['note'])
+
+        for uid in other_userids:
+            self.assertIn(uid, items_by_userid)
+            self.assertNotIn('note', items_by_userid[uid])

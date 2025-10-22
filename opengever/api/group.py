@@ -3,7 +3,7 @@ from opengever.base.model import GROUP_ID_LENGTH
 from opengever.base.security import elevated_privileges
 from opengever.base.utils import check_group_plugin_configuration
 from opengever.ogds.models.group import Group
-from opengever.ogds.models.group import groups_users
+from opengever.ogds.models.group_membership import groups_users
 from opengever.ogds.models.service import ogds_service
 from opengever.ogds.models.user import User
 from plone import api

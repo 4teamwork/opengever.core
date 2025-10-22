@@ -3,7 +3,7 @@ from AccessControl.SecurityInfo import ClassSecurityInfo
 from logging import getLogger
 from OFS.Cache import Cacheable
 from opengever.ogds.models.group import Group
-from opengever.ogds.models.group import groups_users
+from opengever.ogds.models.group_membership import groups_users
 from opengever.ogds.models.service import ogds_service
 from opengever.ogds.models.user import User
 from plone import api

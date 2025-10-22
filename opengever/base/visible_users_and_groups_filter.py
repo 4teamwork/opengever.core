@@ -1,4 +1,4 @@
-from opengever.ogds.models.group import groups_users
+from opengever.ogds.models.group_membership import groups_users
 from opengever.ogds.models.service import ogds_service
 from opengever.workspace import is_workspace_feature_enabled
 from plone import api

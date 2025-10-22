@@ -20,7 +20,8 @@ from opengever.dossier.utils import supports_is_subdossier
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.models.admin_unit import AdminUnit
 from opengever.ogds.models.group import Group
-from opengever.ogds.models.group import groups_users
+from opengever.ogds.models.group_membership import GroupMembership
+from opengever.ogds.models.group_membership import groups_users
 from opengever.ogds.models.org_unit import OrgUnit
 from opengever.ogds.models.team import Team
 from opengever.ogds.models.user import User
@@ -410,6 +411,26 @@ class SerializeUserModelToJson(SerializeSQLModelToJsonBase):
             team_serializer = queryMultiAdapter(
                 (team, self.request), ISerializeToJsonSummary)
             data['teams'].append(team_serializer())
+
+        groupids = [group.get('groupid') for group in data['groups']]
+
+        rows = (
+            GroupMembership.query
+            .with_entities(GroupMembership.groupid, GroupMembership.note)
+            .filter(
+                GroupMembership.userid == self.context.userid,
+                GroupMembership.groupid.in_(groupids),
+                GroupMembership.note.isnot(None),
+            )
+            .all()
+        )
+
+        notes_by_groupid = dict(rows)
+
+        for group in data['groups']:
+            note = notes_by_groupid.get(group.get("groupid"))
+            if note:
+                group["note"] = note
 
     def __call__(self, *args, **kwargs):
         data = super(SerializeUserModelToJson, self).__call__(*args, **kwargs)

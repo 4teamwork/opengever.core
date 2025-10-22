@@ -1881,4 +1881,13 @@
       permission="zope.Public"
       />
 
+  <plone:service
+      method="POST"
+      name="@membership-notes"
+      for="Products.CMFCore.interfaces.ISiteRoot"
+      factory=".ogdsmembership_note.MembershipNotes"
+      permission="opengever.api.ManageGroups"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
 </configure>
