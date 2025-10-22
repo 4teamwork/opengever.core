@@ -742,12 +742,7 @@ class TestTOCByDecisionSequenceNumber(TestAlphabeticalTOC):
                         'meeting_start_page_number': 33,
                         'repository_folder_title': u'\xc4 Business',
                         'title': u'proposal 1'
-                    }
-                ],
-                'group_title': ''
-            },
-            {
-                'contents': [
+                    },
                     {
                         'decision_number': 3,
                         'description': None,
@@ -757,11 +752,7 @@ class TestTOCByDecisionSequenceNumber(TestAlphabeticalTOC):
                         'meeting_start_page_number': 33,
                         'repository_folder_title': u'\xc4 Business',
                         'title': u'\xc4a proposal'
-                    }
-                ],
-                'group_title': ''},
-            {
-                'contents': [
+                    },
                     {
                         'decision_number': 4,
                         'description': None,
@@ -771,11 +762,7 @@ class TestTOCByDecisionSequenceNumber(TestAlphabeticalTOC):
                         'meeting_start_page_number': 129,
                         'repository_folder_title': u'A Business',
                         'title': u'Proposal 3'
-                    }
-                ],
-                'group_title': ''},
-            {
-                'contents': [
+                    },
                     {
                         'decision_number': 5,
                         'description': u'Really, Anything.',
@@ -785,11 +772,7 @@ class TestTOCByDecisionSequenceNumber(TestAlphabeticalTOC):
                         'meeting_start_page_number': 129,
                         'repository_folder_title': u'Other Stuff',
                         'title': u'Anything goes'
-                    }
-                ],
-                'group_title': ''},
-            {
-                'contents': [
+                    },
                     {
                         'decision_number': 6,
                         'description': None,
@@ -809,11 +792,7 @@ class TestTOCByDecisionSequenceNumber(TestAlphabeticalTOC):
                         'meeting_start_page_number': 129,
                         'repository_folder_title': None,
                         'title': u'Nahhh not here either'
-                    }
-                ],
-                'group_title': ''},
-            {
-                'contents': [
+                    },
                     {
                         'decision_number': 8,
                         'description': None,
