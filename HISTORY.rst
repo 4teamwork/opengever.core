@@ -10,6 +10,16 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2025.8.3 (2025-10-22)
+---------------------
+
+Bug fixes:
+
+
+- Disable grouping for toc sorted by decision sequence. [ran] [TI-2888]
+- Fix loading of i18n overrides in Docker image. [buchi] [TI-3173]
+
+
 2025.8.2 (2025-09-11)
 ---------------------
 
