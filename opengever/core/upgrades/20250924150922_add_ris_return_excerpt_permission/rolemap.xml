@@ -1,0 +1,10 @@
+<rolemap>
+  <permissions>
+
+    <permission name="opengever.ris: Return Excerpt" acquire="True">
+      <role name="Manager" />
+      <role name="Member" />
+    </permission>
+
+  </permissions>
+</rolemap>

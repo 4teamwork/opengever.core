@@ -4,4 +4,7 @@
 
   <permission id="opengever.ris.AddProposal" title="opengever.ris: Add Proposal" />
 
+  <permission id="opengever.ris.ReturnExcerpt" title="opengever.ris: Return Excerpt" />
+  <permission id="opengever.ris.UpdateExcerpt" title="opengever.ris: Update Excerpt" />
+
 </configure>

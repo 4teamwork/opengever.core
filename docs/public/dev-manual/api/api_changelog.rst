@@ -13,6 +13,8 @@ Breaking Changes
 Other Changes
 ^^^^^^^^^^^^^
 - ``@membership-notes``: Add endpoint to update a note on a membership.
+- ``@ris-return-excerpt``: Add endpoint to allow users from spv to create a proposal excerpt in a dossier they do not have view permission in.
+- ``@ris-update-excerpt``: Add endpoint to allow users from spv to update a proposal excerpt in a dossier they do not have view permission in.
 
 
 2025.8.0 (2025-08-22)

@@ -112,3 +112,8 @@ msgstr "Thema"
 #: ./opengever/ris/viewlets/byline.py
 msgid "label_workflow_state"
 msgstr "Status"
+
+#. Default: "Excerpt was replaced"
+#: ./opengever/ris/browser/ris_excerpt.py
+msgid "excerpt_was_replaced"
+msgstr "Protokollauszug ersetzt"

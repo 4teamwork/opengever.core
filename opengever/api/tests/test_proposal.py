@@ -388,3 +388,48 @@ class TestSubmitAdditionalDocuments(IntegrationTestCase):
         self.assertEqual(documents[0].file.data,
                          self.document.file.data)
         self.assertEqual("New", documents[0].file.data)
+
+
+class TestRISExcerptEndpoints(IntegrationTestCase):
+
+    @browsing
+    def test_ris_return_and_update_excerpt(self, browser):
+        self.login(self.regular_user, browser)
+
+        dossier_rel = "/".join(self.dossier.getPhysicalPath()[2:])
+
+        browser.open(
+            self.document.absolute_url() + "/@ris-return-excerpt",
+            method="POST",
+            headers=self.api_headers,
+            data=json.dumps(
+                {
+                    "target_admin_unit_id": "plone",
+                    "target_dossier_relative_path": dossier_rel,
+                }
+            ),
+        )
+
+        self.assertEqual(200, browser.status_code)
+        data = browser.json
+        self.assertEqual(data["current_version_id"], 0)
+
+        excerpt_doc = self.portal.unrestrictedTraverse(data["path"].encode("utf-8"))
+
+        self.assertEqual(excerpt_doc.file.data, self.document.file.data)
+        self.assertTrue(excerpt_doc.is_final_document())
+
+        browser.open(
+            self.document.absolute_url() + "/@ris-update-excerpt",
+            method="POST",
+            headers=self.api_headers,
+            data=json.dumps(
+                {
+                    "target_admin_unit_id": "plone",
+                    "target_doc_relative_path": data["path"],
+                }
+            ),
+        )
+
+        self.assertEqual(browser.json["current_version_id"], 1)
+        self.assertTrue(excerpt_doc.is_final_document())

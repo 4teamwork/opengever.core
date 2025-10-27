@@ -159,3 +159,79 @@ Die Response ist eine Liste die für jede Beilage die folgenden Informationen zu
               "source": "dossier-1/proposal-1/document-76"
           }
       ]
+
+
+Protokollauszug im Antragsdossier ablegen
+=========================================
+
+Mit dem ``@ris-return-excerpt`` Endpoint können Protokollauszüge aus der SPV
+ins Antragsdossier eingereicht werden. Der Endpoint erwartet als Pfad Parameter:
+
+- Mandant ID
+- relative Dossierpfad
+
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+      POST ordnungssystem/dossier-1/document-1/@ris-return-excerpt HTTP/1.1
+      Accept: application/json
+
+      {
+        "target_admin_unit_id": "fd",
+        "target_dossier_relative_path": "ordnungssystem/dossier-1"
+      }
+
+**Beispiel-Response**:
+
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Content-Type: application/json
+
+      {
+        "path": "ordnungssystem/dossier-2/document-2",
+        "intid": 3,
+        "url": "http://gever.onegovgever.ch/fd/ordnungssystem/dossier-2/document-2",
+        "current_version_id": 1,
+      }
+
+
+Protokollauszug im Antragsdossier aktualisieren
+===============================================
+
+Mit dem ``@ris-update-excerpt`` Endpoint können Protokollauszüge aus der SPV
+im Antragsdossier aktualisiert werden. Der Endpoint erwartet als Pfad Parameter:
+
+- Mandant ID
+- relative Dokumentpfad vom Protokollauszug
+
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+      POST ordnungssystem/dossier-1/document-1/@ris-update-excerpt HTTP/1.1
+      Accept: application/json
+
+      {
+        "target_admin_unit_id": "fd",
+        "target_document_relative_path": "ordnungssystem/dossier-1/document-1"
+      }
+
+**Beispiel-Response**:
+
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Content-Type: application/json
+
+      {
+        "path": "ordnungssystem/dossier-2/document-2",
+        "intid": 3,
+        "url": "http://gever.onegovgever.ch/fd/ordnungssystem/dossier-2/document-2",
+        "current_version_id": 1,
+      }
