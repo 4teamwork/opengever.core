@@ -114,3 +114,8 @@ msgstr "Sujet"
 #: ./opengever/ris/viewlets/byline.py
 msgid "label_workflow_state"
 msgstr "Etat"
+
+#. Default: "Excerpt was replaced"
+#: ./opengever/ris/browser/ris_excerpt.py
+msgid "excerpt_was_replaced"
+msgstr "Extrait du protocole remplacé"

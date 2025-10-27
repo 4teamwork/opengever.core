@@ -183,6 +183,7 @@ NON_WRITE_PERMISSIONS = [
     'opengever.meeting: Add Member',
     'opengever.repository: Export repository',
     'opengever.ris: Return Excerpt',
+    'opengever.ris: Update Excerpt',
     'opengever.sign: Sign Document',
     'opengever.sharing: List Protected Objects',
     'opengever.workspace: Access all users and groups',
