@@ -290,6 +290,11 @@
       <role name="Member" />
     </permission>
 
+    <permission name="opengever.ris: Update Excerpt" acquire="False">
+      <role name="Manager" />
+      <role name="Member" />
+    </permission>
+
     <!-- SHARING -->
     <permission name="Sharing page: Delegate Administrator role" acquire="True">
       <role name="Administrator" />
