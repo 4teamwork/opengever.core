@@ -159,3 +159,42 @@ Die Response ist eine Liste die für jede Beilage die folgenden Informationen zu
               "source": "dossier-1/proposal-1/document-76"
           }
       ]
+
+
+Protokollauszug im Antragsdossier ablegen
+=========================================
+
+Mit dem ``@ris-return-excerpt`` Endpoint können Protokollauszüge aus der SPV
+ins Antragsdossier eingereichtwerden. Der Endpoint erwartet als Pfad Parameter:
+
+- Mandant ID
+- relative Dossierpfad
+- Vermerk als String
+
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+      POST ordnungssystem/dossier-1/document-1/@ris-return-excerpt HTTP/1.1
+      Accept: application/json
+
+      {
+        "target_admin_unit_id": "fd",
+        "target_dossier_relative_path": "ordnungssystem/dossier-1"
+      }
+
+**Beispiel-Response**:
+
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Content-Type: application/json
+
+      {
+        "path": "ordnungssystem/dossier-2/document-2",
+        "intid": 3,
+        "url": "http://gever.onegovgever.ch/fd/ordnungssystem/dossier-2/document-2",
+        "current_version_id": 1,
+      }
