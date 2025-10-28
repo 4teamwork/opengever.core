@@ -41,12 +41,44 @@ class TestUIActionsGET(IntegrationTestCase):
     def test_ui_actions_includes_listing_actions(self, browser):
         self.login(self.regular_user, browser)
         url = u'{}/@ui-actions?categories:list=listing_actions'\
-              u'&listings:list=proposals'.format(self.dossier.absolute_url())
+              u'&listings:list=dossiers'.format(self.dossier.absolute_url())
         browser.open(url, method='GET', headers=self.api_headers)
 
         self.assertEqual(
-            {u'@id': url,
-             u'listing_actions': [{u'id': u'export_proposals'}]}, browser.json)
+            {
+                u'@id': url,
+                u'listing_actions': [
+                    {u'id': u'edit_items'},
+                    {u'id': u'change_items_state'},
+                    {u'id': u'copy_items'},
+                    {u'id': u'move_items'},
+                    {u'id': u'export_dossiers'},
+                    {u'id': u'export_dossiers_with_subdossiers'},
+                    {u'id': u'pdf_dossierlisting'},
+                    {u'id': u'transfer_dossier_responsible'},
+                ]
+            }, browser.json)
+
+    @browsing
+    def test_ui_actions_includes_listing_actions_as_admin(self, browser):
+        self.login(self.administrator, browser)
+        url = u'{}/@ui-actions?categories:list=listing_actions'\
+              u'&listings:list=dossiers'.format(self.dossier.absolute_url())
+        browser.open(url, method='GET', headers=self.api_headers)
+        self.assertEqual(
+            {
+                u'@id': url,
+                u'listing_actions': [
+                    {u'id': u'edit_items'},
+                    {u'id': u'change_items_state'},
+                    {u'id': u'copy_items'},
+                    {u'id': u'move_items'},
+                    {u'id': u'export_dossiers'},
+                    {u'id': u'export_dossiers_with_subdossiers'},
+                    {u'id': u'pdf_dossierlisting'},
+                    {u'id': u'transfer_dossier_responsible'},
+                ]
+            }, browser.json)
 
     @browsing
     def test_listing_actions_with_multiple_listings_returns_intersection(self, browser):
