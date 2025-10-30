@@ -10,6 +10,39 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2025.9.0 (2025-10-30)
+---------------------
+
+New features:
+
+
+- Filter out inactive groups and users in the group membership report. [ran] [TI-2116]
+- Allow admins to set a 'note' for every ogds membership. [ran] [TI-2821]
+- Allow SPV to send and update excerpts to proposal dossier. [ran] [TI-2959]
+
+
+Bug fixes:
+
+
+- Fix Sentry integeration for container deployments. [buchi] [GH-8185]
+- Fix dossier report translations for archival_value column. [ran] [TI-1604]
+- Skip duplicate state transition if completing successor task. [elioschmutz] [TI-1633]
+- Return 0 for document count and size if disposition is closed. [ran] [TI-2704]
+- Disable grouping for toc sorted by decision sequence. [ran] [TI-2888]
+- Decode file content before updating the excerpt. [ran] [TI-2959]
+- Only users with 'Transfer Assignment' can see transfer responsible action. [ran] [TI-2961]
+- Fix error when storing a document as PDF. [elioschmutz] [TI-3142]
+- Fix loading of i18n overrides in Docker image. [buchi] [TI-3173]
+
+
+Other changes:
+
+
+- No longer use the legacy ldap profile on the local dev stack [elioschmutz] [TI-1200]
+- Improve solr search query handling when using combined letters and numbers [elioschmutz] [TI-3074]
+- - XSS: Escape html for solr listing document snippets. [elioschmutz] [TI-3167]
+
+
 2025.8.0 (2025-08-22)
 ---------------------
 
