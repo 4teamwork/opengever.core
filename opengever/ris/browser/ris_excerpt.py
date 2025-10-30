@@ -19,6 +19,7 @@ from zope.component import getAdapters
 from zope.component import getUtility
 from zope.interface import alsoProvides
 from zope.intid.interfaces import IIntIds
+import base64
 import json
 
 
@@ -182,8 +183,11 @@ class RISUpdateExcerptReceive(RISReturnExcerptReceive):
 
         file = data["field-data"]["IDocumentSchema"].get("file")
         if file:
+            raw = file["data"]
+            raw = base64.b64decode(raw)
+
             gever_doc.update_file(
-                file["data"],
+                raw,
                 content_type=file.get("content-type"),
                 filename=file.get("filename"),
                 create_version=True,
