@@ -8,6 +8,7 @@ from opengever.activity.mailer import process_mail_queue
 from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
 from opengever.base.interfaces import IOGMailSettings
 from opengever.globalindex.model.task import Task
+from opengever.ogds.models.user_settings import UserSettings
 from opengever.task.activities import TaskAddedActivity
 from opengever.testing import IntegrationTestCase
 from plone import api
@@ -178,6 +179,34 @@ class TestEmailNotification(IntegrationTestCase):
 
         mail = email.message_from_string(Mailing(self.portal).pop())
         self.assertEquals('Ziegler Robert <robert.ziegler@gever.local>', get_header(mail, 'From'))
+
+    @browsing
+    def test_from_address_fallback_if_notify_own_action_and_send_with_actor_from_address_enabled(self, browser):
+        UserSettings.save_setting_for_user(
+            self.regular_user.getId(), 'notify_own_actions', True)
+
+        api.portal.set_registry_record(
+            'send_with_actor_from_address', True, IOGMailSettings)
+
+        self.login(self.dossier_responsible, browser)
+        self.create_task_via_browser(browser)
+        process_mail_queue()
+
+        # It uses the email address of the currently logged in user to send
+        # an email, if the recipients email is different.
+        mail = email.message_from_string(Mailing(self.portal).pop())
+        self.assertEquals('Ziegler Robert <robert.ziegler@gever.local>', get_header(mail, 'From'))
+        self.assertEquals('foo@example.com', get_header(mail, 'To'))
+
+        self.login(self.regular_user, browser)
+        self.create_task_via_browser(browser)
+        process_mail_queue()
+
+        # But it uses the portal email address, if the senders email is the same
+        # as the recipient email address. This avoids spam filters blocking the email.
+        mail = email.message_from_string(Mailing(self.portal).pop())
+        self.assertEquals('B\xc3\xa4rfuss K\xc3\xa4thi <test@localhost>', get_header(mail, 'From'))
+        self.assertEquals('foo@example.com', get_header(mail, 'To'))
 
     @browsing
     def test_task_title_is_linked_to_resolve_notification_view(self, browser):
