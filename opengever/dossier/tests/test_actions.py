@@ -23,7 +23,7 @@ class TestDossierListingActions(IntegrationTestCase):
         self.login(self.regular_user)
         expected_actions = [u'edit_items', u'change_items_state', u'copy_items',
                             u'move_items', u'export_dossiers', u'export_dossiers_with_subdossiers',
-                            u'pdf_dossierlisting', u'transfer_dossier_responsible']
+                            u'pdf_dossierlisting']
         self.assertEqual(expected_actions, self.get_actions(self.repository_root))
         self.assertEqual(expected_actions, self.get_actions(self.branch_repofolder))
 
@@ -31,14 +31,14 @@ class TestDossierListingActions(IntegrationTestCase):
         self.login(self.regular_user)
         expected_actions = [u'edit_items', u'change_items_state', u'copy_items',
                             u'move_items', u'export_dossiers', u'export_dossiers_with_subdossiers',
-                            u'pdf_dossierlisting', u'transfer_dossier_responsible']
+                            u'pdf_dossierlisting']
         self.assertEqual(expected_actions, self.get_actions(self.portal))
 
     def test_dossier_actions_for_dossier(self):
         self.login(self.regular_user)
         expected_actions = [u'edit_items', u'change_items_state', u'copy_items',
                             u'move_items', u'export_dossiers', u'export_dossiers_with_subdossiers',
-                            u'pdf_dossierlisting', u'transfer_dossier_responsible']
+                            u'pdf_dossierlisting']
         self.assertEqual(expected_actions, self.get_actions(self.dossier))
         self.assertEqual(expected_actions, self.get_actions(self.meeting_dossier))
 

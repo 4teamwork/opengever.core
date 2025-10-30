@@ -42,7 +42,15 @@ class DossierListingActions(BaseListingActions):
         return True
 
     def is_transfer_dossier_responsible_available(self):
-        return True
+        # Copy of https://github.com/4teamwork/opengever.core/pull/8187
+        #
+        # Fribourg wants everyone to see the action and get an Error if they don't
+        # have the correct permissions.
+        # Everyone else should only be able to see it if they have the correct permissions.
+        if is_grant_dossier_manager_to_responsible_enabled():
+            return True
+
+        return api.user.has_permission('opengever.api: Transfer Assignment')
 
 
 class PrivateDossierListingActions(BaseListingActions):
