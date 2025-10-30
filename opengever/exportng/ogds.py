@@ -138,8 +138,12 @@ class CommitteeSerializer(OGDSItemSerializer):
         return []
 
     def objsecchange(self):
-        members = self.item.get_active_members()
-        return [member.email for member in members]
+        return []
+        # Temporary workaround:
+        # Do not add any committee members because these would be added to
+        # every imported meeting.
+        # members = self.item.get_active_members()
+        # return [member.email for member in members]
 
     def objsecread(self):
         return []
@@ -231,8 +235,11 @@ class MeetingSerializer(OGDSItemSerializer):
     def objsecchange(self):
         return []
 
+    # Temporary workaround:
+    # Give read permission to all meeting participants. This will add them as
+    # participants in NG as we can't set them yet in another way.
     def objsecread(self):
-        return []
+        return [participant.email for participant in self.item.participants]
 
 
 class MeetingSyncer(OGDSSyncer):
