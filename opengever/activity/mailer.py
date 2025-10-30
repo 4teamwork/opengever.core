@@ -98,11 +98,16 @@ class Mailer(object):
         noreply_gever_address = api.portal.get().email_from_address
         from_mail = noreply_gever_address
 
+        if to_userid:
+            to_email = ogds_service().fetch_user(to_userid).email
+
         send_with_actor_from_address = api.portal.get_registry_record(
             name='send_with_actor_from_address', interface=IOGMailSettings)
 
         if actor:
-            if not send_with_actor_from_address:
+            is_same_sender_and_receiver = actor.email == to_email
+            use_actors_email_for_from = send_with_actor_from_address and not is_same_sender_and_receiver
+            if not use_actors_email_for_from:
                 # Set From: header to full name of actor, but 'noreply' address
                 # of the GEVER deployment. Sending mails with the From-address of
                 # the actor would lead to them getting rejected in modern mail
@@ -123,9 +128,6 @@ class Mailer(object):
         else:
             msg['From'] = make_addr_header(
                 self.default_addr_header, noreply_gever_address, 'utf-8')
-
-        if to_userid:
-            to_email = ogds_service().fetch_user(to_userid).email
 
         recipients = []
         if to_email:
