@@ -1,11 +1,14 @@
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import info_messages
+from opengever.base.response import COMMENT_REMOVED_RESPONSE_TYPE
 from opengever.base.response import IResponseContainer
+from opengever.base.response import Response
 from opengever.testing import IntegrationTestCase
 from persistent import Persistent
 from persistent.list import PersistentList
 from persistent.mapping import PersistentMapping
 from plone import api
+import pickle
 
 
 class TestTaskResponses(IntegrationTestCase):
@@ -25,6 +28,22 @@ class TestTaskResponses(IntegrationTestCase):
         self.assertIsInstance(response, Persistent)
         self.assertIsInstance(response.changes, PersistentList)
         self.assertIsInstance(response.changes[0], PersistentMapping)
+
+    def test_old_responses_in_task_history_provides_the_transition_property(self):
+        """Tasks should only have TaskResponse objects in the response history.
+        But we've never migrated old response objects.
+
+        Because it'd be too much work to migrate all old Response objects to
+        TaskResponse objects, we ensure here that old Response objects at least
+        provide the 'transition' property after unpickling.
+        """
+        response = Response(response_type=COMMENT_REMOVED_RESPONSE_TYPE)
+
+        self.assertFalse(hasattr(response, 'transition'))
+
+        unpickled_response = pickle.loads(pickle.dumps(response))
+        self.assertTrue(hasattr(unpickled_response, 'transition'))
+        self.assertEqual(unpickled_response.transition, u'')
 
 
 class TestTaskResponseForm(IntegrationTestCase):

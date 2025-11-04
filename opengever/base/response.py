@@ -184,6 +184,20 @@ class Response(Persistent):
         self.modified = None
         self.modifier = None
 
+    def __setstate__(self, state):
+        # Ensure backward compatibility with older serialized Response objects.
+        # Older pickled states may lack the 'transition' attribute, which leads to
+        # AttributeError when accessing the transition attribute.
+        #
+        # We do not define the transition-property in the IResponse-interface
+        # nor in the __init__ method, as it is only relevant for rare edge
+        # cases were we're working with old Response.
+        #
+        # Fixes: https://4teamwork.atlassian.net/browse/TI-3124
+        state['transition'] = state.get('transition', u'')
+
+        super(Response, self).__setstate__(state)
+
     def add_change(self, field_id, before, after, field_title=''):
         self.changes.append(PersistentDict(
             field_id=field_id,
