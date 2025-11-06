@@ -160,4 +160,4 @@ class TestDossierTasksLaTeXView(FunctionalTestCase):
 
             tasks_data = dossiertasks.get_render_arguments()['task_data_list']
             self.assertEqual(1, len(tasks_data))
-            self.assertIn("Eine & Aufgabe", tasks_data[0]['history'])
+            self.assertIn("Eine \\& Aufgabe", tasks_data[0]['history'])
