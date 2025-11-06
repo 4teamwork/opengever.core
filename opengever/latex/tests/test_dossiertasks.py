@@ -125,6 +125,39 @@ class TestDossierTasksLaTeXView(FunctionalTestCase):
             layout = DefaultLayout(dossier, dossier.REQUEST, PDFBuilder())
             dossiertasks = getMultiAdapter((dossier, dossier.REQUEST, layout),
                                            ILaTeXView)
+
             tasks_data = dossiertasks.get_render_arguments()['task_data_list']
             self.assertEqual(1, len(tasks_data))
             self.assertIn("response text", tasks_data[0]['history'])
+
+    @browsing
+    def test_dossier_tasks_history_with_html_response(self, browser):
+        repository = create(Builder('repository_root')
+                            .titled(u'Repository'))
+        dossier = create(Builder('dossier')
+                         .titled(u'Anfr\xf6gen 2015')
+                         .within(repository)
+                         .having(responsible=self.user.userid))
+
+        browser.login().visit(dossier)
+        factoriesmenu.add('Task')
+        browser.fill({'Title': 'Task title',
+                      'Task type': 'To comment'})
+
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill(TEST_USER_ID)
+        browser.find('Save').click()
+
+        browser.open('http://nohost/plone/repository/dossier-1/task-1')
+        browser.click_on("Resolve")
+        browser.fill({'Response': u'<p>Eine &amp; Aufgabe</p>'})
+        browser.click_on("Save")
+
+        with provide_dossier_task_layer(dossier.REQUEST):
+            layout = DefaultLayout(dossier, dossier.REQUEST, PDFBuilder())
+            dossiertasks = getMultiAdapter((dossier, dossier.REQUEST, layout),
+                                           ILaTeXView)
+
+            tasks_data = dossiertasks.get_render_arguments()['task_data_list']
+            self.assertEqual(1, len(tasks_data))
+            self.assertIn("Eine & Aufgabe", tasks_data[0]['history'])
