@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2025.9.1 (2025-11-10)
+---------------------
+
+Bug fixes:
+
+
+- Fix unauthorized error for spv return excerpt. [ran] [TI-2959]
+
+
 2025.9.0 (2025-10-30)
 ---------------------
 
