@@ -102,11 +102,14 @@ class RISReturnExcerptReceive(PrivilegedReceiveObject):
 
         intids = getUtility(IIntIds)
 
+        with elevated_privileges():
+            current_version = obj.get_current_version_id(missing_as_zero=True)
+
         data = {
             "path": "/".join(obj.getPhysicalPath())[len(portal_path) + 1:],
             "intid": intids.queryId(obj),
             "url": obj.absolute_url(),
-            "current_version_id": obj.get_current_version_id(missing_as_zero=True),
+            "current_version_id": current_version,
         }
 
         self.request.response.setHeader("Content-type", "application/json")
