@@ -468,6 +468,7 @@ class DocumentSerializer(CatalogItemSerializer):
         Attribute('public_trial_statement', 'disclosurestatusstatement', 'varchar'),
         Attribute('description', 'dadescription', 'varchar'),
         Attribute('keywords', 'objterms', 'jsonb'),
+        Attribute('reference_number', 'documentnumber', 'varchar'),
         Attribute('foreign_reference', 'gcexternalreference', 'varchar'),
         Attribute('document_date', 'dadate', 'date'),
         Attribute('receipt_date', 'gcreceiptdate', 'date'),
@@ -520,6 +521,9 @@ class DocumentSerializer(CatalogItemSerializer):
             return 'agendaitem-{}'.format(self.parent.agenda_item_id)
         else:
             return self.parent.UID()
+
+    def reference_number(self):
+        return '.'.join(IReferenceNumber(self.obj).get_numbers()['document'])
 
     # proposals:
     # - pproposaldocument
