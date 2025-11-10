@@ -378,7 +378,7 @@ class DossierSerializer(CatalogItemSerializer):
         Attribute('external_reference', 'boforeignnumber', 'varchar'),
         Attribute('related_dossiers', 'gborelateddossiers', 'jsonb'),
         Attribute('former_reference_number', 'bonumberhistory', 'jsonb'),
-        Attribute('reference_number', 'documentnumber', 'varchar'),
+        Attribute('reference_number', 'bosequencenumber', 'varchar'),
         # Attribute('dossier_type', 'XXX', 'varchar'),
         Attribute('classification', 'classification', 'varchar'),
         Attribute('privacy_layer', 'privacyprotection', 'boolean'),
