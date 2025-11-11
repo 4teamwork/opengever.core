@@ -410,7 +410,7 @@ class DossierSerializer(CatalogItemSerializer):
         return [ref.to_object.UID() for ref in value if ref.to_object is not None]
 
     def reference_number(self):
-        return '.'.join(IReferenceNumber(self.obj).get_numbers()['dossier'])
+        return IReferenceNumber(self.obj).get_numbers()['dossier'][-1]
 
     def former_reference_number(self):
         return [self.dexterity_field_value('former_reference_number')]
