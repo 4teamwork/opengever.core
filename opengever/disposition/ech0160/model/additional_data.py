@@ -13,7 +13,7 @@ def get_additional_data(obj):
         if value is None:
             continue
 
-        if isinstance(value, list):
+        if isinstance(value, list) or isinstance(value, set):
             value = u', '.join(value)
 
         if isinstance(value, bool):
