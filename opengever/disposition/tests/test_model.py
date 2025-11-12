@@ -366,23 +366,26 @@ class TestDocumentModel(IntegrationTestCase):
                            values=["one", "two", "three"])
                .with_field("bool", u"f3", u"Field 3", u"", False)
                .with_field("int", u"f4", u"Field 4", u"", False)
-               .with_field("date", u"f5", u"Field 5", u"", False))
+               .with_field("date", u"f5", u"Field 5", u"", False)
+               .with_field("multiple_choice", u"f6", u"Field 6", u"", False,
+                           values=["blue", "red", "green"]))
 
         IDocumentCustomProperties(self.document).custom_properties = {
             "IDocument.default": {"f1": "custom field text",
                                   "f2": ["one", "three"],
                                   "f3": False,
                                   "f4": 1234,
-                                  "f5": date(2022, 4, 1)},
+                                  "f5": date(2022, 4, 1),
+                                  "f6": {"red"}},
         }
 
         binding = Document(self.document).binding()
 
         self.assertEquals(
-            [u'f1', u'f2', u'f3', u'f4', u'f5'],
+            [u'f1', u'f2', u'f3', u'f4', u'f5', u'f6'],
             [prop.name for prop in binding.zusatzDaten.merkmal])
         self.assertEquals(
-            [u'custom field text', u'one, three', u'No', u'1234', u'2022-04-01'],
+            [u'custom field text', u'one, three', u'No', u'1234', u'2022-04-01', 'red'],
             [prop.value() for prop in binding.zusatzDaten.merkmal])
 
 
