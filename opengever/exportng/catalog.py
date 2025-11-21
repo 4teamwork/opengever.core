@@ -392,6 +392,7 @@ class DossierSerializer(CatalogItemSerializer):
         Attribute('readers', 'objsecread', 'jsonb'),
         Attribute('editors', 'objsecchange', 'jsonb'),
         Attribute('managers', 'fadmins', 'jsonb'),
+        Attribute('sort_order', '_sort_order', 'varchar'),
     ]
 
     def review_state(self):
@@ -417,6 +418,10 @@ class DossierSerializer(CatalogItemSerializer):
 
     def classification(self):
         return self.dexterity_field_value('classification').upper()
+
+    def sort_order(self):
+        return '.'.join([str(n).zfill(4) for n in IReferenceNumber(
+            self.obj).get_numbers()['dossier']])
 
 
 class DossierSyncer(CatalogSyncer):
