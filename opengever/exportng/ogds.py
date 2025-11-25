@@ -338,6 +338,7 @@ class AgendaItemSerializer(OGDSItemSerializer):
         state_mapping = {
             'pending': 'OPEN',
             'decided': 'DONE',
+            'revision': 'DONE',
         }
         return state_mapping.get(self.item.workflow_state)
 
