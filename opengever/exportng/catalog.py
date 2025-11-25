@@ -331,7 +331,7 @@ class FileplanEntrySerializer(CatalogItemSerializer):
         Attribute('title', 'fcstitle', 'jsonb'),
         Attribute('description', 'fcsdescription', 'varchar'),
         Attribute('location', 'felocation', 'varchar'),
-        Attribute('reference_number', 'fcsbusinessnumber', 'varchar'),
+        Attribute('reference_number', 'fcsbusinessnumber', 'integer'),
         Attribute('valid_from', 'objvalidfrom', 'date'),
         Attribute('valid_until', 'objvaliduntil', 'date'),
         # Attribute('external_reference', 'boforeignnumber', 'varchar', None),
@@ -346,7 +346,7 @@ class FileplanEntrySerializer(CatalogItemSerializer):
         return titles
 
     def reference_number(self):
-        return '.'.join(IReferenceNumber(self.obj).get_numbers()['repository'])
+        return int(IReferenceNumber(self.obj).get_local_number())
 
 
 class FileplanEntrySyncer(CatalogSyncer):
@@ -378,7 +378,7 @@ class DossierSerializer(CatalogItemSerializer):
         Attribute('external_reference', 'boforeignnumber', 'varchar'),
         Attribute('related_dossiers', 'gborelateddossiers', 'jsonb'),
         Attribute('former_reference_number', 'bonumberhistory', 'jsonb'),
-        Attribute('reference_number', 'bosequencenumber', 'varchar'),
+        Attribute('reference_number', 'bosequencenumber', 'integer'),
         # Attribute('dossier_type', 'XXX', 'varchar'),
         Attribute('classification', 'classification', 'varchar'),
         Attribute('privacy_layer', 'privacyprotection', 'boolean'),
@@ -411,7 +411,7 @@ class DossierSerializer(CatalogItemSerializer):
         return [ref.to_object.UID() for ref in value if ref.to_object is not None]
 
     def reference_number(self):
-        return IReferenceNumber(self.obj).get_numbers()['dossier'][-1]
+        return int(IReferenceNumber(self.obj).get_local_number())
 
     def former_reference_number(self):
         return [self.dexterity_field_value('former_reference_number')]
@@ -473,7 +473,7 @@ class DocumentSerializer(CatalogItemSerializer):
         Attribute('public_trial_statement', 'disclosurestatusstatement', 'varchar'),
         Attribute('description', 'dadescription', 'varchar'),
         Attribute('keywords', 'objterms', 'jsonb'),
-        Attribute('reference_number', 'documentnumber', 'varchar'),
+        Attribute('reference_number', 'documentnumber', 'integer'),
         Attribute('foreign_reference', 'gcexternalreference', 'varchar'),
         Attribute('document_date', 'dadate', 'date'),
         Attribute('receipt_date', 'gcreceiptdate', 'date'),
@@ -528,7 +528,7 @@ class DocumentSerializer(CatalogItemSerializer):
             return self.parent.UID()
 
     def reference_number(self):
-        return '.'.join(IReferenceNumber(self.obj).get_numbers()['document'])
+        return int(IReferenceNumber(self.obj).get_local_number())
 
     # proposals:
     # - pproposaldocument
