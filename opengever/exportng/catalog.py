@@ -436,6 +436,7 @@ class DossierSyncer(CatalogSyncer):
         'review_state': [
             'dossier-state-active',
             'dossier-state-resolved',
+            'dossier-state-inactive',
         ],
     }
     serializer = DossierSerializer
@@ -453,6 +454,7 @@ class SubdossierSyncer(DossierSyncer):
         'review_state': [
             'dossier-state-active',
             'dossier-state-resolved',
+            'dossier-state-inactive',
         ],
     }
     serializer = DossierSerializer
