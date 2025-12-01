@@ -1,6 +1,8 @@
 from Acquisition import aq_parent
 from ftw.journal.interfaces import IAnnotationsJournalizable
+from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.exportng.utils import Attribute
+from opengever.exportng.utils import document_parent
 from opengever.exportng.utils import userid_to_email
 from opengever.journal.manager import JournalManager
 
@@ -33,14 +35,6 @@ JOURNAL_MAPPING = [
 ]
 
 
-def parent_uid(obj):
-    parent = aq_parent(obj)
-    # Documents in tasks are added to the dossier
-    while parent.portal_type == 'opengever.task.task':
-        parent = aq_parent(parent)
-    return parent.UID()
-
-
 def get_journal_entries_from_document(obj):
     res = []
     if IAnnotationsJournalizable.providedBy(obj):
@@ -50,8 +44,12 @@ def get_journal_entries_from_document(obj):
             obj_event, has_histobj, parent_event = DOCUMENT_ACTION_TYPE_EVENT_MAPPING.get(
                 action_type, (None, False, None))
 
+            parent = document_parent(obj)
+            if has_histobj and not IDossierMarker.providedBy(parent):
+                continue
+
             if obj_event is not None:
-                histobj = parent_uid(obj) if has_histobj else None
+                histobj = parent.UID() if has_histobj else None
                 res.append({
                     'objexternalkey': obj.UID(),
                     'timestamp': entry['time'].asdatetime().replace(tzinfo=None),
@@ -62,7 +60,7 @@ def get_journal_entries_from_document(obj):
                 })
             if parent_event is not None:
                 res.append({
-                    'objexternalkey': parent_uid(obj),
+                    'objexternalkey': parent.UID(),
                     'timestamp': entry['time'].asdatetime().replace(tzinfo=None),
                     'user': userid_to_email(entry['actor']),
                     'historyobject': obj.UID(),
@@ -88,8 +86,9 @@ def get_journal_entries_from_dossier(obj):
                 title = entry.get('action', {}).get('title')
                 parent_event = DOSSIER_STATE_CHANGES.get(title)
 
+            parent = aq_parent(obj)
             if obj_event is not None:
-                histobj = parent_uid(obj) if has_histobj else None
+                histobj = parent.UID() if has_histobj else None
                 res.append({
                     'objexternalkey': obj.UID(),
                     'timestamp': entry['time'].asdatetime().replace(tzinfo=None),
@@ -100,7 +99,6 @@ def get_journal_entries_from_dossier(obj):
                 })
             # XXX: DOSSIER_CLOSED on parent is currently not supported in NG!?
             if parent_event is not None and parent_event != 'DOSSIER_CLOSED':
-                parent = aq_parent(obj)
                 if parent.portal_type != 'opengever.repository.repositoryfolder':
                     res.append({
                         'objexternalkey': parent.UID(),
