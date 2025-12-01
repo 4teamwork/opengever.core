@@ -335,6 +335,7 @@ class FileplanEntrySerializer(CatalogItemSerializer):
         Attribute('valid_from', 'objvalidfrom', 'date'),
         Attribute('valid_until', 'objvaliduntil', 'date'),
         # Attribute('external_reference', 'boforeignnumber', 'varchar', None),
+        Attribute('full_reference_number', '_reference_number', 'varchar'),
     ]
 
     def title(self):
@@ -347,6 +348,9 @@ class FileplanEntrySerializer(CatalogItemSerializer):
 
     def reference_number(self):
         return int(IReferenceNumber(self.obj).get_local_number())
+
+    def full_reference_number(self):
+        return '.'.join(IReferenceNumber(self.obj).get_numbers()['repository'])
 
 
 class FileplanEntrySyncer(CatalogSyncer):
