@@ -320,7 +320,11 @@ class AgendaItemSerializer(OGDSItemSerializer):
 
     def proposal_uid(self):
         if self.item.has_proposal:
-            return self.item.proposal.resolve_proposal().UID()
+            proposal = (
+                self.item.proposal.resolve_submitted_proposal()
+                or self.item.proposal.resolve_proposal()
+            )
+            return proposal.UID()
 
     def dossier_uid(self):
         if self.item.meeting.workflow_state == 'closed' and self.item.has_proposal:
@@ -364,11 +368,12 @@ class ProposalSerializer(OGDSItemSerializer):
         Attribute('dossier_uid', 'poriginaldossier', 'varchar'),
         Attribute('agendaitem_id', 'pagendaitem', 'varchar'),
         Attribute('attachments', '_pdocuments', 'jsonb'),
+        Attribute('document', '_pproposaldocument', 'varchar'),
     ]
 
     def __init__(self, item):
         super(ProposalSerializer, self).__init__(item)
-        self.proposal = item.resolve_proposal()
+        self.proposal = item.resolve_submitted_proposal() or item.resolve_proposal()
 
     def proposal_uid(self):
         return self.proposal.UID()
@@ -398,6 +403,9 @@ class ProposalSerializer(OGDSItemSerializer):
             'cancelled': 'DISCARDED',
         }
         return state_mapping.get(self.item.workflow_state)
+
+    def document(self):
+        return self.proposal.get_proposal_document().UID()
 
     def attachments(self):
         return [doc.UID() for doc in self.proposal.get_documents()]
