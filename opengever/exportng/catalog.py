@@ -10,6 +10,7 @@ from opengever.exportng.journal import get_journal_entries_from_document
 from opengever.exportng.journal import get_journal_entries_from_dossier
 from opengever.exportng.journal import JOURNAL_TABLE
 from opengever.exportng.utils import Attribute
+from opengever.exportng.utils import document_parent
 from opengever.exportng.utils import userid_to_email
 from opengever.meeting.model import AgendaItem
 from plone import api
@@ -512,20 +513,7 @@ class DocumentSerializer(CatalogItemSerializer):
             return os.path.splitext(value.filename)[-1][1:]
 
     def get_parent(self):
-        parent = aq_parent(self.obj)
-        if parent.portal_type == 'opengever.meeting.proposal':
-            pass
-        elif parent.portal_type == 'opengever.meeting.submittedproposal':
-            proposal = parent.load_model()
-            if proposal.agenda_item is not None:
-                return proposal.agenda_item
-            else:
-                parent = proposal.resolve_proposal()
-        else:
-            # Documents in tasks are added to the dossier
-            while parent.portal_type == 'opengever.task.task':
-                parent = aq_parent(parent)
-        return parent
+        return document_parent(self.obj)
 
     def parent_uid(self):
         if isinstance(self.parent, AgendaItem):
@@ -547,17 +535,18 @@ class DocumentSerializer(CatalogItemSerializer):
     def attributedefinitiontarget(self):
         if isinstance(self.parent, AgendaItem):
             return 'references'
+        real_parent = aq_parent(self.obj)
+        if real_parent.portal_type == 'opengever.meeting.submittedproposal':
+            if self.obj == real_parent.get_proposal_document():
+                return 'pproposaldocument'
+            else:
+                return 'pdocuments'
         if self.parent.portal_type == 'opengever.meeting.proposal':
             return 'pproposaldocument'
         if self.parent.portal_type == 'opengever.dossier.businesscasedossier':
             return 'gbodocuments'
         if self.parent.portal_type == 'opengever.meeting.meetingdossier':
             return 'gbodocuments'
-        # if self.obj.portal_type == 'opengever.document.document':
-        #     backrefs = self.obj.related_items(
-        #         include_forwardrefs=False, include_backrefs=True)
-        #     if any([br.portal_type == 'opengever.meeting.proposal' for br in backrefs]):
-        #         return 'pdocuments'
         logger.warning('Could not determine attributedefinitiontarget for %s', self.obj)
         return 'gbodocuments'
 
