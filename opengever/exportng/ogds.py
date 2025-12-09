@@ -18,7 +18,8 @@ logger = logging.getLogger('opengever.exportng')
 
 class OGDSItemSerializer(object):
 
-    mapping = {}
+    mapping = []
+    additional_mappings = {}
 
     def __init__(self, item):
         self.item = item
@@ -64,14 +65,24 @@ class OGDSSyncer(object):
     def sync(self):
         self.truncate()
         inserts = []
+        additional_inserts = {}
         for item in self.get_ogds_items():
             serializer = self.serializer(item)
             inserts.append(serializer.data())
+            for tablename in self.serializer.additional_mappings.keys():
+                additional_data = serializer.additional_data(tablename)
+                if additional_data:
+                    additional_inserts.setdefault(tablename, []).extend(
+                        additional_data)
 
         table = self.metadata.tables[self.table]
         with self.engine.connect() as conn:
             conn.execute(table.insert(), inserts)
-        logger.info('Added %s: %s', table, len(inserts))
+            logger.info('Added %s: %s', table, len(inserts))
+            for tablename, ainserts in additional_inserts.items():
+                atable = self.metadata.tables[tablename]
+                conn.execute(atable.insert(), ainserts)
+                logger.info('Added %s: %s', atable, len(ainserts))
 
 
 class UserSerializer(OGDSItemSerializer):
@@ -305,9 +316,18 @@ class AgendaItemSerializer(OGDSItemSerializer):
         Attribute('workflow_state', 'aistate', 'varchar'),
         Attribute('proposal_uid', 'aiproposal', 'varchar'),
         Attribute('dossier_uid', 'mdossier', 'varchar'),
-        Attribute('excerpt_uid', '_aiprotocolword', 'varchar'),
         Attribute('sort_order', '_sort_order', 'integer'),
+        Attribute('is_paragraph', '_is_subheading', 'boolean'),
     ]
+
+    additional_mappings = {
+        'agendaitem_links': {
+            Attribute('id', 'id', 'integer'),
+            Attribute('agendaitem_id', 'agendaitem', 'varchar'),
+            Attribute('excerpt_uid', 'document', 'varchar'),
+            Attribute('attributedefinitiontarget', 'attributedefinitiontarget', 'varchar'),
+        },
+    }
 
     def agendaitem_id(self):
         return 'agendaitem-{}'.format(self.item.agenda_item_id)
@@ -346,6 +366,16 @@ class AgendaItemSerializer(OGDSItemSerializer):
         }
         return state_mapping.get(self.item.workflow_state)
 
+    def additional_data(self, name):
+        excerpt_uid = self.excerpt_uid()
+        if excerpt_uid:
+            return [{
+                'id': self.item.agenda_item_id,
+                'agendaitem': self.agendaitem_id(),
+                'document': self.excerpt_uid(),
+                'attributedefinitiontarget': 'aiprotocolword',
+            }]
+
 
 class AgendaItemSyncer(OGDSSyncer):
 
@@ -367,9 +397,16 @@ class ProposalSerializer(OGDSItemSerializer):
         Attribute('issuer', 'pproposedby', 'varchar'),
         Attribute('dossier_uid', 'poriginaldossier', 'varchar'),
         Attribute('agendaitem_id', 'pagendaitem', 'varchar'),
-        Attribute('attachments', '_pdocuments', 'jsonb'),
-        Attribute('document', '_pproposaldocument', 'varchar'),
     ]
+
+    additional_mappings = {
+        'proposal_links': {
+            Attribute('id', 'id', 'integer'),
+            Attribute('proposal_id', 'proposal', 'varchar'),
+            Attribute('document', 'document', 'varchar'),
+            Attribute('attributedefinitiontarget', 'attributedefinitiontarget', 'varchar'),
+        },
+    }
 
     def __init__(self, item):
         super(ProposalSerializer, self).__init__(item)
@@ -409,6 +446,23 @@ class ProposalSerializer(OGDSItemSerializer):
 
     def attachments(self):
         return [doc.UID() for doc in self.proposal.get_documents()]
+
+    def additional_data(self, name):
+        links = []
+        document = self.document()
+        if document:
+            links.append({
+                'proposal': self.proposal_uid(),
+                'document': document,
+                'attributedefinitiontarget': 'pproposaldocument',
+            })
+        for attachment in self.attachments():
+            links.append({
+                'proposal': self.proposal_uid(),
+                'document': attachment,
+                'attributedefinitiontarget': 'pdocuments',
+            })
+        return links
 
 
 class ProposalSyncer(OGDSSyncer):
