@@ -149,12 +149,8 @@ class CommitteeSerializer(OGDSItemSerializer):
         return []
 
     def objsecchange(self):
-        return []
-        # Temporary workaround:
-        # Do not add any committee members because these would be added to
-        # every imported meeting.
-        # members = self.item.get_active_members()
-        # return [member.email for member in members]
+        members = self.item.get_active_members()
+        return [member.email for member in members]
 
     def objsecread(self):
         return []
