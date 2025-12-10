@@ -72,6 +72,7 @@ class Syncer(object):
         AgendaItemSyncer(engine, metadata).sync()
         ProposalSyncer(engine, metadata).sync()
         self.cleanup_orphans()
+        self.validate()
 
     def cleanup_orphans(self):
         parent_keys = set([])
@@ -123,3 +124,19 @@ class Syncer(object):
                 with engine.connect() as conn:
                     res = conn.execute(stmt)
                     logger.info('Removed %s orphans from table %s.', res.rowcount, JOURNAL_TABLE)
+
+    def validate(self):
+        table = metadata.tables[FileplanEntrySyncer.table]
+        stmt = select([table.c.objprimaryrelated])
+        with engine.connect() as conn:
+            fileplanentry_parents = set([r[0] for r in conn.execute(stmt).fetchall()])
+        table = metadata.tables[DossierSyncer.table]
+        stmt = select([table.c.objprimaryrelated])
+        with engine.connect() as conn:
+            dossier_parents = set([r[0] for r in conn.execute(stmt).fetchall()])
+        invalid_parents = fileplanentry_parents & dossier_parents
+        if invalid_parents:
+            logger.warning(
+                'Fileplan entries and dossiers with common parent: %s',
+                list(invalid_parents),
+            )
