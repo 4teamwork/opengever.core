@@ -231,7 +231,7 @@ class MeetingSerializer(OGDSItemSerializer):
     def workflow_state(self):
         state_mapping = {
             'pending': 'IN_PREPARATION',
-            'held': 'IN_PROGRESS',
+            'held': 'COMPLETED',
             'closed': 'CLOSED',
         }
         return state_mapping.get(self.item.workflow_state)
