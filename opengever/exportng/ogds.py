@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from Acquisition import aq_parent
+from DateTime import DateTime
 from opengever.base.exceptions import InvalidOguidIntIdPart
 from opengever.exportng.utils import Attribute
 from opengever.exportng.utils import userid_to_email
@@ -209,6 +210,13 @@ class MeetingSerializer(OGDSItemSerializer):
         Attribute('objsecchange', 'objsecchange', 'jsonb'),
         Attribute('objsecread', 'objsecread', 'jsonb'),
     ]
+
+    def start(self):
+        return DateTime(self.item.get_start()).asdatetime()
+
+    def end(self):
+        if self.item.end:
+            return DateTime(self.item.get_end()).asdatetime()
 
     def meeting_id(self):
         return 'meeting-{}'.format(self.item.meeting_id)
