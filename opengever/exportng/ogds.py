@@ -389,8 +389,8 @@ class ProposalSerializer(OGDSItemSerializer):
         Attribute('committee_uid', 'pcommittee', 'varchar'),
         Attribute('title', 'objname', 'varchar'),
         Attribute('workflow_state', 'pstate', 'varchar'),
-        Attribute('creator', 'objcreatedby', 'varchar'),
-        Attribute('issuer', 'pproposedby', 'varchar'),
+        Attribute('issuer', 'objcreatedby', 'varchar'),
+        Attribute('creator', 'pproposedby', 'varchar'),
         Attribute('dossier_uid', 'poriginaldossier', 'varchar'),
         Attribute('agendaitem_id', 'pagendaitem', 'varchar'),
     ]
