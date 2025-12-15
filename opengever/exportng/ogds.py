@@ -11,6 +11,7 @@ from opengever.meeting.model import Membership
 from opengever.meeting.model import Proposal
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.user import User
+from plone.app.uuid.utils import uuidToObject
 from sqlalchemy.sql.expression import false
 import logging
 
@@ -446,7 +447,11 @@ class ProposalSerializer(OGDSItemSerializer):
         return state_mapping.get(self.item.workflow_state)
 
     def document(self):
-        return self.proposal.get_proposal_document().UID()
+        if self.proposal._proposal_document_uuid:
+            document = uuidToObject(self.proposal._proposal_document_uuid)
+            if document:
+                return document.UID()
+        # return self.proposal.get_proposal_document().UID()
 
     def attachments(self):
         return [doc.UID() for doc in self.proposal.get_documents()]
