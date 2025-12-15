@@ -12,6 +12,8 @@ from opengever.exportng.journal import JOURNAL_TABLE
 from opengever.exportng.utils import Attribute
 from opengever.exportng.utils import document_parent
 from opengever.exportng.utils import userid_to_email
+from opengever.exportng.utils import garbage_collect
+from opengever.exportng.utils import timer
 from opengever.meeting.model import AgendaItem
 from plone import api
 from plone.dexterity.utils import iterSchemata
@@ -19,10 +21,7 @@ from Products.CMFEditions.utilities import dereference
 from six.moves import range
 from sqlalchemy import bindparam
 from sqlalchemy.sql.expression import false
-from time import time
-from zope.component.hooks import setSite
 from zope.schema import getFields
-import gc
 import logging
 import os.path
 
@@ -34,16 +33,6 @@ SQL_CHUNK_SIZE = 5000
 logger = logging.getLogger('opengever.exportng')
 
 
-def timer(func=time):
-    """Set up a generator returning the elapsed time since the last call """
-    def gen(last=func()):
-        while True:
-            elapsed = func() - last
-            last = func()
-            yield '%.3fs' % elapsed
-    return gen()
-
-
 def chunks(lst, n):
     """Yield successive n-sized chunks from lst."""
     for i in range(0, len(lst), n):
@@ -53,17 +42,6 @@ def chunks(lst, n):
 def rename_dict_key(dict_, old_key, new_key):
     dict_[new_key] = dict_.pop(old_key)
     return dict_
-
-
-def garbage_collect(site):
-    # In order to get rid of leaking references, the Plone site needs to be
-    # re-set in regular intervals using the setSite() hook. This reassigns
-    # it to the SiteInfo() module global in zope.component.hooks, and
-    # therefore allows the Python garbage collector to cut loose references
-    # it was previously holding on to.
-    setSite(site)
-    site._p_jar.cacheGC()
-    gc.collect()
 
 
 class CatalogItemSerializer(object):
