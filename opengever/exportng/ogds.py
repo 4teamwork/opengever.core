@@ -3,6 +3,8 @@ from Acquisition import aq_parent
 from DateTime import DateTime
 from opengever.base.exceptions import InvalidOguidIntIdPart
 from opengever.exportng.utils import Attribute
+from opengever.exportng.utils import garbage_collect
+from opengever.exportng.utils import timer
 from opengever.exportng.utils import userid_to_email
 from opengever.meeting.model import AgendaItem
 from opengever.meeting.model import Committee
@@ -13,6 +15,8 @@ from opengever.ogds.models.group import Group
 from opengever.ogds.models.user import User
 from plone.app.uuid.utils import uuidToObject
 from sqlalchemy.sql.expression import false
+from zope.component.hooks import getSite
+
 import logging
 
 logger = logging.getLogger('opengever.exportng')
@@ -45,6 +49,7 @@ class OGDSSyncer(object):
     def __init__(self, engine, metadata):
         self.engine = engine
         self.metadata = metadata
+        self.site = getSite()
 
     def get_sql_items(self):
         table = self.metadata.tables[self.table]
@@ -66,8 +71,16 @@ class OGDSSyncer(object):
 
     def sync(self):
         self.truncate()
+
+        total_time = timer()
+        lap_time = timer()
+        counter = 0
+
         inserts = []
         additional_inserts = {}
+        ogds_items = self.get_ogds_items()
+        ogds_items_len = len(ogds_items)
+        logger.info('Exporting %s %s...', ogds_items_len, self.table)
         for item in self.get_ogds_items():
             serializer = self.serializer(item)
             inserts.append(serializer.data())
@@ -76,6 +89,15 @@ class OGDSSyncer(object):
                 if additional_data:
                     additional_inserts.setdefault(tablename, []).extend(
                         additional_data)
+
+            counter += 1
+            if counter % 100 == 0:
+                logger.info(
+                    '%d of %d items processed (%.2f %%), last batch in %s',
+                    counter, ogds_items_len, 100 * float(counter) / ogds_items_len, next(lap_time),
+                )
+                garbage_collect(self.site)
+        logger.info('Processed %d items in %s.', counter, next(total_time))
 
         table = self.metadata.tables[self.table]
         with self.engine.connect() as conn:

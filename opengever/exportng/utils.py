@@ -1,6 +1,9 @@
 from Acquisition import aq_parent
 from collections import namedtuple
 from opengever.ogds.models.service import ogds_service
+from time import time
+from zope.component.hooks import setSite
+import gc
 
 CACHE = {}
 
@@ -8,6 +11,16 @@ Attribute = namedtuple(
     'Attribute',
     ['name', 'col_name', 'col_type'],
 )
+
+
+def timer(func=time):
+    """Set up a generator returning the elapsed time since the last call """
+    def gen(last=func()):
+        while True:
+            elapsed = func() - last
+            last = func()
+            yield '%.3fs' % elapsed
+    return gen()
 
 
 def userid_to_email(userid):
@@ -42,3 +55,14 @@ def document_parent(doc):
         while parent.portal_type == 'opengever.task.task':
             parent = aq_parent(parent)
     return parent
+
+
+def garbage_collect(site):
+    # In order to get rid of leaking references, the Plone site needs to be
+    # re-set in regular intervals using the setSite() hook. This reassigns
+    # it to the SiteInfo() module global in zope.component.hooks, and
+    # therefore allows the Python garbage collector to cut loose references
+    # it was previously holding on to.
+    setSite(site)
+    site._p_jar.cacheGC()
+    gc.collect()
