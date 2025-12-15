@@ -20,7 +20,9 @@ from six.moves import range
 from sqlalchemy import bindparam
 from sqlalchemy.sql.expression import false
 from time import time
+from zope.component.hooks import setSite
 from zope.schema import getFields
+import gc
 import logging
 import os.path
 
@@ -51,6 +53,17 @@ def chunks(lst, n):
 def rename_dict_key(dict_, old_key, new_key):
     dict_[new_key] = dict_.pop(old_key)
     return dict_
+
+
+def garbage_collect(site):
+    # In order to get rid of leaking references, the Plone site needs to be
+    # re-set in regular intervals using the setSite() hook. This reassigns
+    # it to the SiteInfo() module global in zope.component.hooks, and
+    # therefore allows the Python garbage collector to cut loose references
+    # it was previously holding on to.
+    setSite(site)
+    site._p_jar.cacheGC()
+    gc.collect()
 
 
 class CatalogItemSerializer(object):
@@ -181,6 +194,7 @@ class CatalogSyncer(object):
         self.base_query = query or {}
         self._catalog_items = None
         self._sql_items = None
+        self.site = api.portal.get()
 
     @property
     def catalog_items(self):
@@ -247,6 +261,7 @@ class CatalogSyncer(object):
                     '%d of %d items processed (%.2f %%), last batch in %s',
                     counter, added_len, 100 * float(counter) / added_len, next(lap_time),
                 )
+                garbage_collect(self.site)
         logger.info('Processed %d items in %s.', counter, next(total_time))
 
         if inserts:
@@ -288,6 +303,7 @@ class CatalogSyncer(object):
                     '%d of %d items processed (%.2f %%), last batch in %s',
                     counter, modified_len, 100 * float(counter) / modified_len, next(lap_time),
                 )
+                garbage_collect(self.site)
         logger.info('Processed %d items in %s.', counter, next(total_time))
 
         if updates:
