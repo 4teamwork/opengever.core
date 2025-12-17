@@ -1,0 +1,1 @@
+Fix PATCH requests for local groups in teamraum in combination with the ogds_auth plugin. [elioschmutz]

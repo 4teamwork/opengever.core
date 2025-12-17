@@ -384,6 +384,8 @@ class TestGeverGroupsPatch(IntegrationTestCase):
             method='PATCH',
             headers=self.api_headers)
 
+        self.ogds_group.session.flush()
+
         group_data = portal_groups.getGroupById(self.groupid)
         self.assertEqual(204, response.status_code)
         self.assertEqual(u'new title',
