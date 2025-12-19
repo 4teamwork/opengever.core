@@ -22,7 +22,7 @@ from sqlalchemy.sql.expression import true
 
 class GroupQuery(BaseQuery):
 
-    searchable_fields = ['groupid', 'title']
+    searchable_fields = ['groupname', 'title']
 
 
 class Group(Base):

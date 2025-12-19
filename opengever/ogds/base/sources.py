@@ -904,13 +904,16 @@ class BaseSQLModelSource(BaseQuerySoure):
             raise LookupError
 
     def search(self, query_string):
-        self.terms = []
         query = self.search_query.by_searchable_text(query_string.split(' '))
-
-        for result in query:
-            self.terms.append(self.getTerm(result.id()))
-
+        self.terms = self.create_terms_from_query(query)
         return self.terms
+
+    def create_terms_from_query(self, query):
+        terms = []
+        for result in query:
+            terms.append(self.getTerm(result.id()))
+
+        return terms
 
 
 class CurrentAdminUnitOrgUnitsSource(BaseSQLModelSource):
@@ -938,21 +941,24 @@ class CurrentAdminUnitOrgUnitsSourceBinder(object):
 class FilterMixin(object):
     """Filters the searched terms by white and black-listed groups
     """
-    def terms_filter(self, term):
+    def results_filter(self, result):
         black_list_prefix = api.portal.get_registry_record(
             'black_list_prefix', ISharingConfiguration)
         white_list_prefix = api.portal.get_registry_record(
             'white_list_prefix', ISharingConfiguration)
 
-        if re.search(black_list_prefix, term.value):
-            if re.search(white_list_prefix, term.value):
+        if re.search(black_list_prefix, result.groupname):
+            if re.search(white_list_prefix, result.groupname):
                 return True
             return False
         return True
 
-    def search(self, query_string):
-        terms = super(FilterMixin, self).search(query_string)
-        return filter(self.terms_filter, terms)
+    def create_terms_from_query(self, query):
+        terms = []
+        for result in filter(self.results_filter, query):
+            terms.append(self.getTerm(result.id()))
+
+        return terms
 
 
 class AllGroupsSource(BaseSQLModelSource):
@@ -986,7 +992,7 @@ class AllGroupsSource(BaseSQLModelSource):
 
         return query.order_by(
             asc(func.lower(Group.title)),
-            asc(func.lower(Group.groupid))
+            asc(func.lower(Group.groupname))
         )
 
     def raw_search(self, query_string):
