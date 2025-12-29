@@ -222,7 +222,7 @@ msgstr "Requêtes"
 #. Default: "Reference number addendum"
 #: ./opengever/repository/repositoryroot.py
 msgid "label_reference_number_addendum"
-msgstr "Numéro de référence addendum"
+msgstr "Numéro de référence supplémentaire"
 
 #. Default: "Repository number"
 #: ./opengever/repository/behaviors/referenceprefix.py
