@@ -82,7 +82,7 @@ services:
         soft: 65000
         hard: 65000
   ldap:
-    image: bitnami/openldap:2.6
+    image: bitnamilegacy/openldap:2.6
     ports:
       - 1389:1389
     environment:
