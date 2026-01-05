@@ -14,7 +14,6 @@ from Products.PlonePAS.interfaces.group import IGroupIntrospection
 from Products.PlonePAS.interfaces.group import IGroupManagement
 from Products.PluggableAuthService.interfaces.plugins import IGroupEnumerationPlugin
 from Products.PluggableAuthService.interfaces.plugins import IGroupsPlugin
-from unittest import expectedFailure
 import json
 
 
@@ -342,7 +341,6 @@ class TestGeverGroupsPatch(IntegrationTestCase):
         self.ogds_group = Group.query.get(self.groupid)
         self.ogds_group.is_local = True
 
-    @expectedFailure
     @browsing
     def test_updating_group_is_allowed_for_administrators(self, browser):
         self.login(self.workspace_owner, browser)
@@ -384,6 +382,8 @@ class TestGeverGroupsPatch(IntegrationTestCase):
             method='PATCH',
             headers=self.api_headers)
 
+        self.ogds_group.session.flush()
+
         group_data = portal_groups.getGroupById(self.groupid)
         self.assertEqual(204, response.status_code)
         self.assertEqual(u'new title',
@@ -423,7 +423,6 @@ class TestGeverGroupsPatch(IntegrationTestCase):
         self.assertEqual(u'Gruppe Rechnungspr\xfcfungskommission',
                          safe_unicode(group_data.getGroupTitleOrName()))
 
-    @expectedFailure
     @browsing
     def test_updating_group_also_updates_ogds(self, browser):
         self.login(self.administrator, browser)

@@ -2,6 +2,7 @@ from AccessControl.requestmethod import postonly
 from AccessControl.SecurityInfo import ClassSecurityInfo
 from logging import getLogger
 from OFS.Cache import Cacheable
+from opengever.ogds.auth.property import OGDSAuthPropertySheet
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.group import groups_users
 from opengever.ogds.models.service import ogds_service
@@ -436,7 +437,6 @@ class OGDSAuthenticationPlugin(BasePlugin, Cacheable):
     # IPropertiesPlugin implementation
     def getPropertiesForUser(self, user, request=None):
         self.log('Getting properties for user={!r}'.format(user))
-
         view_name = self.getId() + '_getPropertiesForUser'
         principal_id = user.getId()
         is_group = user.isGroup()
@@ -449,7 +449,7 @@ class OGDSAuthenticationPlugin(BasePlugin, Cacheable):
 
         if cached_info is not None:
             self.log('Returning cached results from getPropertiesForUser()')
-            return cached_info
+            return OGDSAuthPropertySheet(self.getId(), **cached_info)
 
         principal_id = safe_unicode(principal_id)
 
@@ -478,7 +478,7 @@ class OGDSAuthenticationPlugin(BasePlugin, Cacheable):
             self.log("Returning properties %r" % properties)
 
         self.ZCacheable_set(properties, view_name=view_name, keywords=criteria)
-        return properties
+        return OGDSAuthPropertySheet(self.getId(), **properties)
 
     security.declareProtected(ManagePortal, 'manage_updateConfig')
 

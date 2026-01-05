@@ -512,7 +512,7 @@ class TestOGDSAuthPluginIPropertiesPlugin(TestOGDSAuthPluginBase):
             'lastname': 'B\xc3\xa4rfuss',
             'fullname': 'K\xc3\xa4thi B\xc3\xa4rfuss (FD-AFI)',
         }
-        self.assertEqual(expected, results)
+        self.assertEqual(expected, results._properties)
 
     def test_get_properties_for_user_also_works_for_groups(self):
         group = PloneUser('projekt_a')
@@ -522,7 +522,7 @@ class TestOGDSAuthPluginIPropertiesPlugin(TestOGDSAuthPluginBase):
             'groupid': 'projekt_a',
             'title': 'Projekt A',
         }
-        self.assertEqual(expected, results)
+        self.assertEqual(expected, results._properties)
 
     def test_get_properties_for_user_with_no_match_returns_empty_dict(self):
         self.portal.acl_users.source_users.addUser(
@@ -532,7 +532,7 @@ class TestOGDSAuthPluginIPropertiesPlugin(TestOGDSAuthPluginBase):
         member_not_in_ogds = api.user.get('some.user.id')
         results = self.plugin.getPropertiesForUser(member_not_in_ogds)
         expected = {}
-        self.assertEqual(expected, results)
+        self.assertEqual(expected, results._properties)
 
     def test_get_properties_for_user_only_returns_props_for_active_users(self):
         ogds_user = ogds_service().fetch_user(self.dossier_responsible.id)
@@ -542,13 +542,13 @@ class TestOGDSAuthPluginIPropertiesPlugin(TestOGDSAuthPluginBase):
         inactive_member = api.user.get(self.dossier_responsible.id)
         results = self.plugin.getPropertiesForUser(inactive_member)
         expected = {}
-        self.assertEqual(expected, results)
+        self.assertEqual(expected, results._properties)
 
     def test_get_properties_for_user_returns_bytestring_values(self):
         member = api.user.get(self.regular_user.id)
         results = self.plugin.getPropertiesForUser(member)
 
-        for key, value in results.items():
+        for key, value in results.propertyItems():
             self.assertIsInstance(key, str)
             self.assertIsInstance(value, str)
 
@@ -571,12 +571,12 @@ class TestOGDSAuthPluginIPropertiesPlugin(TestOGDSAuthPluginBase):
             'lastname': '',
             'fullname': '',
         }
-        self.assertEqual(expected, results)
+        self.assertEqual(expected, results._properties)
 
     def test_get_properties_for_user_is_case_insensitive(self):
         user = PloneUser('REGULAR_USER')
         results = self.plugin.getPropertiesForUser(user)
-        self.assertEqual(self.regular_user.id, results['userid'])
+        self.assertEqual(self.regular_user.id, results._properties['userid'])
 
     def test_get_properties_for_user_is_cached(self):
         kathi = api.user.get(self.regular_user.id)
@@ -591,17 +591,17 @@ class TestOGDSAuthPluginIPropertiesPlugin(TestOGDSAuthPluginBase):
 
             results = self.plugin.getPropertiesForUser(kathi)
             cached_results = self.plugin.getPropertiesForUser(kathi)
-            self.assertEqual(results, cached_results)
+            self.assertEqual(results._properties, cached_results._properties)
             self.assertEqual(1, mock_query_ogds.call_count)
 
             cache_miss = self.plugin.getPropertiesForUser(robert)
-            self.assertNotEqual(cache_miss, cached_results)
+            self.assertNotEqual(cache_miss._properties, cached_results._properties)
             self.assertEqual(2, mock_query_ogds.call_count)
 
             negative_cache_miss = self.plugin.getPropertiesForUser(member_not_in_ogds)
             negative_cache_hit = self.plugin.getPropertiesForUser(member_not_in_ogds)
             self.assertEqual(3, mock_query_ogds.call_count)
-            self.assertEqual(negative_cache_hit, negative_cache_miss)
+            self.assertEqual(negative_cache_hit._properties, negative_cache_miss._properties)
 
 
 class TestOGDSAuthPluginPloneIntegration(OGDSAuthTestCase):
