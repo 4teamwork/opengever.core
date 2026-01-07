@@ -96,6 +96,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
                 ('repositoryfolder_tasks_tab', True),
                 ('resolver_name', 'strict'),
                 ('sablon_date_format', u'%d.%m.%Y'),
+                ('save_as_pdf', True),
                 ('solr', True),
                 ('tasktemplatefolder_nesting', False),
                 ('error_log', False),

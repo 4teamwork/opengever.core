@@ -92,6 +92,11 @@ class IDocumentSettings(Interface):
         missing_value=[],
     )
 
+    is_save_document_as_pdf_feature_enabled = schema.Bool(
+        title=u'Enable Save as PDF Feature',
+        description=u'Allows users to save documents as pdfs',
+        default=True)
+
 
 class ICheckinCheckoutManager(Interface):
     """Interface for the checkin / checkout manager.

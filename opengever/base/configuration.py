@@ -176,6 +176,7 @@ class GeverSettingsAdpaterV1(object):
         features['repositoryfolder_tasks_tab'] = api.portal.get_registry_record('show_tasks_tab', interface=IRepositoryFolderRecords)  # noqa
         features['resolver_name'] = api.portal.get_registry_record('resolver_name', interface=IDossierResolveProperties)
         features['sablon_date_format'] = api.portal.get_registry_record('sablon_date_format_string', interface=IMeetingSettings)  # noqa
+        features['save_as_pdf'] = api.portal.get_registry_record('is_save_document_as_pdf_feature_enabled', interface=IDocumentSettings)  # noqa
         features['solr'] = api.portal.get_registry_record('use_solr', interface=ISearchSettings)
         features['tasktemplatefolder_nesting'] = api.portal.get_registry_record('is_tasktemplatefolder_nesting_enabled', interface=ITaskTemplateSettings)  # noqa
         features['error_log'] = is_redis_error_log_feature_enabled()
