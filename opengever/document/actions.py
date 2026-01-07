@@ -9,6 +9,7 @@ from opengever.document.behaviors import IBaseDocument
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.interfaces import IFileActions
+from opengever.document.utils import is_save_as_pdf_feature_enabled
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.inbox.inbox import IInbox
 from opengever.meeting import is_meeting_feature_enabled
@@ -295,6 +296,9 @@ class DocumentSchemaContextActions(BaseDocumentContextActions):
         return self.file_actions.is_oneoffixx_retry_action_available()
 
     def is_save_document_as_pdf_available(self):
+        if not is_save_as_pdf_feature_enabled():
+            return False
+
         if self.is_trashed:
             return False
 

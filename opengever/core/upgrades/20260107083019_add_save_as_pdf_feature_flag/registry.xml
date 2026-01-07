@@ -1,0 +1,5 @@
+<registry>
+  <records interface="opengever.document.interfaces.IDocumentSettings">
+    <value key="is_save_document_as_pdf_feature_enabled">True</value>
+  </records>
+</registry>

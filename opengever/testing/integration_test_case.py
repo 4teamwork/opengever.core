@@ -98,6 +98,7 @@ FEATURE_FLAGS = {
     'workspace-meeting': 'opengever.workspace.interfaces.IWorkspaceMeetingSettings.is_feature_enabled',
     'workspace-todo': 'opengever.workspace.interfaces.IToDoSettings.is_feature_enabled',
     'favorites': 'opengever.base.interfaces.IFavoritesSettings.is_feature_enabled',
+    'save_as_pdf': 'opengever.base.interfaces.IDocumentSettings.is_save_document_as_pdf_feature_enabled',  # noqa
     'solr': 'opengever.base.interfaces.ISearchSettings.use_solr',
     'error_log': 'opengever.base.interfaces.IBaseSettings.is_redis_error_log_feature_enabled',
     'purge-trash': 'opengever.dossier.interfaces.IDossierResolveProperties.purge_trash_enabled',
