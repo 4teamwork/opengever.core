@@ -93,15 +93,6 @@ class TestExcelRoleAssignmentReport(SolrIntegrationTestCase):
                     u'Task responsible'
                 ],
                 [
-                    u'Zu allem \xdcbel',
-                    u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-17',
-                    u'Business Case Dossier',
-                    u'fa_inbox_users',
-                    None,
-                    u'fa_inbox_users',
-                    u'Task responsible'
-                ],
-                [
                     u'Abgeschlossene Vertr\xe4ge',
                     u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-5',
                     u'Business Case Dossier',
@@ -113,6 +104,15 @@ class TestExcelRoleAssignmentReport(SolrIntegrationTestCase):
                 [
                     u'Inaktive Vertr\xe4ge',
                     u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-6',
+                    u'Business Case Dossier',
+                    u'fa_inbox_users',
+                    None,
+                    u'fa_inbox_users',
+                    u'Task responsible'
+                ],
+                                [
+                    u'Zu allem \xdcbel',
+                    u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-17',
                     u'Business Case Dossier',
                     u'fa_inbox_users',
                     None,
