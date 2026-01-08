@@ -10,6 +10,7 @@ from opengever.ogds.models.org_unit import OrgUnit
 from opengever.testing import IntegrationTestCase
 from plone import api
 from unittest import skip
+from uuid import uuid4
 
 
 class TestPossibleWatchersSource(IntegrationTestCase):
@@ -39,21 +40,21 @@ class TestPossibleWatchersSource(IntegrationTestCase):
         self.login(self.regular_user)
         source = PossibleWatchersSource(self.task)
 
-        create(Builder('ogds_group').having(groupid='regular_group_1', title="Regular Group 1"))
-        create(Builder('ogds_group').having(groupid='regular_group_2', title="Regular Group 2"))
-        create(Builder('ogds_group').having(groupid='regular_group_3', title="Regular Group 3"))
+        create(Builder('ogds_group').having(groupid=uuid4().hex, groupname='regular_group_1', title="Regular Group 1"))
+        create(Builder('ogds_group').having(groupid=uuid4().hex, groupname='regular_group_2', title="Regular Group 2"))
+        create(Builder('ogds_group').having(groupid=uuid4().hex, groupname='regular_group_3', title="Regular Group 3"))
 
         self.assertItemsEqual([
-            'group:regular_group_1',
-            'group:regular_group_2',
-            'group:regular_group_3'
-        ], [term.token for term in source.search('Regular Group')])
+            'Regular Group 1',
+            'Regular Group 2',
+            'Regular Group 3'
+        ], [term.title for term in source.search('Regular Group')])
 
         api.portal.set_registry_record('possible_watcher_groups_white_list_regex', u'^.+2$', IBaseSettings)
 
         self.assertItemsEqual([
-            'group:regular_group_2',
-        ], [term.token for term in source.search('Regular Group')])
+            'Regular Group 2',
+        ], [term.title for term in source.search('Regular Group')])
 
     def test_list_only_users_with_view_permission(self):
         self.login(self.dossier_manager)
