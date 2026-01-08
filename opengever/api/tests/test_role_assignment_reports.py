@@ -35,24 +35,6 @@ class TestRoleAssignmentReportGet(SolrIntegrationTestCase):
                     u'title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung'
                 },
                 {
-                    u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-17',
-                    u'@type': u'opengever.dossier.businesscasedossier',
-                    u'UID': u'createprotecteddossiers000000003',
-                    u'description': u'Schl\xe4cht',
-                    u'is_leafnode': None,
-                    u'reference': u'Client1 1.1 / 11',
-                    u'review_state': u'dossier-state-active',
-                    u'role_Contributor': [],
-                    u'role_DossierManager': [],
-                    u'role_Editor': [],
-                    u'role_Publisher': [],
-                    u'role_Reader': [],
-                    u'role_Reviewer': [],
-                    u'role_Role Manager': [],
-                    u'role_TaskResponsible': [u'regular_user'],
-                    u'title': u'Zu allem \xdcbel'
-                },
-                {
                     u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-5',
                     u'@type': u'opengever.dossier.businesscasedossier',
                     u'UID': u'createexpireddossier000000000001',
@@ -87,6 +69,24 @@ class TestRoleAssignmentReportGet(SolrIntegrationTestCase):
                     u'role_Role Manager': [],
                     u'role_TaskResponsible': [u'regular_user'],
                     u'title': u'Inaktive Vertr\xe4ge'
+                },
+                                {
+                    u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-17',
+                    u'@type': u'opengever.dossier.businesscasedossier',
+                    u'UID': u'createprotecteddossiers000000003',
+                    u'description': u'Schl\xe4cht',
+                    u'is_leafnode': None,
+                    u'reference': u'Client1 1.1 / 11',
+                    u'review_state': u'dossier-state-active',
+                    u'role_Contributor': [],
+                    u'role_DossierManager': [],
+                    u'role_Editor': [],
+                    u'role_Publisher': [],
+                    u'role_Reader': [],
+                    u'role_Reviewer': [],
+                    u'role_Role Manager': [],
+                    u'role_TaskResponsible': [u'regular_user'],
+                    u'title': u'Zu allem \xdcbel'
                 }
             ],
             u'items_total': 4,

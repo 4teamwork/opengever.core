@@ -43,6 +43,14 @@ class TestRoleAssignmentReporter(SolrIntegrationTestCase):
                         },
                     },
                     {
+                        "item": {"@id": "http://nohost/plone/workspaces/workspace-1"},
+                        "role_assignments": {
+                            "WorkspaceAdmin": ["fridolin.hugentobler", "gunther.frohlich"],
+                            "WorkspaceGuest": ["hans.peter"],
+                            "WorkspaceMember": ["beatrice.schrodinger"],
+                        },
+                    },
+                    {
                         "item": {"@id": "http://nohost/plone/ordnungssystem/fuhrung"},
                         "role_assignments": {"DossierManager": ["dossier_manager"]},
                     },
@@ -61,6 +69,18 @@ class TestRoleAssignmentReporter(SolrIntegrationTestCase):
                             "Reader": ["archivist"],
                             "Reviewer": ["archivist"],
                         },
+                    },
+                    {
+                        "item": {
+                            "@id": "http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-5"
+                        },
+                        "role_assignments": {"TaskResponsible": ["fa_inbox_users", "regular_user"]},
+                    },
+                    {
+                        "item": {
+                            "@id": "http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-6"
+                        },
+                        "role_assignments": {"TaskResponsible": ["fa_inbox_users", "regular_user"]},
                     },
                     {
                         "item": {
@@ -85,29 +105,9 @@ class TestRoleAssignmentReporter(SolrIntegrationTestCase):
                     },
                     {
                         "item": {
-                            "@id": "http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-5"
-                        },
-                        "role_assignments": {"TaskResponsible": ["fa_inbox_users", "regular_user"]},
-                    },
-                    {
-                        "item": {
-                            "@id": "http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-6"
-                        },
-                        "role_assignments": {"TaskResponsible": ["fa_inbox_users", "regular_user"]},
-                    },
-                    {
-                        "item": {
                             "@id": "http://nohost/plone/ordnungssystem/rechnungsprufungskommission"
                         },
                         "role_assignments": {"Contributor": ["archivist"], "Publisher": ["archivist"]},
-                    },
-                    {
-                        "item": {"@id": "http://nohost/plone/workspaces/workspace-1"},
-                        "role_assignments": {
-                            "WorkspaceAdmin": ["fridolin.hugentobler", "gunther.frohlich"],
-                            "WorkspaceGuest": ["hans.peter"],
-                            "WorkspaceMember": ["beatrice.schrodinger"],
-                        },
                     },
                 ]
             }, self.strip_item_metadata(reporter()))
@@ -228,12 +228,6 @@ class TestRoleAssignmentReporter(SolrIntegrationTestCase):
                     },
                     {
                         "item": {
-                            "@id": "http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-17",
-                        },
-                        "role_assignments": {"TaskResponsible": ["fa_inbox_users"]},
-                    },
-                    {
-                        "item": {
                             "@id": "http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-5",
                         },
                         "role_assignments": {"TaskResponsible": ["fa_inbox_users"]},
@@ -241,6 +235,12 @@ class TestRoleAssignmentReporter(SolrIntegrationTestCase):
                     {
                         "item": {
                             "@id": "http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-6",
+                        },
+                        "role_assignments": {"TaskResponsible": ["fa_inbox_users"]},
+                    },
+                    {
+                        "item": {
+                            "@id": "http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-17",
                         },
                         "role_assignments": {"TaskResponsible": ["fa_inbox_users"]},
                     },
@@ -408,17 +408,6 @@ class TestRoleAssignmentReporter(SolrIntegrationTestCase):
                 },
                 {
                     "item": {
-                        "@id": "http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-17"
-                    },
-                    "principal": {
-                        "groupname": "fa_inbox_users",
-                        "principal_id": "fa_inbox_users",
-                        "username": None,
-                    },
-                    "role": "TaskResponsible",
-                },
-                {
-                    "item": {
                         "@id": "http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-5"
                     },
                     "principal": {
@@ -431,6 +420,17 @@ class TestRoleAssignmentReporter(SolrIntegrationTestCase):
                 {
                     "item": {
                         "@id": "http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-6"
+                    },
+                    "principal": {
+                        "groupname": "fa_inbox_users",
+                        "principal_id": "fa_inbox_users",
+                        "username": None,
+                    },
+                    "role": "TaskResponsible",
+                },
+                                {
+                    "item": {
+                        "@id": "http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-17"
                     },
                     "principal": {
                         "groupname": "fa_inbox_users",

@@ -26,7 +26,7 @@ class RoleAssignmentReporter(object):
         'is_leafnode',
     ]
 
-    sort_order = 'path asc'
+    sort_order = 'sortable_reference asc'
 
     def __init__(self):
         self.solr_service = SolrQueryService()
