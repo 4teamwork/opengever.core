@@ -49,10 +49,10 @@ class PossibleWatchersSourceUsers(AssignedUsersSource):
 
 class PossibleWatchersGroupsSource(AllFilteredGroupsSourcePrefixed):
 
-    def terms_filter(self, term):
+    def results_filter(self, result):
         white_list_prefix = api.portal.get_registry_record(
             'possible_watcher_groups_white_list_regex', IBaseSettings)
-        return bool(re.search(white_list_prefix, term.value))
+        return bool(re.search(white_list_prefix, result.groupname))
 
 
 class PossibleWatchersSource(BaseMultipleSourcesQuerySource):

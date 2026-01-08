@@ -4,6 +4,7 @@ from ftw.solr.connection import SolrResponse
 from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.schema import SolrSchema
 from mock import MagicMock
+from opengever.base.model import create_session
 from opengever.ogds.base.interfaces import IAdminUnitConfiguration
 from opengever.ogds.base.sources import AllEmailContactsAndUsersSource
 from opengever.ogds.base.sources import AllFilteredGroupsSource
@@ -24,6 +25,7 @@ from opengever.testing import SolrIntegrationTestCase
 from pkg_resources import resource_string
 from plone import api
 from plone.app.testing import TEST_USER_ID
+from uuid import uuid4
 from zope.component import getUtility
 from zope.schema.vocabulary import SimpleTerm
 import os
@@ -1201,54 +1203,100 @@ class TestAllFilteredGroupsSource(TestAllGroupsSource):
         self.source = AllFilteredGroupsSource(self.portal)
 
     def test_search_does_not_find_blacklisted_groups(self):
-        expected_groups = [
-            u'fa_inbox_users',
-            u'fa_users',
-            u'committee_ver_group',
-            u'committee_rpk_group',
-            u'projekt_a',
-            u'projekt_b',
-            u'projekt_laeaer',
-            u'rk_inbox_users',
-            u'rk_users',
-        ]
-        self.assertEqual(expected_groups, [term.value for term in self.source.search('')])
+        session = create_session()
+        group_1 = Group(
+            groupid=uuid4().hex,
+            groupname='group_a_1',
+            title="MasterGroup A 1",
+            external_id=uuid4().hex,
+        )
+        group_2 = Group(
+            groupid=uuid4().hex,
+            groupname='group_a_2',
+            title="MasterGroup A 2",
+            external_id=uuid4().hex,
+        )
+        group_3 = Group(
+            groupid=uuid4().hex,
+            groupname='group_b_1',
+            title="MasterGroup B 1",
+            external_id=uuid4().hex,
+        )
+        group_4 = Group(
+            groupid='44444',
+            groupname='group_b_2',
+            title="MasterGroup B 2",
+            external_id=uuid4().hex,
+        )
+
+        for group in (group_1, group_2, group_3, group_4):
+            session.add(group)
+        session.flush()
 
         # Whitelist no group explicitly
         api.portal.set_registry_record('white_list_prefix', u'^$', ISharingConfiguration)
 
-        # Blacklist all groups beginning with `fa_`
-        api.portal.set_registry_record('black_list_prefix', u'^fa_', ISharingConfiguration)
+        # Blacklist all groups beginning with `group_a_`
+        api.portal.set_registry_record('black_list_prefix', u'^group_a_', ISharingConfiguration)
 
         expected_groups = [
-            u'committee_ver_group',
-            u'committee_rpk_group',
-            u'projekt_a',
-            u'projekt_b',
-            u'projekt_laeaer',
-            u'rk_inbox_users',
-            u'rk_users',
+            u'MasterGroup B 1',
+            u'MasterGroup B 2',
         ]
-        self.assertEqual(expected_groups, [term.value for term in self.source.search('')])
+
+        self.assertEqual(expected_groups, [term.title for term in self.source.search('MasterGroup')])
 
         # Blacklist all groups
         api.portal.set_registry_record('black_list_prefix', u'^.', ISharingConfiguration)
-        self.assertEqual([], [term.value for term in self.source.search('')])
+        self.assertEqual([], [term.title for term in self.source.search('')])
 
     def test_search_finds_whitelisted_org_groups(self):
+        session = create_session()
+        group_1 = Group(
+            groupid=uuid4().hex,
+            groupname='group_a_1',
+            title="MasterGroup A 1",
+            external_id=uuid4().hex,
+        )
+        group_2 = Group(
+            groupid=uuid4().hex,
+            groupname='group_a_2',
+            title="MasterGroup A 2",
+            external_id=uuid4().hex,
+        )
+        group_3 = Group(
+            groupid=uuid4().hex,
+            groupname='group_b_1',
+            title="MasterGroup B 1",
+            external_id=uuid4().hex,
+        )
+        group_4 = Group(
+            groupid='44444',
+            groupname='group_b_2',
+            title="MasterGroup B 2",
+            external_id=uuid4().hex,
+        )
+
+        for group in (group_1, group_2, group_3, group_4):
+            session.add(group)
+        session.flush()
+
         # Blacklist all groups
         api.portal.set_registry_record('black_list_prefix',
                                        u'^.',
                                        ISharingConfiguration)
 
-        # Whitelist all groups beginning with `fa_` explicitly
+        # Whitelist all groups beginning with `group_a_` explicitly
         api.portal.set_registry_record('white_list_prefix',
-                                       u'^fa_',
+                                       u'^group_a_',
                                        ISharingConfiguration)
 
-        self.assertEqual(
-            [u'fa_inbox_users', u'fa_users'],
-            [term.value for term in self.source.search('')])
+        expected_groups = [
+            u'MasterGroup A 1',
+            u'MasterGroup A 2',
+        ]
+
+        self.assertEqual(expected_groups, [term.title for term in self.source.search('MasterGroup')])
 
 
 class TestAllTeamsSource(IntegrationTestCase):

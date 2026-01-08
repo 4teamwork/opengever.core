@@ -48,7 +48,7 @@ event.listen(
 
 class GroupQuery(BaseQuery):
 
-    searchable_fields = ['groupid', 'title']
+    searchable_fields = ['groupname', 'title']
 
 
 class Group(Base):
