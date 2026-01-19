@@ -149,15 +149,17 @@ def to_html_xweb_intelligent(text):
     )
 
 
-def file_checksum(filename, chunksize=65536, algorithm=u'MD5'):
-    """Calculates a checksum for the given file."""
+def file_checksum(file_obj, chunksize=65536, algorithm=u'MD5'):
+    """Calculates a checksum for the given file object."""
+    if not file_obj.mode == 'rb':
+        raise Exception("Must read the file in byte mode")
+
     h = getattr(hashlib, algorithm.lower())()
-    with open(filename, 'rb') as f:
-        chunk = f.read(chunksize)
-        while len(chunk) > 0:
-            h.update(chunk)
-            chunk = f.read(chunksize)
-        return algorithm, h.hexdigest()
+    chunk = file_obj.read(chunksize)
+    while len(chunk) > 0:
+        h.update(chunk)
+        chunk = file_obj.read(chunksize)
+    return algorithm, h.hexdigest()
 
 
 def make_persistent(data):

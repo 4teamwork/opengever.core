@@ -9,11 +9,11 @@ import unittest
 
 class DummyZipFile(object):
     def __init__(self):
-        self.filenames = []
+        self.data = []
         self.arcnames = []
 
-    def write(self, filename, arcname):
-        self.filenames.append(filename)
+    def writestr(self, arcname, data):
+        self.data.append(data)
         self.arcnames.append(arcname)
 
 

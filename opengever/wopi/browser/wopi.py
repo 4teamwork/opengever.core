@@ -146,8 +146,8 @@ class WOPIView(BrowserView):
         modified_iso9601 = (
             modified_dt.replace(tzinfo=None) - modified_dt.utcoffset()
         ).isoformat() + 'Z'
-        _alg, sha256_checksum = file_checksum(
-            self.obj.file._blob.committed(), algorithm=u'SHA256')
+        with self.obj.get_file().open() as file_:
+            _alg, sha256_checksum = file_checksum(file_, algorithm=u'SHA256')
         data = {
             'BaseFileName': self.obj.file.filename,
             'OwnerId': self.obj.Creator() or self.obj.getOwner().getId(),

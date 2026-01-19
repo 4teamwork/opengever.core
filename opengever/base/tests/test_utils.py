@@ -144,20 +144,20 @@ class TestEscapeHTML(TestCase):
 class TestChecksum(TestCase):
 
     def test_md5_checksum(self):
-        filename = os.path.join(os.path.dirname(__file__), 'data', 'test.txt')
-        alg, chksum = file_checksum(filename)
+        with open(os.path.join(os.path.dirname(__file__), 'data', 'test.txt'), 'rb') as file_:
+            alg, chksum = file_checksum(file_)
         self.assertEqual(alg, u'MD5')
         self.assertEqual(chksum, 'a51445bd8ffce9a6b90199f3fd72715a')
 
     def test_md5_checksum_with_multiple_chunks(self):
-        filename = os.path.join(os.path.dirname(__file__), 'data', 'test.txt')
-        alg, chksum = file_checksum(filename, chunksize=100)
+        with open(os.path.join(os.path.dirname(__file__), 'data', 'test.txt'), 'rb') as file_:
+            alg, chksum = file_checksum(file_, chunksize=100)
         self.assertEqual(alg, u'MD5')
         self.assertEqual(chksum, 'a51445bd8ffce9a6b90199f3fd72715a')
 
     def test_sha256_checksum(self):
-        filename = os.path.join(os.path.dirname(__file__), 'data', 'test.txt')
-        alg, chksum = file_checksum(filename, algorithm=u'SHA256')
+        with open(os.path.join(os.path.dirname(__file__), 'data', 'test.txt'), 'rb') as file_:
+            alg, chksum = file_checksum(file_, algorithm=u'SHA256')
         self.assertEqual(alg, u'SHA256')
         self.assertEqual(chksum, '2cbe78150099d95789ceb5606818eeefccc7228cedd9bbe9cf7ce6af7071abd2')
 

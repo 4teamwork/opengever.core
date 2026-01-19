@@ -45,7 +45,8 @@ class Folder(object):
         return ordner
 
     def add_to_zip(self, zipfile):
-        for file_ in self.files:
-            zipfile.write(file_.filepath, os.path.join(self.path, file_.name))
+        for ech_0160_file in self.files:
+            with ech_0160_file.file.open() as file_:
+                zipfile.writestr(os.path.join(self.path, ech_0160_file.name), file_.read())
         for folder in self.folders:
             folder.add_to_zip(zipfile)

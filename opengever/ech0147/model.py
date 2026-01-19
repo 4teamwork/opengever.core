@@ -146,7 +146,8 @@ class MessageT1(object):
         for dossier in self.dossiers:
             dossier.add_to_zip(zipfile)
         for document in self.documents:
-            zipfile.write(document.blobpath, document.path)
+            with document.obj.get_file().open() as file_:
+                zipfile.writestr(document.path, file_.read())
 
 
 class Dossier(object):
@@ -220,7 +221,8 @@ class Dossier(object):
         for dossier in self.dossiers:
             dossier.add_to_zip(zipfile)
         for document in self.documents:
-            zipfile.write(document.blobpath, document.path)
+            with document.obj.get_file().open() as file_:
+                zipfile.writestr(document.path, file_.read())
 
 
 class Document(object):
@@ -228,7 +230,6 @@ class Document(object):
     def __init__(self, obj, base_path):
         self.obj = obj
         self.path = os.path.join(base_path, self.obj.get_file().filename)
-        self.blobpath = self.obj.get_file()._blob.committed()
 
     def binding(self):
         d = ech0147t0.documentType()
@@ -242,7 +243,8 @@ class Document(object):
         f = ech0147t0.fileType()
         f.pathFileName = self.path
         f.mimeType = self.obj.get_file().contentType
-        f.hashCodeAlgorithm, f.hashCode = file_checksum(self.blobpath)
+        with self.obj.get_file().open() as file_:
+            f.hashCodeAlgorithm, f.hashCode = file_checksum(file_)
         d.files.append(f)
 
         c_obj = IClassification(self.obj)
