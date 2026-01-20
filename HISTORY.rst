@@ -10,6 +10,16 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2024.18.2 (2026-01-20)
+----------------------
+
+Bug fixes:
+
+
+- Fix PATCH requests for local groups in teamraum in combination with the ogds_auth plugin. [elioschmutz] [TI-3525]
+- Fix ogds group query source white and black list filter. [elioschmutz] [TI-3539]
+
+
 2024.18.1 (2025-02-27)
 ----------------------
 
