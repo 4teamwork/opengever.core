@@ -10,6 +10,35 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2026.1.0 (2026-01-22)
+---------------------
+
+New features:
+
+
+- Feature flag the Save as PDF action. [ran] [TI-3266]
+
+
+Bug fixes:
+
+
+- Fix unauthorized error for spv return excerpt. [ran] [TI-2959]
+- Fix generating task listing pdf for resolved dossiers in nightly jobs. [elioschmutz] [TI-3124]
+- Fallback to noreply from address if sender and receiver of notification emails are equal. [elioschmutz] [TI-3214]
+- Properly check permissions for the transfer responsible ui listing action. [elioschmutz] [TI-3265]
+- Fix sip package generation if using multiple choice custom fields. [elioschmutz] [TI-3289]
+- Fix generating task listing pdf for tasks having special chars in the response comments. [elioschmutz] [TI-3331]
+- Fix PATCH requests for local groups in teamraum in combination with the ogds_auth plugin. [elioschmutz] [TI-3525]
+- Fix ogds group query source white and black list filter. [elioschmutz] [TI-3539]
+
+
+Other changes:
+
+
+- Sort role assignment report with reference instead of path. [ran] [TI-2850]
+- Fix unintuitive french translation. [ran] [TI-2984]
+
+
 2025.9.0 (2025-10-30)
 ---------------------
 
