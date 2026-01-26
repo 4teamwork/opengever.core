@@ -343,7 +343,7 @@ class AgendaItemSerializer(OGDSItemSerializer):
         Attribute('workflow_state', 'aistate', 'varchar'),
         Attribute('proposal_uid', 'aiproposal', 'varchar'),
         Attribute('dossier_uid', 'mdossier', 'varchar'),
-        Attribute('sort_order', '_sort_order', 'integer'),
+        Attribute('sort_order', '_sort_key', 'integer'),
         Attribute('is_paragraph', '_is_subheading', 'boolean'),
     ]
 
