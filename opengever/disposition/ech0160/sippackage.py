@@ -136,9 +136,12 @@ class SIPPackage(object):
             filename = os.path.join(schemas_path, schema)
             arcname = os.path.join(
                 self.get_folder_name(), 'header', 'xsd', schema)
+
             zipfile.write(filename, arcname)
 
-            checksum_alg, checksum = file_checksum(filename)
+            with open(filename, 'rb') as file_:
+                checksum_alg, checksum = file_checksum(file_)
+
             self.xsd.append(arelda.dateiSIP(
                 schema,
                 schema,

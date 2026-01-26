@@ -24,5 +24,6 @@ class File(object):
         datei = arelda.dateiSIP(id=self.id)
         datei.name = self.name
         datei.originalName = self.filename
-        datei.pruefalgorithmus, datei.pruefsumme = file_checksum(self.filepath)
+        with self.file.open() as file_:
+            datei.pruefalgorithmus, datei.pruefsumme = file_checksum(file_)
         return datei
