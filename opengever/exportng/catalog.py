@@ -330,7 +330,7 @@ class FileplanEntrySerializer(CatalogItemSerializer):
         Attribute('valid_from', 'objvalidfrom', 'date'),
         Attribute('valid_until', 'objvaliduntil', 'date'),
         # Attribute('external_reference', 'boforeignnumber', 'varchar', None),
-        Attribute('full_reference_number', '_reference_number', 'varchar'),
+        Attribute('full_reference_number', '_sort_key', 'varchar'),
     ]
 
     def title(self):
@@ -391,7 +391,7 @@ class DossierSerializer(CatalogItemSerializer):
         Attribute('readers', 'objsecread', 'jsonb'),
         Attribute('editors', 'objsecchange', 'jsonb'),
         Attribute('managers', 'fadmins', 'jsonb'),
-        Attribute('sort_order', '_sort_order', 'varchar'),
+        Attribute('sort_order', '_sort_key', 'varchar'),
     ]
 
     def review_state(self):
