@@ -376,6 +376,8 @@ class AgendaItemSerializer(OGDSItemSerializer):
         Attribute('dossier_uid', 'mdossier', 'varchar'),
         Attribute('sort_order', '_sort_key', 'integer'),
         Attribute('is_paragraph', '_is_subheading', 'boolean'),
+        Attribute('created', 'objcreatedat', 'datetime'),
+        Attribute('modified', 'objmodifiedat', 'datetime'),
     ]
 
     additional_mappings = {
@@ -423,6 +425,12 @@ class AgendaItemSerializer(OGDSItemSerializer):
             'revision': 'DONE',
         }
         return state_mapping.get(self.item.workflow_state)
+
+    def created(self):
+        return None
+
+    def modified(self):
+        return None
 
     def additional_data(self, name):
         adata = []
