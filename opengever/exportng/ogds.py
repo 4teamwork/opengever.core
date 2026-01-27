@@ -292,6 +292,7 @@ class MeetingParticipantsSerializer(OGDSItemSerializer):
         Attribute('meeting_id', 'meeting', 'varchar'),
         Attribute('participant', 'participant', 'varchar'),
         Attribute('role', 'role', 'varchar'),
+        Attribute('attendance', 'attendance', 'boolean'),
     ]
 
     def data(self):
@@ -307,6 +308,14 @@ class MeetingParticipantsSerializer(OGDSItemSerializer):
                 'meeting': meeting_id,
                 'participant': participant.email,
                 'role': role,
+                'attendance': True,
+            })
+        for absentee in self.item.absentees:
+            participants.append({
+                'meeting': meeting_id,
+                'participant': absentee.email,
+                'role': None,
+                'attendance': False
             })
         return participants
 
