@@ -378,7 +378,8 @@ class DossierSerializer(CatalogItemSerializer):
         Attribute('related_dossiers', 'gborelateddossiers', 'jsonb'),
         Attribute('former_reference_number', 'bonumberhistory', 'jsonb'),
         Attribute('reference_number', 'bosequencenumber', 'integer'),
-        # Attribute('dossier_type', 'XXX', 'varchar'),
+        Attribute('dossier_type', 'objcategory', 'varchar'),
+        Attribute('customfields', 'customfieldsjson', 'jsonb'),
         Attribute('classification', 'classification', 'varchar'),
         Attribute('privacy_layer', 'privacyprotection', 'boolean'),
         Attribute('public_trial', 'disclosurestatus', 'varchar'),
@@ -417,6 +418,12 @@ class DossierSerializer(CatalogItemSerializer):
 
     def classification(self):
         return self.dexterity_field_value('classification').upper()
+
+    def dossier_type(self):
+        return None
+
+    def customfields(self):
+        return {}
 
     def sort_order(self):
         return '.'.join([str(n).zfill(4) for n in IReferenceNumber(
