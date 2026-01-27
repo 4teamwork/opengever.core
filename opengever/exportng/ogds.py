@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from Acquisition import aq_parent
+from datetime import date
 from DateTime import DateTime
+from datetime import datetime
 from opengever.base.exceptions import InvalidOguidIntIdPart
 from opengever.exportng.utils import Attribute
 from opengever.exportng.utils import garbage_collect
@@ -40,6 +42,15 @@ class OGDSItemSerializer(object):
                 value = getattr(self.item, attr.name)
             data[attr.col_name] = value
         return data
+
+    def as_datetime(self, value):
+        if callable(value):
+            value = value()
+        if isinstance(value, date):
+            value = datetime.combine(value, datetime.min.time())
+        elif isinstance(value, DateTime):
+            value = value.asdatetime().replace(tzinfo=None)
+        return value
 
 
 class OGDSSyncer(object):
@@ -152,6 +163,8 @@ class CommitteeSerializer(OGDSItemSerializer):
         Attribute('workflow_state', 'cdeactivated', 'boolean'),
         Attribute('committee_dossier_location', 'cmeetingdossierlocation', 'varchar'),
         Attribute('protocoltype', 'cprotocoltype', 'varchar'),
+        Attribute('created', 'objcreatedat', 'datetime'),
+        Attribute('modified', 'objmodifiedat', 'datetime'),
         Attribute('objsecsecurity', 'objsecsecurity', 'jsonb'),
         Attribute('objsecchange', 'objsecchange', 'jsonb'),
         Attribute('objsecread', 'objsecread', 'jsonb'),
@@ -165,6 +178,12 @@ class CommitteeSerializer(OGDSItemSerializer):
 
     def committee_dossier_location(self):
         return self.item.resolve_committee().get_repository_folder().UID()
+
+    def created(self):
+        return self.as_datetime(self.item.resolve_committee().created())
+
+    def modified(self):
+        return self.as_datetime(self.item.resolve_committee().modified())
 
     def protocoltype(self):
         return 'WORD'
@@ -229,6 +248,8 @@ class MeetingSerializer(OGDSItemSerializer):
         Attribute('dossier_uid', 'mdossier', 'varchar'),
         Attribute('timezone', 'mtimezone', 'varchar'),
         Attribute('workflow_state', 'mmeetingstate', 'varchar'),
+        Attribute('created', 'objcreatedat', 'datetime'),
+        Attribute('modified', 'objmodifiedat', 'datetime'),
         Attribute('objsecsecurity', 'objsecsecurity', 'jsonb'),
         Attribute('objsecchange', 'objsecchange', 'jsonb'),
         Attribute('objsecread', 'objsecread', 'jsonb'),
@@ -266,6 +287,10 @@ class MeetingSerializer(OGDSItemSerializer):
             'closed': 'CLOSED',
         }
         return state_mapping.get(self.item.workflow_state)
+
+    def created(self):
+        # We don't have a creation date
+        return None
 
     def objsecsecurity(self):
         return []
@@ -442,6 +467,8 @@ class ProposalSerializer(OGDSItemSerializer):
         Attribute('creator', 'pproposedby', 'varchar'),
         Attribute('dossier_uid', 'poriginaldossier', 'varchar'),
         Attribute('agendaitem_id', 'pagendaitem', 'varchar'),
+        Attribute('created', 'objcreatedat', 'datetime'),
+        Attribute('modified', 'objmodifiedat', 'datetime'),
     ]
 
     additional_mappings = {
@@ -485,6 +512,12 @@ class ProposalSerializer(OGDSItemSerializer):
             'cancelled': 'DISCARDED',
         }
         return state_mapping.get(self.item.workflow_state)
+
+    def created(self):
+        return self.as_datetime(self.item.resolve_proposal().created())
+
+    def modified(self):
+        return self.as_datetime(self.proposal.modified())
 
     def document(self):
         if self.proposal._proposal_document_uuid:
