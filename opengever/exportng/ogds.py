@@ -273,11 +273,8 @@ class MeetingSerializer(OGDSItemSerializer):
     def objsecchange(self):
         return []
 
-    # Temporary workaround:
-    # Give read permission to all meeting participants. This will add them as
-    # participants in NG as we can't set them yet in another way.
     def objsecread(self):
-        return [participant.email for participant in self.item.participants]
+        return []
 
 
 class MeetingSyncer(OGDSSyncer):
