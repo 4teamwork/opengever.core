@@ -400,14 +400,26 @@ class AgendaItemSerializer(OGDSItemSerializer):
         return state_mapping.get(self.item.workflow_state)
 
     def additional_data(self, name):
-        excerpt_uid = self.excerpt_uid()
-        if excerpt_uid:
-            return [{
+        adata = []
+        if not self.item.has_proposal:
+            doc = self.item.resolve_document()
+            if doc:
+                adata.append({
+                    'id': self.item.agenda_item_id,
+                    'agendaitem': self.agendaitem_id(),
+                    'document': doc.UID(),
+                    'attributedefinitiontarget': 'references',
+                })
+
+        for doc in self.item.get_excerpt_documents(unrestricted=True):
+            adata.append({
                 'id': self.item.agenda_item_id,
                 'agendaitem': self.agendaitem_id(),
-                'document': self.excerpt_uid(),
+                'document': doc.UID(),
                 'attributedefinitiontarget': 'aiprotocolword',
-            }]
+            })
+
+        return adata
 
 
 class AgendaItemSyncer(OGDSSyncer):
