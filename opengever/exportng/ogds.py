@@ -170,11 +170,11 @@ class CommitteeSerializer(OGDSItemSerializer):
         return 'WORD'
 
     def objsecsecurity(self):
-        return []
-
-    def objsecchange(self):
         members = self.item.get_active_members()
         return [member.email for member in members]
+
+    def objsecchange(self):
+        return []
 
     def objsecread(self):
         return []
