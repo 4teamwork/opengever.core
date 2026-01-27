@@ -505,9 +505,11 @@ class ProposalSerializer(OGDSItemSerializer):
                 'document': document,
                 'attributedefinitiontarget': 'pproposaldocument',
             })
+        original_proposal = self.item.resolve_proposal()
+        if original_proposal:
             links.append({
                 'proposal': self.proposal_uid(),
-                'document': document,
+                'document': original_proposal.get_proposal_document().UID(),
                 'attributedefinitiontarget': 'poriginaldocument',
             })
         for attachment in self.attachments():
