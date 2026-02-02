@@ -423,7 +423,7 @@ class DossierSerializer(CatalogItemSerializer):
         return None
 
     def customfields(self):
-        return {}
+        return None
 
     def sort_order(self):
         return '.'.join([str(n).zfill(4) for n in IReferenceNumber(
