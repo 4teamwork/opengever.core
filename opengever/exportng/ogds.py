@@ -444,12 +444,27 @@ class AgendaItemSerializer(OGDSItemSerializer):
                     'attributedefinitiontarget': 'references',
                 })
 
-        for doc in self.item.get_excerpt_documents(unrestricted=True):
+        # OneGov NG only supports one excerpt per agenda item
+        # Export the newest excerpt as excerpt and all other as referenced documents
+        excerpts = sorted(
+            self.item.get_excerpt_documents(unrestricted=True),
+            key=lambda doc: doc.modified(),
+            reverse=True,
+        )
+        if excerpts:
+            doc = excerpts[0]
             adata.append({
                 'id': self.item.agenda_item_id,
                 'agendaitem': self.agendaitem_id(),
                 'document': doc.UID(),
                 'attributedefinitiontarget': 'aiprotocolword',
+            })
+        for doc in excerpts[1:]:
+            adata.append({
+                'id': self.item.agenda_item_id,
+                'agendaitem': self.agendaitem_id(),
+                'document': doc.UID(),
+                'attributedefinitiontarget': 'references',
             })
 
         return adata
