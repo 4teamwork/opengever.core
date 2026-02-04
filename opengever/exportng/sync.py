@@ -47,6 +47,8 @@ class Syncer(object):
         create_table(CommitteeMemberSyncer.table, CommitteeMemberSyncer.serializer.mapping)
         create_table(MeetingSyncer.table, MeetingSyncer.serializer.mapping)
         create_table(MeetingParticipantsSyncer.table, MeetingParticipantsSyncer.serializer.mapping)
+        for tablename, mapping in MeetingSyncer.serializer.additional_mappings.items():
+            create_table(tablename, mapping)
         create_table(AgendaItemSyncer.table, AgendaItemSyncer.serializer.mapping)
         for tablename, mapping in AgendaItemSyncer.serializer.additional_mappings.items():
             create_table(tablename, mapping)
