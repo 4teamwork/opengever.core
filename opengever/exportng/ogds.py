@@ -255,6 +255,15 @@ class MeetingSerializer(OGDSItemSerializer):
         Attribute('objsecread', 'objsecread', 'jsonb'),
     ]
 
+    additional_mappings = {
+        'meeting_links': {
+            Attribute('id', 'id', 'integer'),
+            Attribute('meeting_id', 'meeting', 'varchar'),
+            Attribute('document_uid', 'document', 'varchar'),
+            Attribute('attributedefinitiontarget', 'attributedefinitiontarget', 'varchar'),
+        },
+    }
+
     def start(self):
         return DateTime(self.item.get_start()).asdatetime()
 
@@ -299,6 +308,9 @@ class MeetingSerializer(OGDSItemSerializer):
         return []
 
     def objsecread(self):
+        return []
+
+    def additional_data(self, name):
         return []
 
 
