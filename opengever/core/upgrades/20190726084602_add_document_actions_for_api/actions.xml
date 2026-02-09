@@ -96,7 +96,7 @@
     </object>
 
     <object name="oneoffixx_retry" meta_type="CMF Action" i18n:domain="opengever.document">
-      <property name="title" i18n:translate="">Oneoffixx retry</property>
+      <property name="title" i18n:translate="">Primedocs retry</property>
       <property name="description" i18n:translate="label_retry_oneoffixx" />
       <property name="available_expr">object/@@file_actions_availability/is_oneoffixx_retry_action_available</property>
       <property name="permissions">

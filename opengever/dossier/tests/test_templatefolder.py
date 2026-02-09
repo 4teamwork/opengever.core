@@ -875,7 +875,7 @@ class TestTemplateDocumentTabsWithOneoffixx(IntegrationTestCase):
     def test_visible_tabs(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.templates, view='tabbed_view')
-        expected_tabs = ['OneOffixx', 'Documents', 'Task template folders']
+        expected_tabs = ['Primedocs', 'Documents', 'Task template folders']
         self.assertEqual(expected_tabs, browser.css('.tabbedview-tabs span').text)
 
 
