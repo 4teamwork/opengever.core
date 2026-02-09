@@ -131,7 +131,7 @@ class SolrReporterView(BaseReporterView):
         if paths:
             self._extend_selected_items_query_by_paths(solr_query, paths, include_children=include_children)
         elif listing_name:
-            self._extend_selected_items_query_by_listing(solr_query, listing_name)
+            self._extend_selected_items_query_by_listing(solr_query, listing_name, include_children=include_children)
 
         for batch in batched_solr_results(**solr_query):
             for doc in batch:
@@ -164,10 +164,13 @@ class SolrReporterView(BaseReporterView):
 
         solr_query['fq'] = filter_queries
 
-    def _extend_selected_items_query_by_listing(self, solr_query, listing_name):
+    def _extend_selected_items_query_by_listing(self, solr_query, listing_name, include_children=False):
         listing = queryMultiAdapter((self.context, self.request), name="GET_application_json_@listing")
         listing.listing_name = listing_name
         query, filters, start, rows, sort, field_list, params = listing.prepare_solr_query(self.request.form)
+
+        if include_children:
+            filters = [f for f in filters if not f.startswith(u'is_subdossier:')]
 
         solr_query['sort'] = sort
         solr_query['query'] = query
