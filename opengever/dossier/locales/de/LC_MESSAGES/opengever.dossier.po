@@ -732,10 +732,10 @@ msgstr "Sie können «${name}» nicht verschieben weil Sie die entsprechenden Be
 msgid "label_number_of_containers"
 msgstr "Anzahl Behältnisse"
 
-#. Default: "OneOffixx"
+#. Default: "Primedocs"
 #: ./opengever/dossier/browser/tabbed.py
 msgid "label_oneoffixx_templates"
-msgstr "OneOffixx"
+msgstr "Primedocs"
 
 #. Default: "Overview"
 #: ./opengever/dossier/browser/tabbed.py

@@ -771,11 +771,11 @@ msgstr "Restore"
 msgid "label_retry_docugate"
 msgstr "Retry with Docugate"
 
-#. German translation: Mit Oneoffixx wiederholen
-#. Default: "Oneoffixx retry"
+#. German translation: Mit Primedocs wiederholen
+#. Default: "Primedocs retry"
 #: ./opengever/document/browser/templates/macros.pt
 msgid "label_retry_oneoffixx"
-msgstr "Retry with OneOffixx"
+msgstr "Retry with Primedocs"
 
 #. German translation: Dokument zurücksetzen
 #. Default: "Restore this version"

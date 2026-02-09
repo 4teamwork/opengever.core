@@ -54,7 +54,7 @@ msgstr "Groupe de modèles"
 msgid "label_title"
 msgstr "Titre"
 
-#. Default: "Connection to OneOffixx failed."
+#. Default: "Connection to Primedocs failed."
 #: ./opengever/oneoffixx/browser/form.py
 msgid "msg_could_not_connect_to_oneoffixx"
-msgstr "Erreur de connection à OneOffix."
+msgstr "Erreur de connection à Primedocs."

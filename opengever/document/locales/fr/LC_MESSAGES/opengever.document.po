@@ -650,10 +650,10 @@ msgstr "Restaurer"
 msgid "label_retry_docugate"
 msgstr "Réessayer avec Docugate"
 
-#. Default: "Oneoffixx retry"
+#. Default: "Primedocs retry"
 #: ./opengever/document/browser/templates/macros.pt
 msgid "label_retry_oneoffixx"
-msgstr "Réessayer avec Oneoffixx"
+msgstr "Réessayer avec Primedocs"
 
 #. Default: "Restore this version"
 #: ./opengever/document/browser/templates/macros.pt

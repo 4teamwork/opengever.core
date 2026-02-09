@@ -524,7 +524,7 @@ class TestFileActionsGetForDocuments(FileActionsTestBase):
         self.login(self.manager, browser)
         expected_file_actions = [
             {u'id': u'oneoffixx_retry',
-             u'title': u'Oneoffixx retry',
+             u'title': u'Primedocs retry',
              u'icon': u''},
             {u'id': u'trash_context',
              u'title': u'Trash',
