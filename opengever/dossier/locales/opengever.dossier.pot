@@ -729,7 +729,7 @@ msgstr ""
 msgid "label_number_of_containers"
 msgstr ""
 
-#. Default: "OneOffixx"
+#. Default: "Primedocs"
 #: ./opengever/dossier/browser/tabbed.py
 msgid "label_oneoffixx_templates"
 msgstr ""

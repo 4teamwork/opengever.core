@@ -188,7 +188,7 @@
                            data-document-url context/absolute_url"
             class="function-revert oc-checkout"
             i18n:translate="label_retry_oneoffixx">
-            Oneoffixx retry
+            Primedocs retry
         </a>
       </tal:oneoffixx>
 

@@ -147,7 +147,7 @@ class TemplateFolderTabbedView(GeverTabbedView):
         if is_oneoffixx_feature_enabled():
             return {
                 'id': 'oneoffixxtemplates',
-                'title': _(u'label_oneoffixx_templates', default=u'OneOffixx'),
+                'title': _(u'label_oneoffixx_templates', default=u'Primedocs'),
             }
 
         return None

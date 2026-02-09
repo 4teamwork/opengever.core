@@ -883,11 +883,11 @@ msgstr "${name} cannot be moved because you do not have the permissions. "
 msgid "label_number_of_containers"
 msgstr "Number of physical containers"
 
-#. German translation: OneOffixx
-#. Default: "OneOffixx"
+#. German translation: Primedocs
+#. Default: "Primedocs"
 #: ./opengever/dossier/browser/tabbed.py
 msgid "label_oneoffixx_templates"
-msgstr "OneOffixx"
+msgstr "Primedocs"
 
 #. German translation: Übersicht
 #. Default: "Overview"

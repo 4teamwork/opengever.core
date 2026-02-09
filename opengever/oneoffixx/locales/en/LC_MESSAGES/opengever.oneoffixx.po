@@ -62,8 +62,8 @@ msgstr "Template group"
 msgid "label_title"
 msgstr "Title"
 
-#. German translation: Verbindung zu OneOffixx fehlgeschlagen.
-#. Default: "Connection to OneOffixx failed."
+#. German translation: Verbindung zu Primedocs fehlgeschlagen.
+#. Default: "Connection to Primedocs failed."
 #: ./opengever/oneoffixx/browser/form.py
 msgid "msg_could_not_connect_to_oneoffixx"
-msgstr "Connection to OneOffixx failed."
+msgstr "Connection to Primedocs failed."

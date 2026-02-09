@@ -647,7 +647,7 @@ msgstr ""
 msgid "label_retry_docugate"
 msgstr ""
 
-#. Default: "Oneoffixx retry"
+#. Default: "Primedocs retry"
 #: ./opengever/document/browser/templates/macros.pt
 msgid "label_retry_oneoffixx"
 msgstr ""
