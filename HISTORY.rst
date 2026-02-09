@@ -10,6 +10,16 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2026.1.1 (2026-02-09)
+---------------------
+
+Other changes:
+
+
+- Mass dossier export with subdossier always includes subdosiers. [ran] [TI-3357]
+- Update translations for oneoffixx. [ran] [TI-3357-2]
+
+
 2026.1.0 (2026-01-22)
 ---------------------
 
