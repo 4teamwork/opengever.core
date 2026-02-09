@@ -731,10 +731,10 @@ msgstr "${name} ne peut pas être déplacé, parce que vous n'avez pas les droit
 msgid "label_number_of_containers"
 msgstr "Nombre de conteneurs"
 
-#. Default: "OneOffixx"
+#. Default: "Primedocs"
 #: ./opengever/dossier/browser/tabbed.py
 msgid "label_oneoffixx_templates"
-msgstr "OneOffixx"
+msgstr "Primedocs"
 
 #. Default: "Overview"
 #: ./opengever/dossier/browser/tabbed.py

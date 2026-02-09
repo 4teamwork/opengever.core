@@ -653,10 +653,10 @@ msgstr "Wiederherstellen"
 msgid "label_retry_docugate"
 msgstr "Mit Docugate wiederholen"
 
-#. Default: "Oneoffixx retry"
+#. Default: "Primedocs retry"
 #: ./opengever/document/browser/templates/macros.pt
 msgid "label_retry_oneoffixx"
-msgstr "Mit Oneoffixx wiederholen"
+msgstr "Mit Primedocs wiederholen"
 
 #. Default: "Restore this version"
 #: ./opengever/document/browser/templates/macros.pt

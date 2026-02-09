@@ -229,7 +229,7 @@ msgid "document_from_officeatwork"
 msgstr "Document de officeatwork"
 
 msgid "document_with_oneoffixx_template"
-msgstr "Document à partir d'un modèle OneOffixx"
+msgstr "Document à partir d'un modèle Primedocs"
 
 msgid "document_with_template"
 msgstr "Document à partir du modèle"

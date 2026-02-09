@@ -283,9 +283,9 @@ msgstr "Document from Docugate template"
 msgid "document_from_officeatwork"
 msgstr "Document from officeatwork"
 
-#. German translation: Dokument aus OneOffixx Vorlage
+#. German translation: Dokument aus Primedocs Vorlage
 msgid "document_with_oneoffixx_template"
-msgstr "Document from OneOffixx template"
+msgstr "Document from Primedocs template"
 
 #. German translation: Dokument aus Vorlage
 msgid "document_with_template"
