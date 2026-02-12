@@ -16,6 +16,7 @@ class TokenManager(object):
     """
 
     ANNOTATIONS_KEY = 'sign_token'
+    TTL = 3600 * 24 * 30  # one month
 
     def __init__(self, context):
         self.context = context
@@ -30,7 +31,7 @@ class TokenManager(object):
         if not token or token != self._get_token():
             raise InvalidToken()
 
-        if not validate_access_token(token, self._get_token_scope()):
+        if not validate_access_token(token, self._get_token_scope(), ttl=self.TTL):
             raise InvalidToken()
 
         return True
