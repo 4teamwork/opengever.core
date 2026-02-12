@@ -6,4 +6,10 @@
 
   <include file="permissions.zcml" />
 
+  <subscriber
+      for="opengever.document.behaviors.IBaseDocument
+           zope.lifecycleevent.interfaces.IObjectCopiedEvent"
+      handler=".handlers.reset_sign_data_after_clone"
+      />
+
 </configure>

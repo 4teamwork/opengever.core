@@ -41,3 +41,7 @@ class SignedVersionsStorage(object):
 
     def store(self, signed_versions):
         self.annotations[self.ANNOTATIONS_KEY] = signed_versions.to_json_object()
+
+    def clear(self):
+        if self.ANNOTATIONS_KEY in self.annotations:
+            del self.annotations[self.ANNOTATIONS_KEY]
