@@ -13,6 +13,9 @@ variable "OGCORE_IMAGE" {
 variable "OGTESTSERVER_IMAGE" {
   default = "docker.io/4teamwork/ogtestserver"
 }
+variable "OGSOLR_IMAGE" {
+  default = "docker.io/4teamwork/ogsolr"
+}
 variable "GIT_TAG" {
   default = ""
 }
@@ -23,6 +26,12 @@ variable "LATEST_TAG" {
   default = ""
 }
 variable "BRANCH_NAME" {
+  default = ""
+}
+variable "OGSOLR_VERSION" {
+  default = "9.10.1"
+}
+variable "OGSOLR_VERSION_SUFFIX" {
   default = ""
 }
 
@@ -74,5 +83,20 @@ target "ogtestserver" {
       id = "gldt"
       env = "GITLAB_DEPLOY_TOKEN"
     }
+  ]
+}
+
+target "ogsolr" {
+  args = {
+    SOLR_VERSION = "${OGSOLR_VERSION}",
+  }
+  dockerfile = "./docker/solr/Dockerfile"
+  context = "."
+  tags = [
+    "${OGSOLR_IMAGE}:${OGSOLR_VERSION}${OGSOLR_VERSION_SUFFIX}",
+  ]
+  platforms = [
+    "linux/amd64",
+    "linux/arm64",
   ]
 }
