@@ -156,3 +156,29 @@ class TestSigning(IntegrationTestCase):
         self.assertItemsEqual(
             [{u'userid': u'', u'email': u'updated@example.com'}],
             signer.pending_signing_job.serialize().get('editors'))
+
+    def test_signed_versions_are_dropped_after_copy_obj(self, mocker):
+        self.login(self.regular_user)
+
+        signer = Signer(self.document)
+        signed_versions = signer.signed_versions_storage.load()
+        signed_versions.add_signed_version(SignedVersion(version=1))
+        signer.signed_versions_storage.store(signed_versions)
+
+        document_copy = api.content.copy(source=self.document,
+                                         target=self.dossier)
+
+        self.assertEqual(1, len(signer.serialize_signed_versions().keys()))
+        self.assertEqual(0, len(Signer(document_copy).serialize_signed_versions().keys()))
+
+    def test_pending_signing_job_is_dropped_after_copy_obj(self, mocker):
+        self.login(self.regular_user)
+        mocker.post(re.compile('/signing-jobs'), json=DEFAULT_MOCK_RESPONSE)
+
+        Signer(self.document).start_signing(['foo.bar@example.com'])
+
+        document_copy = api.content.copy(source=self.document,
+                                         target=self.dossier)
+
+        self.assertIsNotNone(Signer(self.document).pending_signing_job)
+        self.assertIsNone(Signer(document_copy).pending_signing_job)
