@@ -14,6 +14,9 @@ class Document(object):
         self.file_refs = []
         self.files = []
 
+    def committed_file_path(self):
+        return self.obj.get_file()._blob.committed()
+
     def binding(self):
         dokument = arelda.dokumentGeverSIP(id=u'_{}'.format(self.obj.UID()))
         dokument.titel = self.obj.Title().decode('utf8')

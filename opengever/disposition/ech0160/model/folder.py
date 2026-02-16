@@ -46,6 +46,6 @@ class Folder(object):
 
     def add_to_zip(self, zipfile):
         for file_ in self.files:
-            zipfile.write(file_.filepath, os.path.join(self.path, file_.name))
+            zipfile.write(file_.committed_file_path(), os.path.join(self.path, file_.name))
         for folder in self.folders:
             folder.add_to_zip(zipfile)
