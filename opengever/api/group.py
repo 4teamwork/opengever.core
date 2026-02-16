@@ -47,6 +47,20 @@ def get_sql_user(userid):
     return user
 
 
+def build_username_to_userid_map(users):
+
+    if not users:
+        return {}
+
+    user_mappings = (
+        User.query
+        .filter(User.active.is_(True))
+        .with_entities(User.username, User.userid)
+        .all()
+    )
+    return dict(user_mappings)
+
+
 class GeverGroupsPost(Service):
     """Copy of plone.restapi.services.groups.add.GroupsPost modified
     to also add the created group into the OGDS.
@@ -101,6 +115,10 @@ class GeverGroupsPost(Service):
         if "IDisableCSRFProtection" in dir(plone.protect.interfaces):
             alsoProvides(self.request, plone.protect.interfaces.IDisableCSRFProtection)
 
+        user_mapping = build_username_to_userid_map(users)
+
+        userids = {user_mapping.get(user, user) for user in users}
+
         gtool = getToolByName(self.context, "portal_groups")
         success = gtool.addGroup(
             groupname,
@@ -117,7 +135,7 @@ class GeverGroupsPost(Service):
 
         # Add members
         group = gtool.getGroupById(groupname)
-        for userid in users:
+        for userid in userids:
             with elevated_privileges():
                 group.addMember(userid)
 
@@ -130,7 +148,7 @@ class GeverGroupsPost(Service):
                                external_id=groupname)
         ogds_group.active = True
 
-        for userid in users:
+        for userid in userids:
             user = get_sql_user(userid)
             ogds_group.users.append(user)
 
@@ -212,6 +230,10 @@ class GeverGroupsPatch(Service):
         if "IDisableCSRFProtection" in dir(plone.protect.interfaces):
             alsoProvides(self.request, plone.protect.interfaces.IDisableCSRFProtection)
 
+        user_mapping = build_username_to_userid_map(users)
+
+        userids = {user_mapping.get(user, user): allow for user, allow in users.items()}
+
         portal_groups = getToolByName(self.context, "portal_groups")
 
         portal_groups.editGroup(
@@ -231,7 +253,7 @@ class GeverGroupsPatch(Service):
         # Add/remove members
         gtool = api.portal.get_tool(name='portal_groups')
         memberids = set(gtool.getGroupMembers(self.group.getId()))
-        for userid, allow in users.items():
+        for userid, allow in userids.items():
             userid = userid.encode('utf8')
             if allow:
                 if userid not in memberids:
@@ -255,7 +277,7 @@ class GeverGroupsPatch(Service):
 
         new_ogds_userids = memberids & ogds_userids
         self.update_ogds_group(data.get("title", None), new_ogds_userids
-                               if users.items() else None)
+                               if userids else None)
 
         return self.reply_no_content()
 

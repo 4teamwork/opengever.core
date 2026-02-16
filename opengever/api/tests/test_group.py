@@ -568,6 +568,72 @@ class TestGeverGroupsPatch(IntegrationTestCase):
             [self.committee_responsible.id, self.administrator.id, userid],
             [user.userid for user in self.ogds_group.users])
 
+    @browsing
+    def test_updating_group_works_with_userid(self, browser):
+        self.login(self.administrator, browser)
+
+        self.assertEqual(u'Gruppe Rechnungspr\xfcfungskommission', self.ogds_group.title)
+        self.assertItemsEqual(
+            [self.committee_responsible.id, self.administrator.id],
+            [user.userid for user in self.ogds_group.users])
+
+        user = User.query.filter_by(userid=self.regular_user.id).first()
+
+        self.assertEqual(u'regular_user', user.userid)
+        self.assertEqual(u'kathi.barfuss', user.username)
+
+        payload = {
+            u'title': u'new title',
+            u'roles': ['workspace_guest'],
+            u'users': {user.userid: True},
+        }
+
+        response = browser.open(
+            "{}/@groups/{}".format(self.portal.absolute_url(), self.groupid),
+            data=json.dumps(payload),
+            method='PATCH',
+            headers=self.api_headers)
+
+        self.assertEqual(204, response.status_code)
+        self.assertEqual(u'new title', self.ogds_group.title)
+        self.ogds_group.session.expire(self.ogds_group)
+        self.assertItemsEqual(
+            [self.committee_responsible.id, self.administrator.id, self.regular_user.id],
+            [user.userid for user in self.ogds_group.users])
+
+    @browsing
+    def test_updating_group_works_with_username(self, browser):
+        self.login(self.administrator, browser)
+
+        self.assertEqual(u'Gruppe Rechnungspr\xfcfungskommission', self.ogds_group.title)
+        self.assertItemsEqual(
+            [self.committee_responsible.id, self.administrator.id],
+            [user.userid for user in self.ogds_group.users])
+
+        user = User.query.filter_by(userid=self.regular_user.id).first()
+
+        self.assertEqual(u'regular_user', user.userid)
+        self.assertEqual(u'kathi.barfuss', user.username)
+
+        payload = {
+            u'title': u'new title',
+            u'roles': ['workspace_guest'],
+            u'users': {user.username: True},
+        }
+
+        response = browser.open(
+            "{}/@groups/{}".format(self.portal.absolute_url(), self.groupid),
+            data=json.dumps(payload),
+            method='PATCH',
+            headers=self.api_headers)
+
+        self.assertEqual(204, response.status_code)
+        self.assertEqual(u'new title', self.ogds_group.title)
+        self.ogds_group.session.expire(self.ogds_group)
+        self.assertItemsEqual(
+            [self.committee_responsible.id, self.administrator.id, self.regular_user.id],
+            [user.userid for user in self.ogds_group.users])
+
 
 class TestGeverGroupsDelete(IntegrationTestCase):
 
