@@ -97,6 +97,10 @@ class Signer(object):
     def serialize_signed_versions(self):
         return self.signed_versions_storage.load().serialize()
 
+    def clear(self):
+        self.pending_signing_job_storage.clear()
+        self.signed_versions_storage.clear()
+
 
 class IssuerNotFound(Exception):
     """Signing issuer not found.
