@@ -1,3 +1,6 @@
+from datetime import datetime
+from datetime import timedelta
+from ftw.testing import freeze
 from opengever.document.versioner import Versioner
 from opengever.sign.token import InvalidToken
 from opengever.sign.token import TokenManager
@@ -44,3 +47,15 @@ class TestTokenManager(IntegrationTestCase):
             token = manager.issue_token()
 
         self.assertTrue(manager.validate_token(token))
+
+    def test_issued_token_is_valid_for_one_month(self):
+        self.login(self.regular_user)
+        manager = TokenManager(self.document)
+        token = manager.issue_token()
+
+        with freeze(datetime.today() + timedelta(days=30)):
+            self.assertTrue(manager.validate_token(token))
+
+        with freeze(datetime.today() + timedelta(days=31)):
+            with self.assertRaises(InvalidToken):
+                TokenManager(self.subdocument).validate_token(token)
