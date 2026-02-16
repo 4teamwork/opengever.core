@@ -422,7 +422,8 @@ class TestFolderAndFileModel(IntegrationTestCase):
         self.assertEquals(1, len(subdossier_model.files))
         subdocument_model = subdossier_model.files[0]
         self.assertEquals(self.subdocument.get_filename(), subdocument_model.filename)
-        self.assertEquals(self.subdocument.file._blob.committed(), subdocument_model.filepath)
+        self.assertEquals(self.subdocument.file._blob.committed(),
+                          subdocument_model.file._blob.committed())
 
         # self.subsubdossier
         subsubdossier_model = subdossier_model.folders[0]
@@ -438,7 +439,8 @@ class TestFolderAndFileModel(IntegrationTestCase):
         self.assertEquals(1, len(inactive_dossier_model.files))
         inactive_document_model = inactive_dossier_model.files[0]
         self.assertEquals(self.inactive_document.get_filename(), inactive_document_model.filename)
-        self.assertEquals(self.inactive_document.file._blob.committed(), inactive_document_model.filepath)
+        self.assertEquals(self.inactive_document.file._blob.committed(),
+                          inactive_document_model.file._blob.committed())
 
     def test_document_references_file_and_archival_file(self):
         self.toc = ContentRootFolder('FAKE_PATH')
