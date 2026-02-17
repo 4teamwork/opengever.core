@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2024.18.3 (2026-02-17)
+----------------------
+
+Bug fixes:
+
+
+- Use username as fallback for userid for @groups endpoint. [ran] [TI-839]
+
+
 2024.18.2 (2026-01-20)
 ----------------------
 
