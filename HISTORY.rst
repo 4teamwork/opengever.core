@@ -10,6 +10,21 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2025.9.2 (2026-02-19)
+---------------------
+
+Bug fixes:
+
+
+- Clear signing data when copying documents [elioschmutz] [TI-3629]
+
+
+Other changes:
+
+
+- Increase ogsign access token lifetime. [elioschmutz] [TI-3628]
+
+
 2025.9.1 (2025-11-10)
 ---------------------
 
