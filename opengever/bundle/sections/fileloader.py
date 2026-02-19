@@ -21,6 +21,8 @@ import logging
 import ntpath
 import os.path
 import posixpath
+import shutil
+import tempfile
 
 
 logger = logging.getLogger('opengever.setup.sections.fileloader')
@@ -188,12 +190,30 @@ class FileLoaderSection(object):
                 setattr(obj, 'original_message', namedblobfile)
 
         else:
-            with open(abs_filepath, 'rb') as f:
-                namedblobfile = field._type(
-                    data=f.read(),
-                    contentType=mimetype,
-                    filename=self.get_filename(abs_filepath))
+            descriptor, staged_path = tempfile.mkstemp(
+                prefix='bundle-temp-',
+                suffix=os.path.splitext(abs_filepath)[1],
+                dir='/data/blobstorage/tmp',
+            )
+            os.close(descriptor)
+
+            try:
+                with open(abs_filepath, 'rb') as src, open(staged_path, 'wb') as dst:
+                    shutil.copyfileobj(src, dst, length=16 * 1024 * 1024)
+
+                with open(staged_path, 'rb') as f:
+                    namedblobfile = field._type(
+                        data=f,
+                        contentType=mimetype,
+                        filename=self.get_filename(abs_filepath))
                 setattr(obj, field.getName(), namedblobfile)
+
+            finally:
+                if os.path.exists(staged_path):
+                    try:
+                        os.unlink(staged_path)
+                    except Exception:
+                        pass
 
     def run_after_creation_jobs(self, item, obj):
         """Fire these event handlers manually because they got fired
