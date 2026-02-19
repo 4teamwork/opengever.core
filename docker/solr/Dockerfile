@@ -1,4 +1,6 @@
-FROM solr:9.9.0
+ARG SOLR_VERSION=9.10.1
+
+FROM solr:${SOLR_VERSION}
 
 ENV SOLR_OPTS="-Dlog4j2.formatMsgNoLookups=true" \
     SOLR_CORES="ogsite" \
@@ -16,7 +18,7 @@ RUN cd /opt/solr/modules \
  && curl -OL https://github.com/SearchScale/dataimporthandler/releases/download/v9.7.0/data-import-handler-9.7.0.jar \
 # Add Nashorn JS Engine for ScriptUpdateProcessorFactory
  && cd /opt/solr/lib \
- && curl -OL https://repo1.maven.org/maven2/org/openjdk/nashorn/nashorn-core/15.6/nashorn-core-15.6.jar \
+ && curl -OL https://repo1.maven.org/maven2/org/openjdk/nashorn/nashorn-core/15.7/nashorn-core-15.7.jar \
  && curl -OL https://repo1.maven.org/maven2/org/ow2/asm/asm-commons/7.3.1/asm-commons-7.3.1.jar \
  && curl -OL https://repo1.maven.org/maven2/org/ow2/asm/asm-tree/7.3.1/asm-tree-7.3.1.jar \
  && curl -OL https://repo1.maven.org/maven2/org/ow2/asm/asm-util/7.3.1/asm-util-7.3.1.jar \

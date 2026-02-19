@@ -193,7 +193,7 @@ class TestSolrBlobIndexingFunctional(SolrFunctionalTestCase):
         self.assert_in_solr(created_document)
         searchable_text = solr_data_for(created_document, 'SearchableText')
         self.assertIsNotNone(searchable_text)
-        self.assertIn(u'Test data\n\n', searchable_text)
+        self.assertIn(u'Test data\n', searchable_text)
 
     @browsing
     def test_blob_is_indexed_when_creating_dossier_with_template_containing_word_document(self, browser):

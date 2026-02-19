@@ -52,7 +52,7 @@ class SolrServer(object):
             'SOLR_CORES=testing functionaltesting testserver',
             '--name',
             self.container_name,
-            '4teamwork/ogsolr:9.9.0',
+            '4teamwork/ogsolr:9.10.1',
             'solr-foreground',
         ]
 
