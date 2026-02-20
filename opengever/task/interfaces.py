@@ -61,6 +61,14 @@ class ITaskSettings(Interface):
         'with a task when closing it is available',
         default=False)
 
+    pass_documents_to_next_task_default_value = schema.Bool(
+        title=u'Pass documents to next task default value',
+        description=u'Frontend default setting that determines whether documents '
+        'are automatically passed to the next task. This value only controls the '
+        'initial state of the corresponding UI element and is not used for backend '
+        'validation or business logic.',
+        default=False)
+
 
 class ISuccessorTaskController(Interface):
     """The successor task controller manages predecessor and successor
