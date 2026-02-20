@@ -1,3 +1,4 @@
+from App.config import getConfiguration
 from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
 from collective.transmogrifier.utils import defaultMatcher
@@ -46,6 +47,7 @@ class FileLoaderSection(object):
         self.previous = previous
         self.context = transmogrifier.context
         self.site = api.portal.get()
+        self.blob_tmp_dir = self._get_blob_tmp_dir()
 
         # TODO: Might want to also use defaultMatcher for this key to make it
         # configurable instead of hard coding it here.
@@ -60,6 +62,11 @@ class FileLoaderSection(object):
         self.bundle.errors['files_unresolvable_path'] = []
         self.bundle.errors['files_invalid_types'] = []
         self.bundle.errors['unmapped_unc_mounts'] = set()
+
+    def _get_blob_tmp_dir(self):
+        blob_dir = getConfiguration().dbtab.getDatabaseFactory('main').config.storage.blob_dir
+        blob_tmp_dir = os.path.join(blob_dir, 'tmp')
+        return blob_tmp_dir
 
     def __iter__(self):
         for item in self.previous:
@@ -193,7 +200,7 @@ class FileLoaderSection(object):
             descriptor, staged_path = tempfile.mkstemp(
                 prefix='bundle-temp-',
                 suffix=os.path.splitext(abs_filepath)[1],
-                dir='/data/blobstorage/tmp',
+                dir=self.blob_tmp_dir,
             )
             os.close(descriptor)
 
