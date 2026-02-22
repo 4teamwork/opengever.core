@@ -16,6 +16,7 @@ from opengever.activity.interfaces import IActivitySettings
 from opengever.base.model import create_session
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.bumblebee.interfaces import IGeverBumblebeeSettings
+from opengever.bundle.tests.helpers import make_fake_fileloader_configuration
 from opengever.core import sqlite_testing
 from opengever.core.cached_testing import CACHED_COMPONENT_REGISTRY_ISOLATION
 from opengever.core.cached_testing import CACHED_COMPONENT_REGISTRY_ISOLATION_SOLR
@@ -132,6 +133,21 @@ class OpengeverFixture(PloneSandboxLayer):
                                  sql_layer.__class__.__name__))
         super(OpengeverFixture, self).__init__(bases=bases, name=name)
 
+    def setup_blobstorage(self):
+        self.fake_blob_dir = tempfile.mkdtemp()
+        os.makedirs(os.path.join(self.fake_blob_dir, 'tmp'))
+
+        fileloader = sys.modules['opengever.bundle.sections.fileloader']
+        self._orig_fileloader_getConfiguration = fileloader.getConfiguration
+
+        fake_blobstorage = make_fake_fileloader_configuration(self.fake_blob_dir)
+        fileloader.getConfiguration = lambda: fake_blobstorage
+
+    def teardown_blobstorage(self):
+        fileloader = sys.modules['opengever.bundle.sections.fileloader']
+        fileloader.getConfiguration = self._orig_fileloader_getConfiguration
+        shutil.rmtree(self.fake_blob_dir, ignore_errors=True)
+
     def setUpZope(self, app, configurationContext):
         xmlconfig.string(
             '<configure xmlns="http://namespaces.zope.org/zope">'
@@ -169,6 +185,7 @@ class OpengeverFixture(PloneSandboxLayer):
         xmlconfig.file('configure.zcml',
                        opengever.base.tests.views,
                        context=configurationContext)
+        self.setup_blobstorage()
 
     def setUpPloneSite(self, portal):
         self.installOpengeverProfiles(portal)
@@ -185,6 +202,7 @@ class OpengeverFixture(PloneSandboxLayer):
     def tearDownZope(self, app):
         super(OpengeverFixture, self).tearDownZope(app)
         os.environ['BUMBLEBEE_DEACTIVATE'] = "True"
+        self.teardown_blobstorage()
 
     def installOpengeverProfiles(self, portal):
         applyProfile(portal, 'opengever.core:default')
