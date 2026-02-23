@@ -1,3 +1,4 @@
+from App.config import getConfiguration
 from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
 from collective.transmogrifier.utils import defaultMatcher
@@ -21,6 +22,8 @@ import logging
 import ntpath
 import os.path
 import posixpath
+import shutil
+import tempfile
 
 
 logger = logging.getLogger('opengever.setup.sections.fileloader')
@@ -44,6 +47,7 @@ class FileLoaderSection(object):
         self.previous = previous
         self.context = transmogrifier.context
         self.site = api.portal.get()
+        self.blob_tmp_dir = self._get_blob_tmp_dir()
 
         # TODO: Might want to also use defaultMatcher for this key to make it
         # configurable instead of hard coding it here.
@@ -58,6 +62,14 @@ class FileLoaderSection(object):
         self.bundle.errors['files_unresolvable_path'] = []
         self.bundle.errors['files_invalid_types'] = []
         self.bundle.errors['unmapped_unc_mounts'] = set()
+
+    def _get_blob_tmp_dir(self):
+        storage = getConfiguration().dbtab.getDatabaseFactory(name='main').config.storage
+        if hasattr(storage, 'config'):
+            storage = storage.config
+        blob_dir = storage.blob_dir
+
+        return os.path.join(blob_dir, 'tmp')
 
     def __iter__(self):
         for item in self.previous:
@@ -188,12 +200,20 @@ class FileLoaderSection(object):
                 setattr(obj, 'original_message', namedblobfile)
 
         else:
-            with open(abs_filepath, 'rb') as f:
+            descriptor, staged_path = tempfile.mkstemp(
+                prefix='bundle-temp-',
+                dir=self.blob_tmp_dir,
+            )
+            os.close(descriptor)
+
+            shutil.copyfile(abs_filepath, staged_path)
+
+            with open(staged_path, 'rb') as f:
                 namedblobfile = field._type(
-                    data=f.read(),
+                    data=f,
                     contentType=mimetype,
                     filename=self.get_filename(abs_filepath))
-                setattr(obj, field.getName(), namedblobfile)
+            setattr(obj, field.getName(), namedblobfile)
 
     def run_after_creation_jobs(self, item, obj):
         """Fire these event handlers manually because they got fired
