@@ -1,0 +1,5 @@
+<registry>
+  <records interface="opengever.task.interfaces.ITaskSettings">
+    <value key="pass_documents_to_next_task_default_value">False</value>
+  </records>
+</registry>
