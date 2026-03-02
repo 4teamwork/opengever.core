@@ -79,6 +79,7 @@
   <adapter factory=".field_deserializers.DateFieldDeserializer" />
   <adapter factory=".field_deserializers.DatetimeFieldDeserializer" />
   <adapter factory=".field_deserializers.UTCDatetimeFieldDeserializer" />
+  <adapter factory=".field_deserializers.GeverNamedFieldDeserializer" />
   <adapter factory=".todo.SerializeToDoToJson" />
 
   <configure zcml:condition="installed z3c.relationfield">
