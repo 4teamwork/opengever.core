@@ -92,6 +92,7 @@ class TestConfig(IntegrationTestCase):
                 u'oc_plugin_check_enabled': False,
                 u'oneoffixx': False,
                 u'optional_task_permissions_revoking': False,
+                u'pass_documents_to_next_task_default_value': False,
                 u'preview': False,
                 u'preview_auto_refresh': False,
                 u'preview_open_pdf_in_new_window': False,
