@@ -606,3 +606,8 @@ msgstr "Non contrôlé"
 #: opengever/repository/classification.py
 msgid "unprotected"
 msgstr "Non classé"
+
+#. Default: "internal"
+#: opengever/repository/classification.py
+msgid "internal"
+msgstr "Interne"

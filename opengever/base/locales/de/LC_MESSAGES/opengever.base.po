@@ -608,3 +608,8 @@ msgstr "Nicht geprüft"
 #: opengever/repository/classification.py
 msgid "unprotected"
 msgstr "Nicht klassifiziert"
+
+#. Default: "internal"
+#: opengever/repository/classification.py
+msgid "internal"
+msgstr "Intern"
