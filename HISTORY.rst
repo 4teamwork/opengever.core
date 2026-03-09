@@ -10,6 +10,16 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2025.7.3 (2026-03-09)
+---------------------
+
+Bug fixes:
+
+
+- Fix loading of i18n overrides in Docker image. [buchi] [TI-3173]
+- Add translations [ran] [TI-3691]
+
+
 2025.7.2 (2025-07-19)
 ---------------------
 
