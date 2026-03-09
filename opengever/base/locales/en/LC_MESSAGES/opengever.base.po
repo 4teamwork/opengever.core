@@ -727,3 +727,9 @@ msgstr "not assessed"
 #: opengever/repository/classification.py
 msgid "unprotected"
 msgstr "unprotected"
+
+#. German translation: Intern
+#. Default: "internal"
+#: opengever/repository/classification.py
+msgid "internal"
+msgstr "internal"
