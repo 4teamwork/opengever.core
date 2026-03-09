@@ -37,6 +37,11 @@ msgstr ""
 msgid "classified"
 msgstr ""
 
+#. Default: "internal"
+#: opengever/repository/classification.py
+msgid "internal"
+msgstr ""
+
 #. Default ""
 #: opengever/repository/classification.py
 msgid "privacy_layer_no"

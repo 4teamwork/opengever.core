@@ -603,3 +603,8 @@ msgstr ""
 #: opengever/repository/classification.py
 msgid "unprotected"
 msgstr ""
+
+#. Default: "internal"
+#: opengever/repository/classification.py
+msgid "internal"
+msgstr ""
