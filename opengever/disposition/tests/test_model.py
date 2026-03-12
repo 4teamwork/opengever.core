@@ -232,6 +232,23 @@ class TestDossier(IntegrationTestCase):
         self.assertEquals(date(2016, 12, 31),
                           binding.abschlussdatum.datum.date())
 
+    def test_inhalt_contains_description_without_newlines(self):
+        self.login(self.regular_user)
+        self.inactive_dossier.description = u'This is \xe4 two-line description,\nso it continues here.'
+        binding = Dossier(self.inactive_dossier).binding()
+
+        self.assertEquals(u'Description: This is \xe4 two-line description, so it continues here.;\n',
+                          binding.inhalt)
+
+    def test_bemerkung_contains_archival_value_and_delivery_date(self):
+        self.login(self.regular_user)
+        binding = Dossier(self.inactive_dossier).binding()
+
+        self.assertEquals(
+            u'Comment on archival value: unchecked;\n' \
+            u'Delivery date: 2026-03-12;\n',
+            binding.bemerkung)
+
     def test_include_propertysheets_in_zusatzdaten(self):
         self.login(self.manager)
         create(
