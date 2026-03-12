@@ -232,6 +232,22 @@ class TestDossier(IntegrationTestCase):
         self.assertEquals(date(2016, 12, 31),
                           binding.abschlussdatum.datum.date())
 
+    def test_inhalt_contains_description(self):
+        self.login(self.regular_user)
+        binding = Dossier(self.inactive_dossier).binding()
+
+        self.assertEquals(u'Description: Inaktive Vertr\xe4ge von 2016.;\n',
+                          binding.inhalt)
+
+    def test_bemerkung_contains_archival_value_and_delivery_date(self):
+        self.login(self.regular_user)
+        binding = Dossier(self.inactive_dossier).binding()
+
+        self.assertEquals(
+            u'Comment on archival value: unchecked;\n' \
+            u'Delivery date: 2026-03-12;\n',
+            binding.bemerkung)
+
     def test_include_propertysheets_in_zusatzdaten(self):
         self.login(self.manager)
         create(

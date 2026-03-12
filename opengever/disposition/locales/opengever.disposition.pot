@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-06-14 06:58+0000\n"
+"POT-Creation-Date: 2026-03-12 22:18+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -347,6 +347,21 @@ msgstr ""
 #. Default: "Responsible"
 #: ./opengever/disposition/disposition.py
 msgid "responsible"
+msgstr ""
+
+#. Default: "Comment on archival value: ${content}"
+#: ./opengever/disposition/ech0160/model/dossier.py
+msgid "sip_comment_archival_value"
+msgstr ""
+
+#. Default: "Delivery date: ${content}"
+#: ./opengever/disposition/ech0160/model/dossier.py
+msgid "sip_comment_delivery_date"
+msgstr ""
+
+#. Default: "Description: ${content}"
+#: ./opengever/disposition/ech0160/model/dossier.py
+msgid "sip_content_description"
 msgstr ""
 
 #. Default: "New disposition added by ${user} on admin unit ${admin_unit}"
