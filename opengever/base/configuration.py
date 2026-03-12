@@ -188,6 +188,7 @@ class GeverSettingsAdpaterV1(object):
         features['workspace_meetings'] = api.portal.get_registry_record('is_feature_enabled', interface=IWorkspaceMeetingSettings)  # noqa
         features['workspace_todo'] = api.portal.get_registry_record('is_feature_enabled', interface=IToDoSettings)
         features['private_tasks'] = api.portal.get_registry_record('private_task_feature_enabled', interface=ITaskSettings)
+        features['pass_documents_to_next_task_default_value'] = api.portal.get_registry_record('pass_documents_to_next_task_default_value', interface=ITaskSettings)  # noqa
         features['optional_task_permissions_revoking'] = api.portal.get_registry_record('optional_task_permissions_revoking_enabled', interface=ITaskSettings)  # noqa
         features['multiple_dossier_types'] = count_available_dossier_types() > 1
         features['oc_plugin_check_enabled'] = api.portal.get_registry_record(

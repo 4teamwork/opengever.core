@@ -107,6 +107,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
                 ('workspace_meetings', True),
                 ('workspace_todo', True),
                 ('private_tasks', True),
+                ('pass_documents_to_next_task_default_value', False),
                 ('optional_task_permissions_revoking', False),
                 ('multiple_dossier_types', False),
                 ('oc_plugin_check_enabled', False),
