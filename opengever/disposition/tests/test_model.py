@@ -1,10 +1,13 @@
-from datetime import date
 from DateTime import DateTime
+from datetime import date
+from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testing import freeze
 from ftw.testing import staticuid
 from opengever.base.behaviors.changed import IChanged
 from opengever.base.behaviors.classification import IClassification
+from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.disposition.ech0160.model import ContentRootFolder
 from opengever.disposition.ech0160.model import Document
 from opengever.disposition.ech0160.model import Dossier
@@ -231,6 +234,26 @@ class TestDossier(IntegrationTestCase):
         binding = Dossier(self.inactive_dossier).binding()
         self.assertEquals(date(2016, 12, 31),
                           binding.abschlussdatum.datum.date())
+
+    def test_inhalt_contains_description_without_newlines(self):
+        self.login(self.regular_user)
+        self.inactive_dossier.description = u'This is \xe4 two-line description,\nso it continues here.'
+        binding = Dossier(self.inactive_dossier).binding()
+
+        self.assertEquals(u'Description: This is \xe4 two-line description, so it continues here.;\n',
+                          binding.inhalt)
+
+    def test_bemerkung_contains_archival_value_and_delivery_date(self):
+        self.login(self.regular_user)
+
+        ILifeCycle(self.inactive_dossier).archival_value_annotation = u'In \xc4bsprache mit ARCH.'
+        with freeze(datetime(2026, 05, 01)):
+            binding = Dossier(self.inactive_dossier).binding()
+
+        self.assertEquals(
+            u'Comment on archival value: In \xc4bsprache mit ARCH.;\n' \
+            u'Delivery date: 2026-05-01;\n',
+            binding.bemerkung)
 
     def test_include_propertysheets_in_zusatzdaten(self):
         self.login(self.manager)

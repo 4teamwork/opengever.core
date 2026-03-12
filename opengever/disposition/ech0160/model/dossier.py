@@ -1,6 +1,8 @@
 from Acquisition import aq_parent
+from DateTime import DateTime
 from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.base.interfaces import IReferenceNumber
+from opengever.disposition import _
 from opengever.disposition.ech0160.bindings import arelda
 from opengever.disposition.ech0160.model import Document
 from opengever.disposition.ech0160.model import NOT_SPECIFIED
@@ -12,7 +14,10 @@ from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.meeting.proposal import IProposal
 from opengever.repository.repositoryroot import IRepositoryRoot
 from opengever.task.task import ITask
+from plone.dexterity.utils import safe_unicode
 from Products.CMFCore.utils import getToolByName
+from zope.globalrequest import getRequest
+from zope.i18n import translate
 
 
 class Dossier(object):
@@ -54,6 +59,60 @@ class Dossier(object):
                 documents[item.UID()] = Document(item)
             else:
                 self._add_task_and_proposal_documents(item, documents)
+
+    def add_content(self, dossier):
+        parts = []
+
+        description = safe_unicode(self.obj.Description())
+
+        # strip newlines according to customer requirements:
+        # https://4teamwork.atlassian.net/browse/TI-3690?focusedCommentId=66247
+        description = description.replace('\n', ' ')
+
+        if description:
+            parts.append(
+                translate(
+                    _(
+                        u'sip_content_description',
+                        default=u'Description: ${content}',
+                        mapping={'content': description},
+                    ),
+                    context=getRequest(),
+                )
+            )
+
+        if parts:
+            parts.append('')
+            dossier.inhalt = ';\n'.join(parts)
+
+    def add_comment(self, dossier):
+        parts = []
+
+        archival_value_annotation = ILifeCycle(self.obj).archival_value_annotation
+        if archival_value_annotation:
+            parts.append(
+                translate(
+                    _(
+                        u'sip_comment_archival_value',
+                        default=u'Comment on archival value: ${content}',
+                        mapping={'content': archival_value_annotation},
+                    ),
+                    context=getRequest(),
+                )
+            )
+
+        parts.append(
+            translate(
+                _(
+                    u'sip_comment_delivery_date',
+                    default=u'Delivery date: ${content}',
+                    mapping={'content': DateTime().strftime('%Y-%m-%d')},
+                ),
+                context=getRequest(),
+            )
+        )
+        parts.append('')
+        dossier.bemerkung = ';\n'.join(parts)
 
     def binding(self):
         dossier = arelda.dossierGeverSIP(id=u'_{}'.format(self.obj.UID()))
@@ -101,6 +160,9 @@ class Dossier(object):
         additional_data = get_additional_data(self.obj)
         if additional_data:
             dossier.zusatzDaten = additional_data
+
+        self.add_content(dossier)
+        self.add_comment(dossier)
 
         for d in self.dossiers.values():
             dossier.dossier.append(d.binding())
