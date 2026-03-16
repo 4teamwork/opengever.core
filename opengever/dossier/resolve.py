@@ -89,6 +89,12 @@ def is_archive_form_needed(dossier):
         return True
 
 
+def is_automatically_set_end_date_enabled():
+    return api.portal.get_registry_record(
+        'automatically_set_end_date',
+        IDossierResolveProperties)
+
+
 class ValidResolverNamesVocabularyFactory(object):
     """Return a vocabulary that contains the names of all named-adapters
     registered as IDossierResolver for IDossierMarker.
@@ -341,7 +347,11 @@ class StrictDossierResolver(object):
         elif is_archive_form_needed(self.context) and not end_date:
             raise TypeError
 
-        end_date = end_date or self.context.earliest_possible_end_date()
+        if end_date is None:
+            end_date = self.context.earliest_possible_end_date()
+        elif is_automatically_set_end_date_enabled():
+            end_date = max(end_date, self.context.earliest_possible_end_date())
+
         self._recursive_resolve(
             self.context, end_date, triggering_dossier=True, **kwargs)
 
@@ -607,7 +617,8 @@ class ResolveConditions(object):
             # invalid. In this case, should allow the resolving the main dossier
             # anyway, and correct the invalid end date during dossier resolution.
             if not dossier.is_resolved() and not dossier.has_valid_enddate():
-                self._invalid_dates.append(dossier.title)
+                if not is_automatically_set_end_date_enabled():
+                    self._invalid_dates.append(dossier.title)
 
         # recursively check subdossiers
         subdossiers = dossier.get_subdossiers(depth=1)

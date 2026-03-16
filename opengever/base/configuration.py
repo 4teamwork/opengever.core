@@ -196,6 +196,7 @@ class GeverSettingsAdpaterV1(object):
             interface=IOfficeConnectorSettings
         )
         features['sign'] = is_sign_feature_enabled()
+        features['automatically_set_end_date'] = api.portal.get_registry_record('automatically_set_end_date', interface=IDossierResolveProperties)  # noqa
 
         return features
 

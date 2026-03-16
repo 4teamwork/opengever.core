@@ -112,6 +112,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
                 ('multiple_dossier_types', False),
                 ('oc_plugin_check_enabled', False),
                 ('sign', False),
+                ('automatically_set_end_date', False),
                 ])),
             ('root_url', 'http://nohost/plone'),
             ('portal_url', 'http://nohost/portal'),
