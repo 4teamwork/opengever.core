@@ -66,6 +66,7 @@ class TestConfig(IntegrationTestCase):
                 u'activity': False,
                 u'archival_file_conversion': False,
                 u'archival_file_conversion_blacklist': [],
+                u'automatically_set_end_date': False,
                 u'changed_for_end_date': True,
                 u'classic_ui_enabled': True,
                 u'contacts': 'plone',

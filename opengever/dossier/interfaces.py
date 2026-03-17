@@ -264,6 +264,14 @@ class IDossierResolveProperties(Interface):
         default=True
     )
 
+    automatically_set_end_date = schema.Bool(
+        title=u"Set earliest possible end date if original end date is too early",
+        description=u'When True, if invalid end date is set, it is automatically '
+        'corrected to earliest possible end date. If set to False, the '
+        'resolve operation will throw invalid end date error.',
+        default=False
+    )
+
 
 class IDossierType(Interface):
     """plone.app.registry schema for the dossier types setting."""
