@@ -22,6 +22,10 @@ class DocumentReporterFieldMapper(SolrFieldMapper):
         )
 
 
+def get_document_link(value, document):
+    return document.getURL()
+
+
 class DocumentReporter(SolrReporterView):
     """View that generates an excel spreadsheet with the XLSReporter,
     listing the selected documents (paths in request)
@@ -49,6 +53,7 @@ class DocumentReporter(SolrReporterView):
         {
             'id': 'title',
             'is_default': True,
+            'hyperlink': get_document_link,
         },
         {
             'id': 'document_author',
