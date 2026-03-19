@@ -10,6 +10,37 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2026.2.0 (2026-03-19)
+---------------------
+
+New features:
+
+
+- Extend the @config endpoint with a new feature-prop: pass_documents_to_next_task_default_value. [elioschmutz] [TI-1330]
+- Dossiers in read-only repositories can now be archived. [ran] [TI-3019]
+- Implement automatically set dossier end date during resolve feature flag. [ran] [TI-3178]
+
+
+Bug fixes:
+
+
+- Use username as fallback for userid for @groups endpoint. [ran] [TI-839]
+- Fix blob file access when exporting an SIP in combination with relstorage. [elioschmutz] [TI-3545]
+- Clear signing data when copying documents [elioschmutz] [TI-3629]
+- Fix huge memory counsumption if uploading a large file [elioschmutz] [TI-3678]
+- Add translations [ran] [TI-3691]
+
+
+Other changes:
+
+
+- Mass dossier export with subdossier always includes subdosiers. [ran] [TI-3357]
+- During bundle import stream all file objects into blob storage. [ran] [TI-3400]
+- Increase ogsign access token lifetime. [elioschmutz] [TI-3628]
+- Add hyperlink to document export. [ran] [TI-3693]
+- Update translations for oneoffixx. [ran] [TI-3357-2]
+
+
 2026.1.0 (2026-01-22)
 ---------------------
 
