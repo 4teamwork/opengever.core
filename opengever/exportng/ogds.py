@@ -110,14 +110,15 @@ class OGDSSyncer(object):
                 garbage_collect(self.site)
         logger.info('Processed %d items in %s.', counter, next(total_time))
 
-        table = self.metadata.tables[self.table]
-        with self.engine.connect() as conn:
-            conn.execute(table.insert(), inserts)
-            logger.info('Added %s: %s', table, len(inserts))
-            for tablename, ainserts in additional_inserts.items():
-                atable = self.metadata.tables[tablename]
-                conn.execute(atable.insert(), ainserts)
-                logger.info('Added %s: %s', atable, len(ainserts))
+        if inserts:
+            table = self.metadata.tables[self.table]
+            with self.engine.connect() as conn:
+                conn.execute(table.insert(), inserts)
+                logger.info('Added %s: %s', table, len(inserts))
+                for tablename, ainserts in additional_inserts.items():
+                    atable = self.metadata.tables[tablename]
+                    conn.execute(atable.insert(), ainserts)
+                    logger.info('Added %s: %s', atable, len(ainserts))
 
 
 class UserSerializer(OGDSItemSerializer):
