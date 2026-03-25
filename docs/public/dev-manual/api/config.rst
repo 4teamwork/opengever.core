@@ -108,6 +108,7 @@ GEVER-Mandanten abgefragt werden.
           "is_manager": false,
           "is_inbox_user": false,
           "is_propertysheets_manager": false,
+          "is_records_manager": false,
           "is_emm_environment": false,
           "max_dossier_levels": 5,
           "max_repositoryfolder_levels": 3,

@@ -59,6 +59,8 @@ class ConfigGet(Service):
         config['is_inbox_user'] = current_user in ogds_inbox.assigned_users()
         config['is_propertysheets_manager'] = api.user.has_permission(
             'opengever.propertysheets: Manage PropertySheets')
+        config['is_records_manager'] = api.user.has_permission(
+            'opengever.disposition: Add disposition')
 
         try:
             primary_root = PrimaryRepositoryRoot(

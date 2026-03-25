@@ -12,6 +12,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- ``@config``: Add ``is_records_manager`` key to indicate whether user is allowed to add dispositions.
 
 
 2026.2.0 (2026-03-19)
