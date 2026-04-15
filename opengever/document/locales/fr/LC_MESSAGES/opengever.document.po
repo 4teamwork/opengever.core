@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2025-06-13 12:43+0000\n"
+"POT-Creation-Date: 2026-04-15 07:45+0000\n"
 "PO-Revision-Date: 2017-09-03 08:50+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-document/fr/>\n"
@@ -124,6 +124,10 @@ msgstr "Le dodument  ${title} ne contient pas de fichier."
 #: ./opengever/document/browser/edit.py
 msgid "The Document is already checked out by: ${userid}"
 msgstr "Le document a déjà un checkout par ${userid}."
+
+#: ./opengever/document/transition.py
+msgid "This user does not have a valid email address defined."
+msgstr "Cet utilisateur n’a pas d’adresse e-mail valide définie."
 
 #: ./opengever/document/browser/templates/submitted_with.pt
 msgid "Update document in proposal"

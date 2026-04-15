@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2025-06-13 12:43+0000\n"
+"POT-Creation-Date: 2026-04-15 07:45+0000\n"
 "PO-Revision-Date: 2017-10-13 14:27+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -145,6 +145,10 @@ msgstr "Document ${title} has no file."
 #: ./opengever/document/browser/edit.py
 msgid "The Document is already checked out by: ${userid}"
 msgstr "Document is already checked out by: ${userid}"
+
+#: ./opengever/document/transition.py
+msgid "This user does not have a valid email address defined."
+msgstr "This user does not have a valid email address defined."
 
 #. German translation: Eingereichte Version aktualisieren
 #: ./opengever/document/browser/templates/submitted_with.pt
