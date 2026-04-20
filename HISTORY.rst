@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2026.2.1 (2026-04-20)
+---------------------
+
+Other changes:
+
+
+- Add translated error message for NoEmailError when starting document signing  [elioschmutz] [TI-3775]
+
+
 2026.2.0 (2026-03-19)
 ---------------------
 
