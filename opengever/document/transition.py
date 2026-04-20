@@ -36,7 +36,7 @@ class DocumentFinalSigningTransitionExtender(TransitionExtender):
         """
         actor = ogds_service().fetch_user(api.user.get_current().id)
         if not actor or not actor.email:
-            raise NoEmailError()
+            raise NoEmailError(_(u'This user does not have a valid email address defined.'))
 
         Signer(self.context).start_signing(editors=[actor.email])
 
