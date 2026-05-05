@@ -177,6 +177,7 @@
   <includeOverrides package="opengever.base" file="overrides.zcml" />
   <includeOverrides package="opengever.bumblebee" file="overrides.zcml" />
   <includeOverrides package="opengever.core" file="overrides.zcml" />
+  <includeOverrides package="opengever.contentstats" file="overrides.zcml" />
   <includeOverrides package="opengever.latex" file="overrides.zcml" />
   <includeOverrides package="opengever.mail" file="overrides.zcml" />
   <includeOverrides package="opengever.readonly" file="overrides.zcml" />
