@@ -20,6 +20,7 @@ from Products.PluggableAuthService.interfaces.plugins import IUserEnumerationPlu
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
 from sqlalchemy import func
 from sqlalchemy.sql import select
+from sqlalchemy.sql.expression import false
 from sqlalchemy.sql.expression import true
 from zope.interface import implements
 
@@ -283,6 +284,7 @@ class OGDSAuthenticationPlugin(BasePlugin, Cacheable):
         query = (
             select([Group.groupid])
             .where(Group.active == true())
+            .where(Group.is_local == false())
             .order_by(Group.groupid)
         )
 
@@ -350,6 +352,7 @@ class OGDSAuthenticationPlugin(BasePlugin, Cacheable):
             .select_from(groups.join(groups_users))
             .where(func.lower(groups_users.c.userid) == principal_id.lower())
             .where(groups.c.active == true())
+            .where(groups.c.is_local == false())
         )
 
         # Omit groups with non-ASCII names
@@ -371,6 +374,7 @@ class OGDSAuthenticationPlugin(BasePlugin, Cacheable):
         query = (
             select([Group.groupname])
             .where(Group.active == true())
+            .where(Group.is_local == false())
             .where(func.lower(Group.groupid) == group_id.lower())
         )
         res = self.query_ogds(query).fetchone()
@@ -420,6 +424,7 @@ class OGDSAuthenticationPlugin(BasePlugin, Cacheable):
         query = (
             select([Group.groupid])
             .where(Group.active == true())
+            .where(Group.is_local == false())
             .order_by(Group.groupid)
         )
         return [self.to_ascii(value) for value, in self.query_ogds(query)]
@@ -468,6 +473,10 @@ class OGDSAuthenticationPlugin(BasePlugin, Cacheable):
             .where(func.lower(id_column) == principal_id.lower())
             .where(active_column == true())
         )
+
+        if is_group:
+            query = query.where(Group.is_local == false())
+
         match = self.query_ogds(query).fetchone()
 
         if match:
