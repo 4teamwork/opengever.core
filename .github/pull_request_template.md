@@ -47,3 +47,8 @@ _Only applicable should be left and checked._
   - [ ] All msg-strings are unicode
 - Change in schema definition:
   - [ ] If `missing_value` is specified, then `default` has to be set to the same value
+
+## Post-merge action
+
+> [!IMPORTANT]
+> After this PR is merged, Dev on Kubernetes must be updated.
