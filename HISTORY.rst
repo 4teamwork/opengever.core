@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2026.1.2 (2026-05-05)
+---------------------
+
+Bug fixes:
+
+
+- Fix overriding portal types provider for content stats. [buchi] [GH-8239]
+
+
 2026.1.1 (2026-02-09)
 ---------------------
 
