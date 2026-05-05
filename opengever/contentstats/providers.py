@@ -1,7 +1,6 @@
 from collections import Counter
 from ftw.contentstats.interfaces import IStatsProvider
 from ftw.contentstats.providers.portal_types import PortalTypesProvider
-from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.contentstats.active_user_stats import UserStatsCalculator
 from opengever.document.document import Document
 from opengever.mail.mail import OGMail
@@ -13,7 +12,7 @@ from zope.interface import Interface
 
 
 @implementer(IStatsProvider)
-@adapter(IPloneSiteRoot, IOpengeverBaseLayer)
+@adapter(IPloneSiteRoot, Interface)
 class GEVERPortalTypesProvider(PortalTypesProvider):
     """Customization of the default ftw.contentstats `portal_types` provider
     that sums up (Documents + Mails) as a separate, fake portal_type

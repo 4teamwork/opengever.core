@@ -13,11 +13,6 @@
       />
 
   <adapter
-      factory=".providers.GEVERPortalTypesProvider"
-      name="portal_types"
-      />
-
-  <adapter
       factory=".providers.CheckedOutDocsProvider"
       name="checked_out_docs"
       />
