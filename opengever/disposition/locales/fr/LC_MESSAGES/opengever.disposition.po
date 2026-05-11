@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-06-14 06:58+0000\n"
+"POT-Creation-Date: 2026-03-12 22:18+0000\n"
 "PO-Revision-Date: 2018-05-22 10:09+0000\n"
 "Last-Translator: Niklaus Johner <Niklaus.johner@4teamwork.ch>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-disposition/fr/>\n"
@@ -347,6 +347,21 @@ msgstr "Progrès"
 #: ./opengever/disposition/disposition.py
 msgid "responsible"
 msgstr "Responsable"
+
+#. Default: "Comment on archival value: ${content}"
+#: ./opengever/disposition/ech0160/model/dossier.py
+msgid "sip_comment_archival_value"
+msgstr "Commentaire sur la valeur archivistique: ${content}"
+
+#. Default: "Delivery date: ${content}"
+#: ./opengever/disposition/ech0160/model/dossier.py
+msgid "sip_comment_delivery_date"
+msgstr "Date de livraison: ${content}"
+
+#. Default: "Description: ${content}"
+#: ./opengever/disposition/ech0160/model/dossier.py
+msgid "sip_content_description"
+msgstr "Description: ${content}"
 
 #. Default: "New disposition added by ${user} on admin unit ${admin_unit}"
 #: ./opengever/disposition/activities.py
