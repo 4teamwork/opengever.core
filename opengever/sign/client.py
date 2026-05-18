@@ -56,6 +56,14 @@ class SignServiceClient(object):
             '{}/signing-jobs/{}'.format(self.sign_service_url, job_id),
             headers={"Accept": "application/json"})
 
+    def get_backoff_status(self, job_id):
+        resp = requests.get(
+            '{}/signing-jobs/{}/backoff_status'.format(self.sign_service_url, job_id),
+            headers={"Accept": "application/json"},
+            timeout=3)
+        resp.raise_for_status()
+        return resp.json()
+
 
 class NullSignServiceClient(object):
 
@@ -68,6 +76,9 @@ class NullSignServiceClient(object):
 
     def abort_signing(self, job_id):
         pass
+
+    def get_backoff_status(self, job_id):
+        return None
 
 
 client_registry = {

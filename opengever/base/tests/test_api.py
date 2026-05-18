@@ -1,13 +1,18 @@
 from datetime import datetime
 from ftw.testbrowser import browsing
 from ftw.testing.freezer import freeze
+from opengever.document.document import Document
 from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.sign.sign import Signer
 from opengever.testing import IntegrationTestCase
 from opengever.wopi.lock import create_lock as create_wopi_lock
+from plone import api
 from plone.locking.interfaces import ILockable
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getMultiAdapter
 from zope.component import getUtility
+import re
+import requests_mock
 
 
 class TestDocumentStatus(IntegrationTestCase):
@@ -135,3 +140,26 @@ class TestDocumentStatus(IntegrationTestCase):
             u'title': u'Vertr\xe4gsentwurf',
         }
         self.assertEqual(expected, browser.json)
+
+    @browsing
+    @requests_mock.Mocker()
+    def test_document_status_contains_pending_signing_job_when_sign_feature_enabled(self, browser, mocker):
+        self.activate_feature('sign')
+        self.login(self.regular_user, browser=browser)
+
+        mocker.post(re.compile('/signing-jobs'), json={'id': 'job-1'})
+        mocker.get(re.compile('/signing-jobs/job-1/backoff_status'),
+                   json={'scheduled_poll_time': '2024-02-18T16:00:00'})
+
+        browser.open(self.document, view='status', headers=self.api_headers)
+        self.assertEqual({}, browser.json.get('pending_signing_job'))
+        self.assertIsNone(browser.json.get('signing_backoff_status'))
+
+        api.content.transition(obj=self.document,
+                               transition=Document.draft_signing_transition)
+        Signer(self.document).start_signing([])
+
+        browser.open(self.document, view='status', headers=self.api_headers)
+        self.assertEqual('job-1', browser.json.get('pending_signing_job').get('job_id'))
+        self.assertEqual({'scheduled_poll_time': '2024-02-18T16:00:00'},
+                         browser.json.get('signing_backoff_status'))

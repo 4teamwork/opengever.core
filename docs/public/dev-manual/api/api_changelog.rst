@@ -12,7 +12,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
-
+- ``[document-id]/status``: Provide pending signing job and signing backoff status if sign-feature is enabled.
 
 2026.2.0 (2026-03-19)
 ----------------------

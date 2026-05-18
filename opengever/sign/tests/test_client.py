@@ -61,6 +61,15 @@ class TestSigningClient(IntegrationTestCase):
 
         self.assertEqual(200, response.status_code)
 
+    def test_get_backoff_status(self, mocker):
+        self.login(self.regular_user)
+        mocker.get(re.compile('/signing-jobs/123/backoff_status'),
+                   json={'scheduled_poll_time': '2024-02-18T16:00:00'})
+
+        backoff_status = SignServiceClient().get_backoff_status('123')
+
+        self.assertEqual({'scheduled_poll_time': '2024-02-18T16:00:00'}, backoff_status)
+
     def test_can_use_a_different_gever_callback_url(self, mocker):
         self.login(self.regular_user)
         os.environ['SIGN_SERVICE_GEVER_URL'] = "http://example.com/mygever"
