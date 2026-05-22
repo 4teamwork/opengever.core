@@ -10,6 +10,7 @@ from opengever.testing import IntegrationTestCase
 from plone import api
 import os
 import re
+import requests
 import requests_mock
 
 
@@ -156,6 +157,38 @@ class TestSigning(IntegrationTestCase):
         self.assertItemsEqual(
             [{u'userid': u'', u'email': u'updated@example.com'}],
             signer.pending_signing_job.serialize().get('editors'))
+
+    def test_get_backoff_status(self, mocker):
+        self.login(self.regular_user)
+        mocker.post(re.compile('/signing-jobs'), json=DEFAULT_MOCK_RESPONSE)
+        mocker.get(re.compile('/signing-jobs/1/backoff_status'),
+                   json={'scheduled_poll_time': '2024-02-18T16:00:00'})
+
+        api.content.transition(obj=self.document,
+                               transition=Document.draft_signing_transition)
+        signer = Signer(self.document)
+        signer.start_signing([])
+
+        self.assertEqual({'scheduled_poll_time': '2024-02-18T16:00:00'}, signer.get_backoff_status())
+
+    def test_get_backoff_status_returns_none_when_not_in_signing_state(self, mocker):
+        self.login(self.regular_user)
+
+        signer = Signer(self.document)
+        self.assertIsNone(signer.get_backoff_status())
+
+    def test_get_backoff_status_returns_none_on_service_failure(self, mocker):
+        self.login(self.regular_user)
+        mocker.post(re.compile('/signing-jobs'), json=DEFAULT_MOCK_RESPONSE)
+        mocker.get(re.compile('/signing-jobs/1/backoff_status'),
+                   exc=requests.exceptions.Timeout)
+
+        api.content.transition(obj=self.document,
+                               transition=Document.draft_signing_transition)
+        signer = Signer(self.document)
+        signer.start_signing([])
+
+        self.assertIsNone(signer.get_backoff_status())
 
     def test_signed_versions_are_dropped_after_copy_obj(self, mocker):
         self.login(self.regular_user)

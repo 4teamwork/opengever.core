@@ -10,6 +10,11 @@ from opengever.sign.token import TokenManager
 from plone import api
 from plone.dexterity.utils import safe_utf8
 from requests.exceptions import ConnectionError
+from requests.exceptions import RequestException
+import logging
+
+
+logger = logging.getLogger('opengever.sign')
 
 
 class Signer(object):
@@ -87,6 +92,20 @@ class Signer(object):
         if not user:
             raise IssuerNotFound()
         return api.env.adopt_user(user=user)
+
+    def get_backoff_status(self):
+        if api.content.get_state(self.context) != Document.signing_state:
+            return None
+
+        job = self.pending_signing_job
+        if not job:
+            return None
+
+        try:
+            return get_sign_service_client().get_backoff_status(job.job_id)
+        except RequestException as e:
+            logger.warning('Failed to fetch backoff status for job %s: %s', job.job_id, e)
+            return None
 
     def update_pending_signing_job(self, **data):
         self.pending_signing_job = self.pending_signing_job.update(**data)

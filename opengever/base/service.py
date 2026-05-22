@@ -1,4 +1,6 @@
 from ftw.bumblebee.interfaces import IBumblebeeDocument
+from opengever.sign.sign import Signer
+from opengever.sign.utils import is_sign_feature_enabled
 from plone import api
 from plone.rest import Service
 from plone.restapi.services.locking.locking import lock_info
@@ -29,6 +31,11 @@ class DocumentStatus(Service):
         payload['file_mtime'] = self.context.get_file_mtime()
 
         payload['review_state'] = api.content.get_state(self.context)
+
+        if is_sign_feature_enabled():
+            signer = Signer(self.context)
+            payload['pending_signing_job'] = signer.serialize_pending_signing_job()
+            payload['signing_backoff_status'] = signer.get_backoff_status()
 
         return json.dumps(payload)
 
