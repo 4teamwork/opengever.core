@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2026.1.3 (2026-05-27)
+---------------------
+
+Bug fixes:
+
+
+- During after resolve dossiers nightly, trashed documents are correctly found  [ran] [TI-3813]
+
+
 2026.1.2 (2026-05-05)
 ---------------------
 
