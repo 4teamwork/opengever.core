@@ -460,11 +460,14 @@ class AfterResolveJobs(object):
         if not self.get_property('purge_trash_enabled'):
             return
 
-        trashed_docs = api.content.find(
-            context=self.context,
-            depth=-1,
-            object_provides=[IBaseDocument],
-            trashed=True)
+        trashed_docs = self.catalog.unrestrictedSearchResults(
+            path={
+                'query': self.context.absolute_url_path(),
+                'depth': -1,
+            },
+            object_provides=IBaseDocument.__identifier__,
+            trashed=True,
+        )
 
         if trashed_docs:
             with elevated_privileges():
