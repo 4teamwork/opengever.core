@@ -10,6 +10,30 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2026.3.0 (2026-05-28)
+---------------------
+
+New features:
+
+
+- Provide pending signing job and signing backoff status in document status endpoint  [elioschmutz] [TI-2916]
+- Extend dossier sip package metadata [elioschmutz] [TI-3690]
+
+
+Bug fixes:
+
+
+- Fix overriding portal types provider for content stats. [buchi] [GH-8239]
+- OGDS Authentication Plugin doesn't return local groups  [ran] [TI-3810]
+- During after resolve dossiers nightly, trashed documents are correctly found  [ran] [TI-3813]
+
+
+Other changes:
+
+
+- Add translated error message for NoEmailError when starting document signing  [elioschmutz] [TI-3775]
+
+
 2026.2.0 (2026-03-19)
 ---------------------
 
