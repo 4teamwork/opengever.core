@@ -3,7 +3,18 @@
 API Changelog
 =============
 
-2026.3.0 (unreleased)
+2026.4.0 (unreleased)
+----------------------
+
+Breaking Changes
+^^^^^^^^^^^^^^^^
+
+
+Other Changes
+^^^^^^^^^^^^^
+
+
+2026.3.0 (2026-05-28)
 ----------------------
 
 Breaking Changes
