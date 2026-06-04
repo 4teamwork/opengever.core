@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2026.3.1 (2026-06-04)
+---------------------
+
+Bug fixes:
+
+
+- OGDS Authentication Plugin returns only non-local groups  [ran] [TI-3358]
+
+
 2026.3.0 (2026-05-28)
 ---------------------
 
