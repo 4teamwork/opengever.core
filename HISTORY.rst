@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2026.3.2 (2026-06-11)
+---------------------
+
+Bug fixes:
+
+
+- Expose period field in solr  [ran] [TI-3837]
+
+
 2026.3.1 (2026-06-04)
 ---------------------
 
