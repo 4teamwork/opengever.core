@@ -91,7 +91,7 @@ class ActorsGet(Service):
         actorid = self.read_params()
         full_representation = self.request.form.get(
             'full_representation', 'false').lower() in ("yes", "y", "true", "t", "1")
-        actor = ActorLookup(actorid).lookup()
+        actor = ActorLookup(actorid, name_as_fallback=True).lookup()
         serializer = queryMultiAdapter((actor, self.request), ISerializeToJson)
         return serializer(full_representation)
 
@@ -122,7 +122,7 @@ class ActorsGetListPOST(Service):
         full_representation = data.get('full_representation', False)
         items = []
         for actorid in actor_ids:
-            actor = ActorLookup(actorid).lookup()
+            actor = ActorLookup(actorid, name_as_fallback=True).lookup()
             serializer = queryMultiAdapter((actor, self.request), ISerializeToJson)
             items.append(serializer(full_representation))
 
