@@ -446,6 +446,17 @@
       </analyzer>
       <analyzer type="query">
         <tokenizer class="solr.WhitespaceTokenizerFactory"/>
+        <filter class="solr.WordDelimiterGraphFilterFactory"
+                splitOnCaseChange="1"
+                splitOnNumerics="1"
+                stemEnglishPossessive="1"
+                generateWordParts="1"
+                generateNumberParts="1"
+                catenateWords="0"
+                catenateNumbers="0"
+                catenateAll="0"
+                preserveOriginal="1"/>
+        <filter class="solr.FlattenGraphFilterFactory"/>
         <filter class="solr.SynonymGraphFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
 <!--         <filter class="solr.StopFilterFactory"
                 ignoreCase="true"
@@ -505,6 +516,17 @@
       </analyzer>
       <analyzer type="query">
         <tokenizer class="solr.WhitespaceTokenizerFactory"/>
+        <filter class="solr.WordDelimiterGraphFilterFactory"
+                splitOnCaseChange="1"
+                splitOnNumerics="1"
+                stemEnglishPossessive="1"
+                generateWordParts="1"
+                generateNumberParts="1"
+                catenateWords="0"
+                catenateNumbers="0"
+                catenateAll="0"
+                preserveOriginal="1"/>
+        <filter class="solr.FlattenGraphFilterFactory"/>
         <filter class="solr.LowerCaseFilterFactory"/>
         <!-- <filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_de.txt" format="snowball" /> -->
         <filter class="solr.KeywordRepeatFilterFactory" />
@@ -558,6 +580,17 @@
       <analyzer type="query">
         <tokenizer class="solr.WhitespaceTokenizerFactory"/>
         <filter class="solr.KeywordRepeatFilterFactory" />
+        <filter class="solr.WordDelimiterGraphFilterFactory"
+                splitOnCaseChange="1"
+                splitOnNumerics="1"
+                stemEnglishPossessive="1"
+                generateWordParts="1"
+                generateNumberParts="1"
+                catenateWords="0"
+                catenateNumbers="0"
+                catenateAll="0"
+                preserveOriginal="1"/>
+        <filter class="solr.FlattenGraphFilterFactory"/>
         <!-- removes l', etc -->
         <filter class="solr.ElisionFilterFactory" ignoreCase="true" articles="lang/contractions_fr.txt"/>
         <filter class="solr.LowerCaseFilterFactory"/>
