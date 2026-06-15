@@ -226,6 +226,9 @@
     <dynamicField name="*_custom_field_strings" type="string" indexed="true" stored="false" multiValued="true"/>
     <dynamicField name="*_custom_field_date" type="pdate" indexed="true" stored="false"/>
 
+    <!--In data import handler we prefix fields we want to ignore with ignored_ -->
+    <dynamicField name="ignored_*" type="ignored"/>
+
     <!-- Field to use to determine and enforce document uniqueness.
          Unless this field is marked with required="false", it will be a required field
      -->
