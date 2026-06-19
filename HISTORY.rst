@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2026.1.4 (2026-06-19)
+---------------------
+
+Other changes:
+
+
+- Increase ogsign access token lifetime. [elioschmutz] [TI-3628]
+
+
 2026.1.3 (2026-05-27)
 ---------------------
 
