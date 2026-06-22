@@ -4,7 +4,6 @@ from opengever.bgtasks.model import BackgroundTask
 from opengever.bgtasks.model import DEFAULT_MAX_RETRIES
 from opengever.bgtasks.model import DEFAULT_PRIORITY
 import json
-import uuid
 
 
 _task_registry = {}
@@ -27,7 +26,6 @@ def queue_task(task_type, admin_unit_id, arguments=None, priority=DEFAULT_PRIORI
         raise ValueError(u'Unknown task type: %s' % task_type)
 
     task = BackgroundTask()
-    task.task_id = unicode(uuid.uuid4())
     task.admin_unit_id = admin_unit_id
     task.task_type = task_type
     task.status = u'pending'
