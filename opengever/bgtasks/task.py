@@ -57,7 +57,7 @@ class BaseBackgroundTask(object):
 
         `task` is the BackgroundTask ORM row.
         `commit_checkpoint(data)` persists a JSON-serializable dict and
-        commits — call it periodically to enable resume after worker restart.
+        commits - call it periodically to enable resume after worker restart.
         The stored data is available as `task.checkpoint_data` (JSON string)
         on the next execution attempt.
         """
