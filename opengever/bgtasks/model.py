@@ -7,6 +7,7 @@ from sqlalchemy import Column
 from sqlalchemy import DateTime
 from sqlalchemy import Integer
 from sqlalchemy import String
+import uuid
 
 
 TASK_STATUS_PENDING = u'pending'
@@ -39,13 +40,17 @@ class BackgroundTaskQuery(BaseQuery):
             status=TASK_STATUS_RUNNING)
 
 
+def default_task_id():
+    return unicode(uuid.uuid4())
+
+
 class BackgroundTask(Base):
 
     __tablename__ = u'background_tasks'
 
     query_cls = BackgroundTaskQuery
 
-    task_id = Column(String(UID_LENGTH), primary_key=True)
+    task_id = Column(String(UID_LENGTH), primary_key=True, default=default_task_id)
     admin_unit_id = Column(String(UNIT_ID_LENGTH), nullable=False)
     task_type = Column(String(100), nullable=False)
     status = Column(String(20), nullable=False, default=TASK_STATUS_PENDING)
