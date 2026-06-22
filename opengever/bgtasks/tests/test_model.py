@@ -34,7 +34,6 @@ class TestBackgroundTaskModel(unittest.TestCase):
     def _make_task(self, admin_unit_id=u'unit-1', task_type=u'dummy',
                    status=TASK_STATUS_PENDING, priority=5, scheduled_for=None):
         task = BackgroundTask()
-        task.task_id = u'task-%s' % id(task)
         task.admin_unit_id = admin_unit_id
         task.task_type = task_type
         task.status = status
