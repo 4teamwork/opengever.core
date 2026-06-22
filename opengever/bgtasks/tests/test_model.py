@@ -1,13 +1,12 @@
 from datetime import datetime
-from datetime import timedelta
 from opengever.base.model import create_session
 from opengever.bgtasks.model import BackgroundTask
 from opengever.bgtasks.model import TASK_STATUS_PENDING
 from opengever.bgtasks.model import TASK_STATUS_RUNNING
 from opengever.bgtasks.model import TASK_STATUS_SUCCEEDED
+from opengever.bgtasks.task import BaseBackgroundTask
 from opengever.bgtasks.task import queue_task
 from opengever.bgtasks.task import register_task_type
-from opengever.bgtasks.task import BaseBackgroundTask
 from opengever.core.testing import MEMORY_DB_LAYER
 import transaction
 import unittest

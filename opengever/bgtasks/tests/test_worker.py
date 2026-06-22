@@ -1,6 +1,5 @@
 from datetime import datetime
 from datetime import timedelta
-from opengever.base.model import create_session
 from opengever.bgtasks.model import BackgroundTask
 from opengever.bgtasks.model import TASK_STATUS_FAILED
 from opengever.bgtasks.model import TASK_STATUS_PENDING
