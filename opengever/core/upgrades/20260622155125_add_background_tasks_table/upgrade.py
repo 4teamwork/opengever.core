@@ -8,9 +8,6 @@ from sqlalchemy import Text
 
 class AddBackgroundTasksTable(SchemaMigration):
 
-    profileid = u'opengever.bgtasks'
-    upgradeid = 1001
-
     def migrate(self):
         if u'background_tasks' in self.metadata.tables:
             return
