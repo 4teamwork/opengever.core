@@ -42,6 +42,8 @@ from .tz_for_log import PatchZ2LogTimezone
 from .verify_object_paste import PatchCopyContainerVerifyObjectPaste
 from .webdav_lock_timeout import PatchWebDAVLockTimeout
 from .workflowtool import PatchWorkflowTool
+from opengever.bgtasks.patches import PatchCMFCatalogAwareReindexObjectSecurity
+import opengever.bgtasks.reindex_object_security  # noqa: registers task type
 from opengever.debug import debug_modified_out_of_sync_env_var_is_set
 from opengever.debug.patches.modified_out_of_sync import PatchConnectionRegister
 from opengever.readonly import readonly_env_var_is_set
@@ -88,6 +90,7 @@ PatchZ2LogTimezone()()
 PatchZ3CFormChangedField()()
 PatchZ3CFormWidgetUpdate()()
 ScrubBoboExceptions()()
+PatchCMFCatalogAwareReindexObjectSecurity()()
 
 # These three patches implement role and permission filtering during RO mode.
 # We only apply these conditionally when RO mode actually is active.
