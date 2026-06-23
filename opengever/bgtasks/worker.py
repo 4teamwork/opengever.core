@@ -60,8 +60,8 @@ class BackgroundTaskWorker(object):
         task = (session.query(BackgroundTask)
                 .filter(BackgroundTask.admin_unit_id == admin_unit_id,
                         BackgroundTask.status == TASK_STATUS_PENDING,
-                        (BackgroundTask.scheduled_for == None) |  # noqa: E711
-                        (BackgroundTask.scheduled_for <= now))
+                        (BackgroundTask.scheduled_for.is_(None))
+                        | (BackgroundTask.scheduled_for <= now))
                 .order_by(BackgroundTask.priority.asc(),
                           BackgroundTask.created.asc())
                 .first())
