@@ -101,6 +101,9 @@ class BackgroundTaskWorker(object):
                 self._handle_failure(task, formatted)
             return
 
+        # Reenroll the session in the current transaction
+        session = create_session()
+        task = session.query(BackgroundTask).get(task_id)
         task.status = TASK_STATUS_SUCCEEDED
         task.finished = datetime.now()
         transaction.commit()
