@@ -24,13 +24,16 @@ class PatchCMFCatalogAwareReindexObjectSecurity(MonkeyPatch):
     def __call__(self):
         global _original_reindex_object_security
 
+        # Ensure patch from ftw.solr is applied first
+        import ftw.solr.patches  # noqa,
         from Products.CMFCore.CMFCatalogAware import CMFCatalogAware
         _original_reindex_object_security = CMFCatalogAware.reindexObjectSecurity
 
+        from opengever.base.monkey.patches.cmf_catalog_aware import IDisableCatalogIndexing
+        from opengever.ogds.base.utils import get_current_admin_unit
+        from zope.globalrequest import getRequest
+
         def reindexObjectSecurity(self, skip_self=False):
-            from opengever.base.monkey.patches.cmf_catalog_aware import IDisableCatalogIndexing
-            from opengever.ogds.base.utils import get_current_admin_unit
-            from zope.globalrequest import getRequest
 
             if IDisableCatalogIndexing.providedBy(getRequest()):
                 return
