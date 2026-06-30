@@ -67,6 +67,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
                 ('classic_ui_enabled', True),
                 ('contacts', 'plone'),
                 ('disposition_disregard_retention_period', False),
+                ('disposition_sip_archive_delivery_enabled', False),
                 ('disposition_transport_filesystem', False),
                 ('disposition_transport_ftps', False),
                 ('doc_properties', False),

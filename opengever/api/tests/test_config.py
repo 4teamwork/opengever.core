@@ -71,6 +71,7 @@ class TestConfig(IntegrationTestCase):
                 u'classic_ui_enabled': True,
                 u'contacts': 'plone',
                 u'disposition_disregard_retention_period': False,
+                u'disposition_sip_archive_delivery_enabled': False,
                 u'disposition_transport_filesystem': False,
                 u'disposition_transport_ftps': False,
                 u'doc_properties': False,
@@ -412,6 +413,19 @@ class TestConfig(IntegrationTestCase):
         with patch('opengever.base.configuration.count_available_dossier_types', return_value=2):
             browser.open(self.config_url, headers=self.api_headers)
             self.assertTrue(browser.json['features']['multiple_dossier_types'])
+
+    @browsing
+    def test_feature_disposition_sip_archive_delivery_enabled(self, browser):
+        self.login(self.regular_user, browser)
+
+        browser.open(self.config_url, headers=self.api_headers)
+
+        self.assertFalse(browser.json['features']['disposition_sip_archive_delivery_enabled'])
+
+        self.activate_feature('disposition_sip_archive_delivery_enabled')
+
+        browser.open(self.config_url, headers=self.api_headers)
+        self.assertTrue(browser.json['features']['disposition_sip_archive_delivery_enabled'])
 
     @browsing
     def test_contains_the_current_admin_unit(self, browser):

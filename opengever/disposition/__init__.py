@@ -15,6 +15,12 @@ def only_attach_original_enabled():
         interface=IDispositionSettings)
 
 
+def is_sip_archive_delivery_enabled():
+    return api.portal.get_registry_record(
+        'sip_archive_delivery',
+        interface=IDispositionSettings)
+
+
 DISPOSITION_ACTIVE_STATES = ["disposition-state-in-progress",
                              "disposition-state-appraised",
                              "disposition-state-archived",
