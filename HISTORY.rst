@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2026.3.3 (2026-07-01)
+---------------------
+
+Bug fixes:
+
+
+- Allow ActorLookup with username in addition to userid  [ran] [TI-3700]
+
+
 2026.3.2 (2026-06-11)
 ---------------------
 
