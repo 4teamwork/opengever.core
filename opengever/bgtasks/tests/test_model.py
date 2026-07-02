@@ -1,4 +1,5 @@
 from datetime import datetime
+from mock import patch
 from opengever.base.model import create_session
 from opengever.bgtasks.model import BackgroundTask
 from opengever.bgtasks.model import TASK_STATUS_PENDING
@@ -29,6 +30,12 @@ class TestBackgroundTaskModel(unittest.TestCase):
     def setUp(self):
         super(TestBackgroundTaskModel, self).setUp()
         self.session = self.layer.session
+        # No Plone site in this layer, so the registry can't be read - force
+        # queue_task() to actually queue instead of falling back to disabled.
+        patcher = patch('opengever.bgtasks.task.is_background_tasks_enabled',
+                         return_value=True)
+        self.addCleanup(patcher.stop)
+        patcher.start()
 
     def _make_task(self, admin_unit_id=u'unit-1', task_type=u'dummy',
                    status=TASK_STATUS_PENDING, priority=5, scheduled_for=None):
