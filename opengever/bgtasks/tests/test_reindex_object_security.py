@@ -13,6 +13,8 @@ import transaction
 class TestReindexObjectSecurityPatch(IntegrationTestCase):
     """Tests for PatchCMFCatalogAwareReindexObjectSecurity."""
 
+    features = ('bgtasks',)
+
     def setUp(self):
         super(TestReindexObjectSecurityPatch, self).setUp()
         self.login(self.regular_user)
