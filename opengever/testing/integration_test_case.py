@@ -110,6 +110,7 @@ FEATURE_FLAGS = {
     'oc-plugin-check-enabled': 'opengever.officeconnector.interfaces.'
                               'IOfficeConnectorSettings.oc_plugin_check_enabled',  # noqa
     'sign': 'opengever.sign.interfaces.ISignSettings.is_feature_enabled',  # noqa
+    'bgtasks': 'opengever.bgtasks.interfaces.IBackgroundTaskSettings.is_feature_enabled',
 }
 
 FEATURE_VALUES = {
@@ -140,6 +141,7 @@ class IntegrationTestCase(TestCase):
         self.portal = self.layer['portal']
         self.request = self.layer['request']
         self.deactivate_extjs()
+        self.deactivate_background_tasks()
         self.install_ogds_plugin()
 
         map(self.parse_feature, self.features)
@@ -296,6 +298,18 @@ class IntegrationTestCase(TestCase):
         """
         api.portal.set_registry_record(
             'ftw.tabbedview.interfaces.ITabbedView.extjs_enabled', False)
+
+    def deactivate_background_tasks(self):
+        """No worker runs in tests, so a queued task never executes before
+        assertions run. We disable background tasks by default so callers of
+        queue_task() execute synchronously instead, matching pre-bgtasks
+        behavior. Tests that specifically exercise queueing/worker behavior
+        can reactivate it:
+
+        >>> self.activate_feature('bgtasks')
+        """
+        api.portal.set_registry_record(
+            'opengever.bgtasks.interfaces.IBackgroundTaskSettings.is_feature_enabled', False)
 
     def parse_feature(self, feature):
         """Activate or deactivate a feature flag."""

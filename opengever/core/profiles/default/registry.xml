@@ -15,6 +15,9 @@
   <records interface="opengever.base.interfaces.IPortalSettings" />
   <records interface="opengever.base.interfaces.IActorSettings" />
 
+  <!-- BGTASKS -->
+  <records interface="opengever.bgtasks.interfaces.IBackgroundTaskSettings" />
+
   <!-- BUMBLEBEE -->
   <records interface="opengever.bumblebee.interfaces.IGeverBumblebeeSettings" />
 
