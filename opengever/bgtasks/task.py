@@ -36,7 +36,7 @@ def is_background_tasks_enabled():
             'opengever.bgtasks.interfaces.IBackgroundTaskSettings.is_feature_enabled')
     except Exception:
         logger.warning('Could not read background tasks registry record, '
-                        'defaulting to disabled', exc_info=True)
+                       'defaulting to disabled', exc_info=True)
         return False
 
 
