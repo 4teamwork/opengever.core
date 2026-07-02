@@ -3,9 +3,9 @@ from opengever.bgtasks.model import BackgroundTask
 from opengever.bgtasks.model import TASK_STATUS_PENDING
 from opengever.bgtasks.reindex_object_security import ReindexObjectSecurityTask
 from opengever.bgtasks.reindex_object_security import TASK_TYPE
+from opengever.ogds.base.interfaces import IAdminUnitConfiguration
 from opengever.testing import IntegrationTestCase
-from mock import MagicMock
-from mock import patch
+from plone import api
 import json
 import transaction
 
@@ -16,12 +16,18 @@ class TestReindexObjectSecurityPatch(IntegrationTestCase):
     def setUp(self):
         super(TestReindexObjectSecurityPatch, self).setUp()
         self.login(self.regular_user)
+        self._clear_queue()
+
+    def _clear_queue(self):
+        session = create_session()
+        session.query(BackgroundTask).delete()
+        transaction.commit()
 
     def _pending_tasks_for(self, uid):
         session = create_session()
         tasks = (session.query(BackgroundTask)
                  .filter_by(task_type=TASK_TYPE,
-                             status=TASK_STATUS_PENDING)
+                            status=TASK_STATUS_PENDING)
                  .all())
         return [t for t in tasks
                 if json.loads(t.task_arguments or u'{}').get(u'uid') == uid]
@@ -59,22 +65,23 @@ class TestReindexObjectSecurityPatch(IntegrationTestCase):
 
     def test_falls_through_to_original_when_no_admin_unit(self):
         uid = self.dossier.UID()
-        with patch('opengever.ogds.base.utils.get_current_admin_unit',
-                   return_value=None):
-            import opengever.bgtasks.patches as _patches_mod
-            original_called = []
+        api.portal.set_registry_record(
+            'current_unit_id', interface=IAdminUnitConfiguration, value=u'')
 
-            real_original = _patches_mod._original_reindex_object_security
+        import opengever.bgtasks.patches as _patches_mod
+        original_called = []
 
-            def spy_original(self_obj, skip_self=False):
-                original_called.append((self_obj, skip_self))
-                return real_original(self_obj, skip_self=skip_self)
+        real_original = _patches_mod._original_reindex_object_security
 
-            _patches_mod._original_reindex_object_security = spy_original
-            try:
-                self.dossier.reindexObjectSecurity()
-            finally:
-                _patches_mod._original_reindex_object_security = real_original
+        def spy_original(self_obj, skip_self=False):
+            original_called.append((self_obj, skip_self))
+            return real_original(self_obj, skip_self=skip_self)
+
+        _patches_mod._original_reindex_object_security = spy_original
+        try:
+            self.dossier.reindexObjectSecurity()
+        finally:
+            _patches_mod._original_reindex_object_security = real_original
 
         self.assertEqual(1, len(original_called))
         self.assertEqual(0, len(self._pending_tasks_for(uid)))
