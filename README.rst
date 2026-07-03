@@ -97,7 +97,7 @@ with these contents:
 respective user in our development LDAP tree.
 
 For development a local LDAP server is used by default, that doesn't require a
-credentials file. 
+credentials file.
 
 
 Solr
@@ -321,6 +321,20 @@ defines these variables by default:
 
 To disable the use of a service, simply remove the according environment
 variable or set it to an empty value.
+
+
+SIP Archive Delivery
+~~~~~~~~~~~~~~~~~~~~
+
+Direct SIP delivery to an external archive system via the ``@deliver-sip-to-archive``
+API endpoint can be enabled with the ``disposition_sip_archive_delivery_enabled``
+feature flag and configured with the following environment variables:
+
+- ``DISPOSITION_SIP_TO_ARCHIVE_PROVIDER`` - Archive provider to use. Currently only ``docuteam``
+  is supported. This variable must be set when the feature flag is enabled.
+- ``DISPOSITION_DOCUTEAM_INGEST_URL`` - Base URL of the Docuteam ingest endpoint.
+- ``DISPOSITION_DOCUTEAM_INGEST_API_KEY`` - API key (token) for authenticating with the
+  Docuteam ingest endpoint.
 
 
 Development with local Ianus portal
