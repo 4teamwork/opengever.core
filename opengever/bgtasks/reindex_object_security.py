@@ -44,7 +44,7 @@ class ReindexObjectSecurityTask(BaseBackgroundTask):
             return
 
         try:
-            obj = results[0].getObject()
+            obj = results[0]._unrestrictedGetObject()
         except Exception:
             logger.warning(
                 u'Could not retrieve object %s, skipping reindexObjectSecurity' % uid)
