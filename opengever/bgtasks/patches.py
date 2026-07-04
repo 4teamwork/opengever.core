@@ -39,7 +39,10 @@ class PatchCMFCatalogAwareReindexObjectSecurity(MonkeyPatch):
             if IDisableCatalogIndexing.providedBy(getRequest()):
                 return
 
-            uid = self.UID()
+            try:
+                uid = self.UID()
+            except TypeError:
+                uid = None
             if not uid:
                 return _original_reindex_object_security(self, skip_self=skip_self)
 
