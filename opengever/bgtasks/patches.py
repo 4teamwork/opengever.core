@@ -4,6 +4,7 @@ from opengever.bgtasks.model import BackgroundTask
 from opengever.bgtasks.model import TASK_STATUS_PENDING
 from opengever.bgtasks.reindex_object_security import TASK_TYPE
 from opengever.bgtasks.task import queue_task
+from plone import api
 import json
 import logging
 
@@ -40,6 +41,11 @@ class PatchCMFCatalogAwareReindexObjectSecurity(MonkeyPatch):
 
             uid = self.UID()
             if not uid:
+                return _original_reindex_object_security(self, skip_self=skip_self)
+
+            catalog = api.portal.get_tool('portal_catalog')
+            results = catalog.unrestrictedSearchResults(UID=uid)
+            if not results:
                 return _original_reindex_object_security(self, skip_self=skip_self)
 
             admin_unit = get_current_admin_unit()
