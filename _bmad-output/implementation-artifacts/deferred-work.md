@@ -25,3 +25,9 @@
 ## From: background-tasks-kill-switch (2026-07-02)
 
 - **Scheduling/priority/checkpoint semantics are no-ops when disabled**: When background tasks are disabled, `queue_task()` executes the handler immediately regardless of `run_at`, `priority`, or `max_retries`, and `commit_checkpoint` is a no-op. This is intentional per spec (no worker exists to honor them when disabled), but no current caller passes `run_at`/relies on checkpointing, so it's untested territory. Worth a second look if a future task handler starts relying on scheduled execution or checkpoint resumption.
+
+## From: update-reference-prefixes-background-task (2026-07-06)
+
+- **Stale child brain not guarded in `reindex_children_with_new_prefix`**: `child.getObject()` in the extracted loop is not checked for `None` before calling `.reindexObject()`. If a child is deleted/moved between the catalog path search and this call, it raises `AttributeError`. Pre-existing in the original inline implementation, unchanged by this story — but now runs with a longer queue-to-execution delay (worker mode) than the original in-request call, making the race window larger in practice.
+- **`results[0]` assumes a single catalog match per UID, silently**: Both this task and the existing `ReindexObjectSecurityTask` pick `results[0]` without checking for or warning about duplicate/stale brains for the same UID. Shared pattern across `opengever.bgtasks`, not introduced here.
+- **Fallback only triggers on `get_current_admin_unit() is None`, not on "is a worker actually consuming the queue"**: If the `bgtasks` feature is enabled but no worker process is deployed/running for an admin unit, tasks queue up and reference-prefix reindexing silently never happens (no error, no operator-facing warning). This is an architectural characteristic shared with `reindexObjectSecurity`'s task, not specific to this change.
