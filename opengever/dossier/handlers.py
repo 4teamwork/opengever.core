@@ -1,26 +1,22 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
-from ftw.solr.interfaces import ISolrSearch
-from ftw.solr.query import make_path_filter
 from opengever.api.not_reported_exceptions import Forbidden as NotReportedForbidden
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import IReferenceNumberPrefix
-from opengever.base.security import elevated_privileges
-from opengever.base.solr import batched_solr_results
-from opengever.base.solr import OGSolrDocument
+from opengever.bgtasks.task import queue_task
 from opengever.bundle.sections.constructor import IDontIssueDossierReferenceNumber
 from opengever.dossier import _
 from opengever.dossier import is_grant_dossier_manager_to_responsible_enabled
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.protect_dossier import IProtectDossier
-from opengever.dossier.indexers import TYPES_WITH_CONTAINING_SUBDOSSIER_INDEX
-from opengever.globalindex.handlers.task import sync_task
+from opengever.dossier.tasks import reindex_dossier_title
+from opengever.dossier.tasks import TASK_TYPE
+from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.workspaceclient.interfaces import ILinkedToWorkspace
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
 from plone import api
 from plone.app.workflow.interfaces import ILocalrolesModifiedEvent
 from zope.component import getAdapter
-from zope.component import queryUtility
 from zope.container.interfaces import IContainerModifiedEvent
 from zope.lifecycleevent import IObjectRemovedEvent
 
@@ -90,49 +86,6 @@ def save_reference_number_prefix(obj, event):
     obj.reindexObject(idxs=['reference', 'sortable_reference', 'SearchableText'])
 
 
-def reindex_containing_subdossier_for_contained_objects(dossier, event):
-    """When a subdossier is modified, we update the ``containing_subdossier``
-    index of all contained objects (documents, mails and tasks) so they don't
-    show an outdated title in the ``subdossier`` column
-    """
-    containing_subdossier_title = dossier.Title()
-
-    solr = queryUtility(ISolrSearch)
-    filters = make_path_filter('/'.join(dossier.getPhysicalPath()), depth=-1)
-    filters += [
-        u'portal_type:({})'.format(
-            u' OR '.join(TYPES_WITH_CONTAINING_SUBDOSSIER_INDEX)),
-    ]
-
-    with elevated_privileges():
-        for batch in batched_solr_results(filters=filters, fl='UID,portal_type,path'):
-            for doc in batch:
-                solr.manager.connection.add({
-                    "UID": doc['UID'],
-                    "containing_subdossier": {"set": containing_subdossier_title},
-                })
-
-
-def reindex_containing_dossier_for_contained_objects(dossier, event):
-    """Reindex the containging_dossier index for all the contained obects.
-    """
-    containing_dossier_title = dossier.Title()
-
-    solr = queryUtility(ISolrSearch)
-    filters = make_path_filter('/'.join(dossier.getPhysicalPath()), depth=-1)
-
-    with elevated_privileges():
-        for batch in batched_solr_results(filters=filters, fl='UID,portal_type,path'):
-            for doc in batch:
-                solr.manager.connection.add({
-                    "UID": doc['UID'],
-                    "containing_dossier": {"set": containing_dossier_title},
-                })
-                if doc['portal_type'] == 'opengever.task.task':
-                    obj = OGSolrDocument(doc).getObject()
-                    sync_task(obj, event)
-
-
 def reindex_contained_objects(dossier, event):
     """When a dossier is modified, if the title has changed we reindex
     the corresponding index in all contained object (containing_dossier or
@@ -150,10 +103,14 @@ def reindex_contained_objects(dossier, event):
     if 'IOpenGeverBase.title' not in attrs:
         return
 
-    if dossier.is_subdossier():
-        reindex_containing_subdossier_for_contained_objects(dossier, event)
-    else:
-        reindex_containing_dossier_for_contained_objects(dossier, event)
+    admin_unit = get_current_admin_unit()
+    if admin_unit is None:
+        # OGDS not ready yet (e.g. setup/test contexts) - run inline.
+        reindex_dossier_title(dossier)
+        return
+
+    queue_task(TASK_TYPE, admin_unit.unit_id,
+               arguments={u'uid': dossier.UID()})
 
 
 def reindex_blocked_local_roles(dossier, event):
