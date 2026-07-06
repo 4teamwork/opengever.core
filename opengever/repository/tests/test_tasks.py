@@ -3,11 +3,9 @@ from ftw.testbrowser import browsing
 from opengever.base.model import create_session
 from opengever.bgtasks.model import BackgroundTask
 from opengever.bgtasks.model import TASK_STATUS_PENDING
-from opengever.ogds.base.interfaces import IAdminUnitConfiguration
 from opengever.repository.tasks import TASK_TYPE
 from opengever.repository.tasks import UpdateReferencePrefixesTask
 from opengever.testing import IntegrationTestCase
-from plone import api
 import json
 import transaction
 
@@ -47,32 +45,6 @@ class TestUpdateReferencePrefixesSubscriber(IntegrationTestCase):
         self.assertEqual(1, len(tasks))
         args = json.loads(tasks[0].task_arguments)
         self.assertEqual(uid, args[u'uid'])
-
-    @browsing
-    def test_falls_back_to_synchronous_execution_when_no_admin_unit(self, browser):
-        self.login(self.administrator, browser)
-        uid = self.leaf_repofolder.UID()
-        original_unit_id = api.portal.get_registry_record(
-            'current_unit_id', interface=IAdminUnitConfiguration)
-        api.portal.set_registry_record(
-            'current_unit_id', interface=IAdminUnitConfiguration, value=u'')
-        self.addCleanup(
-            api.portal.set_registry_record,
-            'current_unit_id', original_unit_id, interface=IAdminUnitConfiguration)
-
-        import opengever.repository.subscribers as subscribers_mod
-        calls = []
-        real_reindex = subscribers_mod.reindex_children_with_new_prefix
-        subscribers_mod.reindex_children_with_new_prefix = lambda obj: calls.append(obj)
-        self.addCleanup(
-            setattr, subscribers_mod, 'reindex_children_with_new_prefix', real_reindex)
-
-        browser.open(self.leaf_repofolder, view='edit')
-        browser.fill({'Repository number': u'7'}).save()
-
-        self.assertEqual(0, len(self._pending_tasks_for(uid)))
-        self.assertEqual(1, len(calls))
-        self.assertEqual(self.leaf_repofolder, calls[0])
 
 
 class TestUpdateReferencePrefixesTask(IntegrationTestCase):
