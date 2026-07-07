@@ -1208,6 +1208,7 @@ class OpengeverContentFixture(object):
             .titled(u'2016')
             .having(
                 keywords=(u'Subkeyword', u'Subkeyw\xf6rd'),
+                responsible=self.dossier_responsible.getId(),
             )
         ))
 
