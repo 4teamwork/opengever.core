@@ -22,7 +22,7 @@ class TestMove(IntegrationTestCase):
                 method='POST',
                 headers=self.api_headers)
 
-        self.assertEqual(200, browser.status_code)
+        self.assertEqual(202, browser.status_code)
         self.assertEqual(1, len(children["added"]))
         self.assertEqual(uid, children["added"].pop().UID())
 
