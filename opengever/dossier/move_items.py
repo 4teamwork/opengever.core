@@ -8,12 +8,17 @@ from opengever.base.adapters import DefaultMovabilityChecker
 from opengever.base.interfaces import IMovabilityChecker
 from opengever.base.source import RepositoryPathSourceBinder
 from opengever.base.source import SolrObjPathSourceBinder
+from opengever.bgtasks.move import paste_clipboard
+from opengever.bgtasks.move import TASK_TYPE
+from opengever.bgtasks.task import queue_task
 from opengever.dossier import _
 from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
 from opengever.dossier.templatefolder.interfaces import ITemplateFolder
 from opengever.globalindex.model.task import Task
+from opengever.ogds.base.utils import get_current_admin_unit
+from plone import api
 from plone.z3cform import layout
 from Products.CMFCore.utils import getToolByName
 from Products.statusmessages.interfaces import IStatusMessage
@@ -108,7 +113,10 @@ class MoveItemsForm(form.Form):
             destination = data['destination_folder']
             failed_objects = []
             failed_resource_locked_objects = []
-            copied_items = 0
+            queued_items = 0
+            admin_unit = get_current_admin_unit()
+            destination_uid = destination.UID()
+            user_id = api.user.get_current().getId()
 
             try:
                 objs = self.extract_selected_objs(data)
@@ -178,23 +186,35 @@ class MoveItemsForm(form.Form):
                     continue
 
                 try:
-                    # Try to cut and paste object
+                    # Try to cut the object
                     clipboard = parent.manage_cutObjects(obj.id)
-                    destination.manage_pasteObjects(clipboard)
-                    copied_items += 1
-
                 except ResourceLockedError:
                     # The object is locket over webdav
                     failed_resource_locked_objects.append(obj.title)
                     continue
 
-                except (ValueError, CopyError):
-                    # Catch exception and add title to a list of failed objects
-                    failed_objects.append(obj.title)
-                    continue
+                if admin_unit is None:
+                    # OGDS not ready yet (e.g. setup/test contexts) - paste
+                    # inline, under the real request's own security manager.
+                    try:
+                        paste_clipboard(destination, clipboard)
+                    except ResourceLockedError:
+                        # The object is locket over webdav
+                        failed_resource_locked_objects.append(obj.title)
+                        continue
+                    except (ValueError, CopyError):
+                        # Catch exception and add title to a list of failed objects
+                        failed_objects.append(obj.title)
+                        continue
+                else:
+                    queue_task(TASK_TYPE, admin_unit.unit_id,
+                               arguments={u'destination_uid': destination_uid,
+                                          u'clipboard': clipboard,
+                                          u'user_id': user_id})
+                queued_items += 1
 
             self.create_statusmessages(
-                copied_items,
+                queued_items,
                 failed_objects,
                 failed_resource_locked_objects, )
 
@@ -217,15 +237,16 @@ class MoveItemsForm(form.Form):
 
     def create_statusmessages(
         self,
-        copied_items,
+        queued_items,
         failed_objects,
         failed_resource_locked_objects,
     ):
         """ Create statusmessages with errors and infos af the move-process
         """
-        if copied_items:
-            msg = _(u'${copied_items} Elements were moved successfully',
-                    mapping=dict(copied_items=copied_items))
+        if queued_items:
+            msg = _(u'label_items_queued_to_be_moved',
+                    default=u'${queued_items} item(s) queued to be moved',
+                    mapping=dict(queued_items=queued_items))
             IStatusMessage(self.request).addStatusMessage(
                 msg, type='info')
 

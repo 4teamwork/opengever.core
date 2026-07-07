@@ -2,6 +2,11 @@
 from Acquisition import aq_parent
 from opengever.api.utils import get_obj_by_path
 from opengever.base.interfaces import IMovabilityChecker
+from opengever.bgtasks.move import paste_clipboard
+from opengever.bgtasks.move import TASK_TYPE
+from opengever.bgtasks.task import queue_task
+from opengever.ogds.base.utils import get_current_admin_unit
+from plone import api
 from plone.restapi.deserializer import json_body
 from plone.restapi.services.copymove.copymove import Move
 from Products.CMFCore.utils import getToolByName
@@ -87,15 +92,31 @@ class Move(Move):
                 else:
                     parents_ids[parent] = [obj.getId()]
 
+        admin_unit = get_current_admin_unit()
+        destination_uid = self.context.UID()
+        user_id = api.user.get_current().getId()
+
         results = []
         for parent, ids in parents_ids.items():
-            result = self.context.manage_pasteObjects(
-                cb_copy_data=self.clipboard(parent, ids))
-            for res in result:
+            clipboard = self.clipboard(parent, ids)
+
+            if admin_unit is None:
+                # OGDS not ready yet (e.g. setup/test contexts) - paste
+                # inline, under the real request's own security manager.
+                paste_clipboard(self.context, clipboard)
+            else:
+                queue_task(TASK_TYPE, admin_unit.unit_id,
+                           arguments={u'destination_uid': destination_uid,
+                                      u'clipboard': clipboard,
+                                      u'user_id': user_id})
+
+            for id_ in ids:
                 results.append({
                     'source': '{}/{}'.format(
-                        parent.absolute_url(), res['id']),
+                        parent.absolute_url(), id_),
                     'target': '{}/{}'.format(
-                        self.context.absolute_url(), res['new_id']),
+                        self.context.absolute_url(), id_),
                 })
+
+        self.request.response.setStatus(202)
         return results
