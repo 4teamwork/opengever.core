@@ -72,7 +72,7 @@ class MoveObjectsTask(BaseBackgroundTask):
 
         with run_as_user(real_user):
             try:
-                paste_clipboard(destination, clipboard)
+                paste_clipboard(destination, clipboard.encode('ascii'))
             except (ValueError, CopyError, ResourceLockedError,
                     Unauthorized) as exc:
                 # These are expected, non-retryable paste-time failures
