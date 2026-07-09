@@ -112,7 +112,8 @@ class TestMoveObjectsTask(IntegrationTestCase):
         pass
 
     def test_execute_moves_the_object(self):
-        clipboard = self.subdossier.manage_cutObjects(self.subdocument.getId())
+        moving_obj = self.subdocument
+        clipboard = self.subdossier.manage_cutObjects(moving_obj.getId())
         task = self._make_task(
             self.empty_dossier.UID(), clipboard, self.administrator.getId())
 
@@ -121,7 +122,7 @@ class TestMoveObjectsTask(IntegrationTestCase):
             handler.execute(task, self._no_op_commit_checkpoint)
 
         self.assertEqual(1, len(children['added']))
-        self.assertEqual(self.subdocument.UID(), children['added'].pop().UID())
+        self.assertEqual(moving_obj.UID(), children['added'].pop().UID())
 
     def test_execute_runs_paste_as_the_queuing_user(self):
         # The test is logged in as the administrator, but the task was
