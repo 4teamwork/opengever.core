@@ -6,6 +6,8 @@ from opengever.api.relationfield import relationfield_value_to_object
 from opengever.api.response import SerializeResponseToJson
 from opengever.api.serializer import GeverSerializeFolderToJson
 from opengever.base.behaviors.lifecycle import ILifeCycle
+from opengever.base.response import IResponseContainer
+from opengever.base.response import Response
 from opengever.base.utils import unrestrictedUuidToObject
 from opengever.disposition import is_sip_archive_delivery_enabled
 from opengever.disposition.archive_clients import get_archive_client
@@ -15,6 +17,7 @@ from opengever.disposition.interfaces import IDisposition
 from opengever.disposition.response import IDispositionResponse
 from opengever.disposition.validators import OfferedDossiersValidator
 from opengever.repository.interfaces import IRepositoryFolder
+from persistent.dict import PersistentDict
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.deserializer import json_body
 from plone.restapi.interfaces import IDeserializeFromJson
@@ -33,6 +36,9 @@ from zope.interface import alsoProvides
 from zope.interface import implementer
 from zope.interface import Interface
 from zope.interface import Invalid
+
+
+SIP_DELIVERED_TO_ARCHIVE_RESPONSE_TYPE = 'sip_delivered_to_archive'
 
 
 @implementer(IDeserializeFromJson)
@@ -182,5 +188,16 @@ class DeliverSIPToArchivePost(Service):
 
         alsoProvides(self.request, IDisableCSRFProtection)
         client = get_archive_client()
-        client.deliver(sip_package, filename)
+        response, submission_id = client.deliver(sip_package, filename)
+
+        self.create_response(submission_id)
+
         return self.reply_no_content()
+
+    def create_response(self, submission_id):
+        response = Response(SIP_DELIVERED_TO_ARCHIVE_RESPONSE_TYPE)
+        response.additional_data = PersistentDict({
+            'submission_id': submission_id
+        })
+        IResponseContainer(self.context).add(response)
+        return response

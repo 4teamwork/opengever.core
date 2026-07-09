@@ -1,6 +1,8 @@
 from datetime import datetime
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
+from opengever.api.disposition import SIP_DELIVERED_TO_ARCHIVE_RESPONSE_TYPE
+from opengever.base.response import IResponseContainer
 from opengever.disposition.delivery import DeliveryScheduler
 from opengever.disposition.interfaces import IAppraisal
 from opengever.disposition.interfaces import IDisposition
@@ -610,3 +612,7 @@ class TestDeliverSIPToArchive(SolrIntegrationTestCase):
                 method='POST', headers=self.api_headers)
 
         self.assertEqual(204, browser.status_code)
+
+        last_response = IResponseContainer(self.disposition_with_sip).list().pop()
+        self.assertEqual(SIP_DELIVERED_TO_ARCHIVE_RESPONSE_TYPE, last_response.response_type)
+        self.assertEqual({'submission_id': '0'}, last_response.additional_data)
