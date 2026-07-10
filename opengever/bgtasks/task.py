@@ -4,6 +4,8 @@ from opengever.bgtasks.model import BackgroundTask
 from opengever.bgtasks.model import DEFAULT_MAX_RETRIES
 from opengever.bgtasks.model import DEFAULT_PRIORITY
 from opengever.bgtasks.model import default_task_id
+from opengever.bgtasks.model import TASK_STATUS_PENDING
+from opengever.bgtasks.model import TASK_STATUS_SUCCEEDED
 from plone import api
 import json
 import logging
@@ -49,7 +51,7 @@ def queue_task(task_type, admin_unit_id, arguments=None, priority=DEFAULT_PRIORI
     task.task_id = default_task_id()
     task.admin_unit_id = admin_unit_id
     task.task_type = task_type
-    task.status = u'pending'
+    task.status = TASK_STATUS_PENDING
     task.priority = priority
     task.scheduled_for = run_at
     task.created = datetime.now()
@@ -62,6 +64,7 @@ def queue_task(task_type, admin_unit_id, arguments=None, priority=DEFAULT_PRIORI
     if not is_background_tasks_enabled():
         handler = get_task_class(task_type)()
         handler.execute(task, lambda data: None)
+        task.status = TASK_STATUS_SUCCEEDED
         return task
 
     session = create_session()
