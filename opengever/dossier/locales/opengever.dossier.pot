@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2025-06-24 08:51+0000\n"
+"POT-Creation-Date: 2026-07-10 09:42+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,10 +23,6 @@ msgstr ""
 
 #: ./opengever/dossier/viewlets/byline.py
 msgid " (currently being resolved)"
-msgstr ""
-
-#: ./opengever/dossier/move_items.py
-msgid "${copied_items} Elements were moved successfully"
 msgstr ""
 
 #: ./opengever/dossier/behaviors/protect_dossier.py
@@ -664,6 +660,11 @@ msgstr ""
 #. Default: "Info"
 #: ./opengever/dossier/browser/tabbed.py
 msgid "label_info"
+msgstr ""
+
+#. Default: "${queued_items} item(s) queued to be moved"
+#: ./opengever/dossier/move_items.py
+msgid "label_items_queued_to_be_moved"
 msgstr ""
 
 #. Default: "Journal"
