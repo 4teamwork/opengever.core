@@ -87,6 +87,7 @@ class MoveItemsForm(form.Form):
     fields = field.Fields(IMoveItemsSchema)
     ignoreContext = True
     label = _('heading_move_items', default="Move Items")
+    move_instantly = False
 
     def updateWidgets(self):
         super(MoveItemsForm, self).updateWidgets()
@@ -193,9 +194,7 @@ class MoveItemsForm(form.Form):
                     failed_resource_locked_objects.append(obj.title)
                     continue
 
-                if admin_unit is None:
-                    # OGDS not ready yet (e.g. setup/test contexts) - paste
-                    # inline, under the real request's own security manager.
+                if self.move_instantly or admin_unit is None:
                     try:
                         paste_clipboard(destination, clipboard)
                     except ResourceLockedError:
@@ -268,6 +267,7 @@ class MoveItemsForm(form.Form):
 class MoveItemForm(MoveItemsForm):
 
     label = _('heading_move_item', default="Move Item")
+    move_instantly = True
 
     def extract_selected_objs(self, data):
         return [self.context]
