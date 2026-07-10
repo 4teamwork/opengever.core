@@ -2,6 +2,7 @@
 from Acquisition import aq_parent
 from opengever.api.utils import get_obj_by_path
 from opengever.base.interfaces import IMovabilityChecker
+from opengever.bgtasks.model import TASK_STATUS_SUCCEEDED
 from opengever.bgtasks.move import paste_clipboard
 from opengever.bgtasks.move import TASK_TYPE
 from opengever.bgtasks.task import queue_task
@@ -104,11 +105,17 @@ class Move(Move):
                 # OGDS not ready yet (e.g. setup/test contexts) - paste
                 # inline, under the real request's own security manager.
                 paste_clipboard(self.context, clipboard)
+                status = 200
             else:
-                queue_task(TASK_TYPE, admin_unit.unit_id,
-                           arguments={u'destination_uid': destination_uid,
-                                      u'clipboard': clipboard,
-                                      u'user_id': user_id})
+                task = queue_task(
+                    TASK_TYPE, admin_unit.unit_id,
+                    arguments={u'destination_uid': destination_uid,
+                               u'clipboard': clipboard,
+                               u'user_id': user_id})
+                if task.status == TASK_STATUS_SUCCEEDED:
+                    status = 200
+                else:
+                    status = 202
 
             for id_ in ids:
                 results.append({
@@ -118,5 +125,5 @@ class Move(Move):
                         self.context.absolute_url(), id_),
                 })
 
-        self.request.response.setStatus(202)
+        self.request.response.setStatus(status)
         return results
