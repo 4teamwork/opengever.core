@@ -10,6 +10,8 @@ from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.base.role_assignments import TaskRoleAssignment
 from opengever.ogds.base.interfaces import IOGDSSyncConfiguration
 from opengever.ogds.models.group import Group
+from opengever.ogds.models.service import ogds_service
+from opengever.sharing.interfaces import ISharingConfiguration
 from opengever.testing import IntegrationTestCase
 from plone import api
 from urllib import urlencode
@@ -518,6 +520,35 @@ class TestOpengeverSharing(IntegrationTestCase):
         self.assertEquals(
             u'http://nohost/plone/@@list_groupmembers?group=group+with+spaces',
             entry['url'])
+
+    @browsing
+    def test_group_filter_matches_on_groupname_not_on_groupid(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        create(Builder('ogds_group')
+               .having(groupid='Meine Testgruppe',
+                       groupname='Meine Testgruppe',
+                       title='Meine Testgruppe'))
+        create(Builder('ogds_group')
+               .having(groupid='11111111-4368-1040-8650-4d25b64301d5',
+                       groupname='Meine Testgruppe 2',
+                       title='Meine Testgruppe 2'))
+
+        ogds_service().session.flush()
+
+        api.portal.set_registry_record(
+            name='black_list_prefix', value=u'^.', interface=ISharingConfiguration)
+        api.portal.set_registry_record(
+            name='white_list_prefix', value=u'^Meine', interface=ISharingConfiguration)
+
+        query = {'search': 'Testgruppe'}
+        browser.open(self.empty_dossier,
+                     view='@sharing?{}'.format(urlencode(query)),
+                     method='Get', headers={'Accept': 'application/json'})
+
+        ids = [item.get('id') for item in browser.json['items']]
+        self.assertIn('Meine Testgruppe', ids)
+        self.assertIn('11111111-4368-1040-8650-4d25b64301d5', ids)
 
     @browsing
     def test_sharing_view_handles_inactive_group(self, browser):
