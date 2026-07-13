@@ -1,0 +1,1 @@
+Fix searching with phrase queries containing tokens that are split by the word delimiter filter. [buchi]
