@@ -17,7 +17,12 @@ from plone.restapi.services import Service
 from Products.CMFCore.utils import getToolByName
 from zExceptions import BadRequest
 from zExceptions import InternalError
+import logging
 
+
+logger = logging.getLogger('opengever.api')
+
+TOO_MANY_CLAUSES_ERROR = 'too many nested clauses'
 
 BLACKLISTED_ATTRIBUTES = set([
     'getDataOrigin',
@@ -283,6 +288,17 @@ class SolrSearchGet(SolrQueryBaseService):
             fl=field_list, **params)
 
         if not resp.is_ok():
+            # Quick-fix for https://4teamwork.atlassian.net/browse/TI-3679
+            if TOO_MANY_CLAUSES_ERROR in resp.error_msg().lower():
+                logger.error('Solr search failed: %s', resp.error_msg())
+                res = {
+                    "items": [],
+                    "start": start,
+                    "rows": rows,
+                    "facet_counts": {},
+                }
+                self.extend_with_batching(res, resp)
+                return res
             raise InternalError(resp.error_msg())
 
         res = {
