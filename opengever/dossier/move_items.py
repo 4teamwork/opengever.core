@@ -17,8 +17,10 @@ from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
 from opengever.dossier.templatefolder.interfaces import ITemplateFolder
 from opengever.globalindex.model.task import Task
+from opengever.locking.lock import MOVE_LOCK
 from opengever.ogds.base.utils import get_current_admin_unit
 from plone import api
+from plone.locking.interfaces import ILockable
 from plone.z3cform import layout
 from Products.CMFCore.utils import getToolByName
 from Products.statusmessages.interfaces import IStatusMessage
@@ -206,10 +208,12 @@ class MoveItemsForm(form.Form):
                         failed_objects.append(obj.title)
                         continue
                 else:
+                    ILockable(obj).lock(MOVE_LOCK)
                     queue_task(TASK_TYPE, admin_unit.unit_id,
                                arguments={u'destination_uid': destination_uid,
                                           u'clipboard': clipboard,
-                                          u'user_id': user_id})
+                                          u'user_id': user_id,
+                                          u'object_uids': [obj.UID()]})
                 queued_items += 1
 
             self.create_statusmessages(
