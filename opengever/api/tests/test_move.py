@@ -1,12 +1,20 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.base.model import create_session
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
+from opengever.bgtasks.model import BackgroundTask
+from opengever.bgtasks.model import TASK_STATUS_PENDING
+from opengever.bgtasks.move import MoveObjectsTask
+from opengever.bgtasks.move import TASK_TYPE
 from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSettings
 from opengever.dossier.interfaces import IDossierContainerTypes
+from opengever.locking.lock import MOVE_LOCK
+from opengever.ogds.base.interfaces import IAdminUnitConfiguration
 from opengever.testing import IntegrationTestCase
 from plone import api
+from plone.locking.interfaces import ILockable
 import json
 
 
@@ -318,3 +326,101 @@ class TestMove(IntegrationTestCase):
 
         self.login(self.regular_user, browser=browser)
         self.assert_can_move(browser, doc, self.dossier)
+
+    @browsing
+    def test_multi_source_same_parent_queued_move_locks_and_unlocks_all_objects(self, browser):
+        self.activate_feature('bgtasks')
+        self.login(self.regular_user, browser)
+
+        self.assertFalse(ILockable(self.document).locked(MOVE_LOCK))
+        self.assertFalse(ILockable(self.mail_eml).locked(MOVE_LOCK))
+
+        browser.open(
+            self.empty_dossier,
+            view='@move',
+            data=json.dumps({
+                'source': [
+                    self.document.absolute_url(),
+                    self.mail_eml.absolute_url(),
+                ]}),
+            method='POST',
+            headers=self.api_headers)
+
+        self.assertEqual(202, browser.status_code)
+
+        session = create_session()
+        tasks = (session.query(BackgroundTask)
+                .filter_by(task_type=TASK_TYPE, status=TASK_STATUS_PENDING)
+                .all())
+        self.assertEqual(1, len(tasks))
+        args = json.loads(tasks[0].task_arguments)
+        self.assertItemsEqual(
+            [self.document.UID(), self.mail_eml.UID()], args[u'object_uids'])
+
+        # Both objects are locked while the task is still pending.
+        self.assertTrue(ILockable(self.document).locked(MOVE_LOCK))
+        self.assertTrue(ILockable(self.mail_eml).locked(MOVE_LOCK))
+
+        handler = MoveObjectsTask()
+        handler.execute(tasks[0], lambda data: None)
+
+        # Both objects are unlocked once the task has executed.
+        self.assertFalse(ILockable(self.document).locked(MOVE_LOCK))
+        self.assertFalse(ILockable(self.mail_eml).locked(MOVE_LOCK))
+
+    @browsing
+    def test_multi_source_different_parents_queues_one_task_per_parent_with_scoped_locks(self, browser):
+        self.activate_feature('bgtasks')
+        self.login(self.regular_user, browser)
+
+        # self.document's parent is self.dossier; self.subdocument's parent
+        # is self.subdossier - two distinct parents, so this must produce
+        # two separate tasks, each locking only its own object.
+        self.assertFalse(ILockable(self.document).locked(MOVE_LOCK))
+        self.assertFalse(ILockable(self.subdocument).locked(MOVE_LOCK))
+
+        browser.open(
+            self.empty_dossier,
+            view='@move',
+            data=json.dumps({
+                'source': [
+                    self.document.absolute_url(),
+                    self.subdocument.absolute_url(),
+                ]}),
+            method='POST',
+            headers=self.api_headers)
+
+        self.assertEqual(202, browser.status_code)
+
+        session = create_session()
+        tasks = (session.query(BackgroundTask)
+                .filter_by(task_type=TASK_TYPE, status=TASK_STATUS_PENDING)
+                .all())
+        self.assertEqual(2, len(tasks))
+
+        object_uids_per_task = [
+            json.loads(task.task_arguments)[u'object_uids'] for task in tasks]
+        self.assertItemsEqual(
+            [[self.document.UID()], [self.subdocument.UID()]],
+            object_uids_per_task)
+
+        self.assertTrue(ILockable(self.document).locked(MOVE_LOCK))
+        self.assertTrue(ILockable(self.subdocument).locked(MOVE_LOCK))
+
+    @browsing
+    def test_synchronous_fallback_never_applies_move_lock(self, browser):
+        self.login(self.regular_user, browser)
+        api.portal.set_registry_record(
+            'current_unit_id', interface=IAdminUnitConfiguration, value=u'')
+
+        self.assertFalse(ILockable(self.document).locked(MOVE_LOCK))
+
+        browser.open(
+            self.empty_dossier,
+            view='@move',
+            data=json.dumps({'source': self.document.absolute_url()}),
+            method='POST',
+            headers=self.api_headers)
+
+        self.assertEqual(200, browser.status_code)
+        self.assertFalse(ILockable(self.document).locked(MOVE_LOCK))

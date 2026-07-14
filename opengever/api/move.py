@@ -6,8 +6,10 @@ from opengever.bgtasks.model import TASK_STATUS_SUCCEEDED
 from opengever.bgtasks.move import paste_clipboard
 from opengever.bgtasks.move import TASK_TYPE
 from opengever.bgtasks.task import queue_task
+from opengever.locking.lock import MOVE_LOCK
 from opengever.ogds.base.utils import get_current_admin_unit
 from plone import api
+from plone.locking.interfaces import ILockable
 from plone.restapi.deserializer import json_body
 from plone.restapi.services.copymove.copymove import Move
 from Products.CMFCore.utils import getToolByName
@@ -71,7 +73,7 @@ class Move(Move):
         if not isinstance(source, list):
             source = [source]
 
-        parents_ids = {}
+        parents_objs = {}
         for item in source:
             obj = self.get_object(item)
             if obj is not None:
@@ -88,17 +90,18 @@ class Move(Move):
                 #         return
                 parent = aq_parent(obj)
                 IMovabilityChecker(obj).validate_movement(self.context)
-                if parent in parents_ids:
-                    parents_ids[parent].append(obj.getId())
+                if parent in parents_objs:
+                    parents_objs[parent].append(obj)
                 else:
-                    parents_ids[parent] = [obj.getId()]
+                    parents_objs[parent] = [obj]
 
         admin_unit = get_current_admin_unit()
         destination_uid = self.context.UID()
         user_id = api.user.get_current().getId()
 
         results = []
-        for parent, ids in parents_ids.items():
+        for parent, objs in parents_objs.items():
+            ids = [obj.getId() for obj in objs]
             clipboard = self.clipboard(parent, ids)
 
             if admin_unit is None:
@@ -107,11 +110,14 @@ class Move(Move):
                 paste_clipboard(self.context, clipboard)
                 status = 200
             else:
+                for obj in objs:
+                    ILockable(obj).lock(MOVE_LOCK)
                 task = queue_task(
                     TASK_TYPE, admin_unit.unit_id,
                     arguments={u'destination_uid': destination_uid,
                                u'clipboard': clipboard,
-                               u'user_id': user_id})
+                               u'user_id': user_id,
+                               u'object_uids': [obj.UID() for obj in objs]})
                 if task.status == TASK_STATUS_SUCCEEDED:
                     status = 200
                 else:
