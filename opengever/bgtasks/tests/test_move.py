@@ -10,9 +10,11 @@ from opengever.bgtasks.model import TASK_STATUS_PENDING
 from opengever.bgtasks.move import MoveObjectsTask
 from opengever.bgtasks.move import TASK_TYPE
 from opengever.dossier.tests.test_move_items import MoveItemsHelper
+from opengever.locking.lock import MOVE_LOCK
 from opengever.ogds.base.interfaces import IAdminUnitConfiguration
 from opengever.testing import IntegrationTestCase
 from plone import api
+from plone.locking.interfaces import ILockable
 import json
 import transaction
 
@@ -82,6 +84,46 @@ class TestMoveObjectsEnqueue(IntegrationTestCase, MoveItemsHelper):
 
         self.assertEqual(0, len(self._pending_tasks()))
         self.assertEqual(1, len(children['added']))
+        moved = children['added'].pop()
+        self.assertFalse(ILockable(moved).locked(MOVE_LOCK))
+
+    @browsing
+    def test_api_move_locks_the_object_before_queuing_the_task(self, browser):
+        self.login(self.regular_user, browser)
+        self.assertFalse(ILockable(self.document).locked(MOVE_LOCK))
+
+        browser.open(
+            self.subdossier,
+            view='@move',
+            data=json.dumps({'source': self.document.absolute_url()}),
+            method='POST',
+            headers=self.api_headers)
+
+        self.assertEqual(202, browser.status_code)
+        self.assertEqual(1, len(self._pending_tasks()))
+        self.assertTrue(ILockable(self.document).locked(MOVE_LOCK))
+
+    def test_move_items_form_locks_the_object_before_queuing_the_task(self):
+        self.login(self.regular_user)
+        self.assertFalse(ILockable(self.subdocument).locked(MOVE_LOCK))
+
+        self.move_items([self.subdocument],
+                        source=self.subdossier,
+                        target=self.empty_dossier)
+
+        self.assertEqual(1, len(self._pending_tasks()))
+        self.assertTrue(ILockable(self.subdocument).locked(MOVE_LOCK))
+
+    @browsing
+    def test_move_item_move_instantly_never_applies_move_lock(self, browser):
+        self.login(self.regular_user, browser)
+
+        browser.open(self.document, view='move_item')
+        browser.fill({'Destination': self.empty_dossier})
+        browser.css('#form-buttons-button_submit').first.click()
+
+        self.assertEqual(0, len(self._pending_tasks()))
+        self.assertFalse(ILockable(self.document).locked(MOVE_LOCK))
 
 
 class TestMoveObjectsTask(IntegrationTestCase):
@@ -91,16 +133,19 @@ class TestMoveObjectsTask(IntegrationTestCase):
         super(TestMoveObjectsTask, self).setUp()
         self.login(self.administrator)
 
-    def _make_task(self, destination_uid, clipboard, user_id):
+    def _make_task(self, destination_uid, clipboard, user_id, object_uids=None):
         task = BackgroundTask()
         task.admin_unit_id = u'plone'
         task.task_type = TASK_TYPE
         task.status = TASK_STATUS_PENDING
         task.priority = 5
-        task.task_arguments = json.dumps({
+        arguments = {
             u'destination_uid': destination_uid,
             u'clipboard': clipboard,
-            u'user_id': user_id})
+            u'user_id': user_id}
+        if object_uids is not None:
+            arguments[u'object_uids'] = object_uids
+        task.task_arguments = json.dumps(arguments)
         task.created = datetime.now()
         task.retries = 0
         task.max_retries = 3
@@ -206,3 +251,78 @@ class TestMoveObjectsTask(IntegrationTestCase):
                 handler.execute(task, self._no_op_commit_checkpoint)
             finally:
                 move_mod.paste_clipboard = real_paste
+
+    def test_execute_unlocks_object_after_successful_move(self):
+        moving_obj = self.subdocument
+        ILockable(moving_obj).lock(MOVE_LOCK)
+        clipboard = self.subdossier.manage_cutObjects(moving_obj.getId())
+        task = self._make_task(
+            self.empty_dossier.UID(), clipboard, self.administrator.getId(),
+            object_uids=[moving_obj.UID()])
+
+        handler = MoveObjectsTask()
+        handler.execute(task, self._no_op_commit_checkpoint)
+
+        self.assertFalse(ILockable(moving_obj).locked(MOVE_LOCK))
+
+    def test_execute_unlocks_object_after_expected_paste_failure(self):
+        moving_obj = self.subdocument
+        ILockable(moving_obj).lock(MOVE_LOCK)
+        task = self._make_task(
+            self.empty_dossier.UID(),
+            u'irrelevant-clipboard',
+            self.administrator.getId(),
+            object_uids=[moving_obj.UID()])
+
+        import opengever.bgtasks.move as move_mod
+        real_paste = move_mod.paste_clipboard
+
+        def raising_paste(destination, clipboard):
+            raise ValueError('boom')
+        move_mod.paste_clipboard = raising_paste
+        try:
+            handler = MoveObjectsTask()
+            handler.execute(task, self._no_op_commit_checkpoint)
+        finally:
+            move_mod.paste_clipboard = real_paste
+
+        self.assertFalse(ILockable(moving_obj).locked(MOVE_LOCK))
+
+    def test_execute_unlocks_object_when_destination_cannot_be_resolved(self):
+        moving_obj = self.subdocument
+        ILockable(moving_obj).lock(MOVE_LOCK)
+        task = self._make_task(
+            u'nonexistent-uid-0000-0000-000000000000',
+            u'irrelevant-clipboard',
+            self.administrator.getId(),
+            object_uids=[moving_obj.UID()])
+
+        handler = MoveObjectsTask()
+        handler.execute(task, self._no_op_commit_checkpoint)
+
+        self.assertFalse(ILockable(moving_obj).locked(MOVE_LOCK))
+
+    def test_execute_unlocks_object_when_arguments_are_missing(self):
+        moving_obj = self.subdocument
+        ILockable(moving_obj).lock(MOVE_LOCK)
+        task = self._make_task(
+            destination_uid=None, clipboard=None, user_id=None,
+            object_uids=[moving_obj.UID()])
+
+        handler = MoveObjectsTask()
+        handler.execute(task, self._no_op_commit_checkpoint)
+
+        self.assertFalse(ILockable(moving_obj).locked(MOVE_LOCK))
+
+    def test_execute_unlocks_object_when_user_cannot_be_resolved(self):
+        moving_obj = self.subdocument
+        ILockable(moving_obj).lock(MOVE_LOCK)
+        clipboard = self.subdossier.manage_cutObjects(moving_obj.getId())
+        task = self._make_task(
+            self.empty_dossier.UID(), clipboard, u'nonexistent-user-0000',
+            object_uids=[moving_obj.UID()])
+
+        handler = MoveObjectsTask()
+        handler.execute(task, self._no_op_commit_checkpoint)
+
+        self.assertFalse(ILockable(moving_obj).locked(MOVE_LOCK))
