@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2026.3.4 (2026-07-14)
+---------------------
+
+Bug fixes:
+
+
+- Fix searching with phrase queries containing tokens that are split by the word delimiter filter. [buchi] [TI-3679]
+
+
 2026.3.3 (2026-07-01)
 ---------------------
 
