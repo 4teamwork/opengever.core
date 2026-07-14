@@ -332,8 +332,8 @@ class TestMove(IntegrationTestCase):
         self.activate_feature('bgtasks')
         self.login(self.regular_user, browser)
 
-        self.assertFalse(ILockable(self.document).locked(MOVE_LOCK))
-        self.assertFalse(ILockable(self.mail_eml).locked(MOVE_LOCK))
+        self.assertFalse(ILockable(self.document).locked())
+        self.assertFalse(ILockable(self.mail_eml).locked())
 
         browser.open(
             self.empty_dossier,
@@ -358,15 +358,15 @@ class TestMove(IntegrationTestCase):
             [self.document.UID(), self.mail_eml.UID()], args[u'object_uids'])
 
         # Both objects are locked while the task is still pending.
-        self.assertTrue(ILockable(self.document).locked(MOVE_LOCK))
-        self.assertTrue(ILockable(self.mail_eml).locked(MOVE_LOCK))
+        self.assertTrue(ILockable(self.document).locked())
+        self.assertTrue(ILockable(self.mail_eml).locked())
 
         handler = MoveObjectsTask()
         handler.execute(tasks[0], lambda data: None)
 
         # Both objects are unlocked once the task has executed.
-        self.assertFalse(ILockable(self.document).locked(MOVE_LOCK))
-        self.assertFalse(ILockable(self.mail_eml).locked(MOVE_LOCK))
+        self.assertFalse(ILockable(self.document).locked())
+        self.assertFalse(ILockable(self.mail_eml).locked())
 
     @browsing
     def test_multi_source_different_parents_queues_one_task_per_parent_with_scoped_locks(self, browser):
@@ -376,8 +376,8 @@ class TestMove(IntegrationTestCase):
         # self.document's parent is self.dossier; self.subdocument's parent
         # is self.subdossier - two distinct parents, so this must produce
         # two separate tasks, each locking only its own object.
-        self.assertFalse(ILockable(self.document).locked(MOVE_LOCK))
-        self.assertFalse(ILockable(self.subdocument).locked(MOVE_LOCK))
+        self.assertFalse(ILockable(self.document).locked())
+        self.assertFalse(ILockable(self.subdocument).locked())
 
         browser.open(
             self.empty_dossier,
@@ -404,8 +404,8 @@ class TestMove(IntegrationTestCase):
             [[self.document.UID()], [self.subdocument.UID()]],
             object_uids_per_task)
 
-        self.assertTrue(ILockable(self.document).locked(MOVE_LOCK))
-        self.assertTrue(ILockable(self.subdocument).locked(MOVE_LOCK))
+        self.assertTrue(ILockable(self.document).locked())
+        self.assertTrue(ILockable(self.subdocument).locked())
 
     @browsing
     def test_synchronous_fallback_never_applies_move_lock(self, browser):
@@ -413,7 +413,7 @@ class TestMove(IntegrationTestCase):
         api.portal.set_registry_record(
             'current_unit_id', interface=IAdminUnitConfiguration, value=u'')
 
-        self.assertFalse(ILockable(self.document).locked(MOVE_LOCK))
+        self.assertFalse(ILockable(self.document).locked())
 
         browser.open(
             self.empty_dossier,
@@ -423,4 +423,4 @@ class TestMove(IntegrationTestCase):
             headers=self.api_headers)
 
         self.assertEqual(200, browser.status_code)
-        self.assertFalse(ILockable(self.document).locked(MOVE_LOCK))
+        self.assertFalse(ILockable(self.document).locked())

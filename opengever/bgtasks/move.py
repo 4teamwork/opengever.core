@@ -100,7 +100,7 @@ class MoveObjectsTask(BaseBackgroundTask):
                         continue
                     for brain in results:
                         obj = brain._unrestrictedGetObject()
-                        if obj is not None and ILockable(obj).locked(MOVE_LOCK):
+                        if obj is not None and ILockable(obj).locked():
                             ILockable(obj).unlock(MOVE_LOCK)
 
 
