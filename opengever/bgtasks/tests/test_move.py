@@ -85,12 +85,12 @@ class TestMoveObjectsEnqueue(IntegrationTestCase, MoveItemsHelper):
         self.assertEqual(0, len(self._pending_tasks()))
         self.assertEqual(1, len(children['added']))
         moved = children['added'].pop()
-        self.assertFalse(ILockable(moved).locked(MOVE_LOCK))
+        self.assertFalse(ILockable(moved).locked())
 
     @browsing
     def test_api_move_locks_the_object_before_queuing_the_task(self, browser):
         self.login(self.regular_user, browser)
-        self.assertFalse(ILockable(self.document).locked(MOVE_LOCK))
+        self.assertFalse(ILockable(self.document).locked())
 
         browser.open(
             self.subdossier,
@@ -101,18 +101,18 @@ class TestMoveObjectsEnqueue(IntegrationTestCase, MoveItemsHelper):
 
         self.assertEqual(202, browser.status_code)
         self.assertEqual(1, len(self._pending_tasks()))
-        self.assertTrue(ILockable(self.document).locked(MOVE_LOCK))
+        self.assertTrue(ILockable(self.document).locked())
 
     def test_move_items_form_locks_the_object_before_queuing_the_task(self):
         self.login(self.regular_user)
-        self.assertFalse(ILockable(self.subdocument).locked(MOVE_LOCK))
+        self.assertFalse(ILockable(self.subdocument).locked())
 
         self.move_items([self.subdocument],
                         source=self.subdossier,
                         target=self.empty_dossier)
 
         self.assertEqual(1, len(self._pending_tasks()))
-        self.assertTrue(ILockable(self.subdocument).locked(MOVE_LOCK))
+        self.assertTrue(ILockable(self.subdocument).locked())
 
     @browsing
     def test_move_item_move_instantly_never_applies_move_lock(self, browser):
@@ -123,7 +123,7 @@ class TestMoveObjectsEnqueue(IntegrationTestCase, MoveItemsHelper):
         browser.css('#form-buttons-button_submit').first.click()
 
         self.assertEqual(0, len(self._pending_tasks()))
-        self.assertFalse(ILockable(self.document).locked(MOVE_LOCK))
+        self.assertFalse(ILockable(self.document).locked())
 
 
 class TestMoveObjectsTask(IntegrationTestCase):
@@ -263,7 +263,7 @@ class TestMoveObjectsTask(IntegrationTestCase):
         handler = MoveObjectsTask()
         handler.execute(task, self._no_op_commit_checkpoint)
 
-        self.assertFalse(ILockable(moving_obj).locked(MOVE_LOCK))
+        self.assertFalse(ILockable(moving_obj).locked())
 
     def test_execute_unlocks_object_after_expected_paste_failure(self):
         moving_obj = self.subdocument
@@ -286,7 +286,7 @@ class TestMoveObjectsTask(IntegrationTestCase):
         finally:
             move_mod.paste_clipboard = real_paste
 
-        self.assertFalse(ILockable(moving_obj).locked(MOVE_LOCK))
+        self.assertFalse(ILockable(moving_obj).locked())
 
     def test_execute_unlocks_object_when_destination_cannot_be_resolved(self):
         moving_obj = self.subdocument
@@ -300,7 +300,7 @@ class TestMoveObjectsTask(IntegrationTestCase):
         handler = MoveObjectsTask()
         handler.execute(task, self._no_op_commit_checkpoint)
 
-        self.assertFalse(ILockable(moving_obj).locked(MOVE_LOCK))
+        self.assertFalse(ILockable(moving_obj).locked())
 
     def test_execute_unlocks_object_when_arguments_are_missing(self):
         moving_obj = self.subdocument
@@ -312,7 +312,7 @@ class TestMoveObjectsTask(IntegrationTestCase):
         handler = MoveObjectsTask()
         handler.execute(task, self._no_op_commit_checkpoint)
 
-        self.assertFalse(ILockable(moving_obj).locked(MOVE_LOCK))
+        self.assertFalse(ILockable(moving_obj).locked())
 
     def test_execute_unlocks_object_when_user_cannot_be_resolved(self):
         moving_obj = self.subdocument
@@ -325,4 +325,4 @@ class TestMoveObjectsTask(IntegrationTestCase):
         handler = MoveObjectsTask()
         handler.execute(task, self._no_op_commit_checkpoint)
 
-        self.assertFalse(ILockable(moving_obj).locked(MOVE_LOCK))
+        self.assertFalse(ILockable(moving_obj).locked())
