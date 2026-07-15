@@ -7,6 +7,7 @@ from opengever.bgtasks.task import register_task_type
 from opengever.locking.lock import MOVE_LOCK
 from plone import api
 from plone.locking.interfaces import ILockable
+from plone.locking.interfaces import ITTWLockable
 import logging
 
 
@@ -100,7 +101,7 @@ class MoveObjectsTask(BaseBackgroundTask):
                         continue
                     for brain in results:
                         obj = brain._unrestrictedGetObject()
-                        if obj is not None and ILockable(obj).locked():
+                        if obj is not None and ITTWLockable.providedBy(obj) and ILockable(obj).locked():
                             ILockable(obj).unlock(MOVE_LOCK)
 
 
