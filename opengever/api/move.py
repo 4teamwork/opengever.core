@@ -101,7 +101,7 @@ class Move(Move):
 
         results = []
         for parent, objs in parents_objs.items():
-            ids = [obj.getId() for obj in objs]
+            ids = [o.getId() for o in objs]
             clipboard = self.clipboard(parent, ids)
 
             if admin_unit is None:
