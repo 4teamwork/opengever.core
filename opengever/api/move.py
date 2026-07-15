@@ -10,6 +10,7 @@ from opengever.locking.lock import MOVE_LOCK
 from opengever.ogds.base.utils import get_current_admin_unit
 from plone import api
 from plone.locking.interfaces import ILockable
+from plone.locking.interfaces import ITTWLockable
 from plone.restapi.deserializer import json_body
 from plone.restapi.services.copymove.copymove import Move
 from Products.CMFCore.utils import getToolByName
@@ -111,7 +112,8 @@ class Move(Move):
                 status = 200
             else:
                 for obj in objs:
-                    ILockable(obj).lock(MOVE_LOCK)
+                    if ITTWLockable.providedBy(obj):
+                        ILockable(obj).lock(MOVE_LOCK)
                 task = queue_task(
                     TASK_TYPE, admin_unit.unit_id,
                     arguments={u'destination_uid': destination_uid,
