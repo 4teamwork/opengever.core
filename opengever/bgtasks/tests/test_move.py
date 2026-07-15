@@ -255,8 +255,8 @@ class TestMoveObjectsTask(IntegrationTestCase):
 
     def test_execute_unlocks_object_after_successful_move(self):
         moving_obj = self.subdocument
-        ILockable(moving_obj).lock(MOVE_LOCK)
         clipboard = self.subdossier.manage_cutObjects(moving_obj.getId())
+        ILockable(moving_obj).lock(MOVE_LOCK)
         task = self._make_task(
             self.empty_dossier.UID(), clipboard, self.administrator.getId(),
             object_uids=[moving_obj.UID()])
@@ -317,8 +317,8 @@ class TestMoveObjectsTask(IntegrationTestCase):
 
     def test_execute_unlocks_object_when_user_cannot_be_resolved(self):
         moving_obj = self.subdocument
-        ILockable(moving_obj).lock(MOVE_LOCK)
         clipboard = self.subdossier.manage_cutObjects(moving_obj.getId())
+        ILockable(moving_obj).lock(MOVE_LOCK)
         task = self._make_task(
             self.empty_dossier.UID(), clipboard, u'nonexistent-user-0000',
             object_uids=[moving_obj.UID()])
