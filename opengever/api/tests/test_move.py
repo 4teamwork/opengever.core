@@ -332,16 +332,19 @@ class TestMove(IntegrationTestCase):
         self.activate_feature('bgtasks')
         self.login(self.regular_user, browser)
 
-        self.assertFalse(ILockable(self.document).locked())
-        self.assertFalse(ILockable(self.mail_eml).locked())
+        document = self.document
+        mail = self.mail_eml
+
+        self.assertFalse(ILockable(document).locked())
+        self.assertFalse(ILockable(mail).locked())
 
         browser.open(
             self.empty_dossier,
             view='@move',
             data=json.dumps({
                 'source': [
-                    self.document.absolute_url(),
-                    self.mail_eml.absolute_url(),
+                    document.absolute_url(),
+                    mail.absolute_url(),
                 ]}),
             method='POST',
             headers=self.api_headers)
@@ -355,18 +358,18 @@ class TestMove(IntegrationTestCase):
         self.assertEqual(1, len(tasks))
         args = json.loads(tasks[0].task_arguments)
         self.assertItemsEqual(
-            [self.document.UID(), self.mail_eml.UID()], args[u'object_uids'])
+            [document.UID(), mail.UID()], args[u'object_uids'])
 
         # Both objects are locked while the task is still pending.
-        self.assertTrue(ILockable(self.document).locked())
-        self.assertTrue(ILockable(self.mail_eml).locked())
+        self.assertTrue(ILockable(document).locked())
+        self.assertTrue(ILockable(mail).locked())
 
         handler = MoveObjectsTask()
         handler.execute(tasks[0], lambda data: None)
 
         # Both objects are unlocked once the task has executed.
-        self.assertFalse(ILockable(self.document).locked())
-        self.assertFalse(ILockable(self.mail_eml).locked())
+        self.assertFalse(ILockable(document).locked())
+        self.assertFalse(ILockable(mail).locked())
 
     @browsing
     def test_multi_source_different_parents_queues_one_task_per_parent_with_scoped_locks(self, browser):
@@ -413,14 +416,15 @@ class TestMove(IntegrationTestCase):
         api.portal.set_registry_record(
             'current_unit_id', interface=IAdminUnitConfiguration, value=u'')
 
-        self.assertFalse(ILockable(self.document).locked())
+        document = self.document
+        self.assertFalse(ILockable(document).locked())
 
         browser.open(
             self.empty_dossier,
             view='@move',
-            data=json.dumps({'source': self.document.absolute_url()}),
+            data=json.dumps({'source': document.absolute_url()}),
             method='POST',
             headers=self.api_headers)
 
         self.assertEqual(200, browser.status_code)
-        self.assertFalse(ILockable(self.document).locked())
+        self.assertFalse(ILockable(document).locked())

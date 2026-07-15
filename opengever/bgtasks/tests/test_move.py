@@ -118,12 +118,13 @@ class TestMoveObjectsEnqueue(IntegrationTestCase, MoveItemsHelper):
     def test_move_item_move_instantly_never_applies_move_lock(self, browser):
         self.login(self.regular_user, browser)
 
-        browser.open(self.document, view='move_item')
+        document = self.document
+        browser.open(document, view='move_item')
         browser.fill({'Destination': self.empty_dossier})
         browser.css('#form-buttons-button_submit').first.click()
 
         self.assertEqual(0, len(self._pending_tasks()))
-        self.assertFalse(ILockable(self.document).locked())
+        self.assertFalse(ILockable(document).locked())
 
 
 class TestMoveObjectsTask(IntegrationTestCase):
