@@ -6,10 +6,8 @@
       "Read(./opengever/disposition/**)",
       "Read(./opengever/base/upgrades/**)",
       "Read(./opengever/core/upgrades/**)",
-      "Read(./docs/**)",
       "Read(./docker/**)",
       "Read(./solr-conf/**)"
     ]
   }
 }
-
