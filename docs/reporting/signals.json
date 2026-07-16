@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-07-09T18:20:00+02:00",
-  "report_date": "2026-07-09",
+  "generated_at": "2026-07-16T16:10:00+02:00",
+  "report_date": "2026-07-16",
   "branch": "ai-playground",
   "git": {
-    "head_sha": "d96de2bec641c49ba8575167a50522cba2e2e0ff",
-    "origin_head_sha": "d96de2bec641c49ba8575167a50522cba2e2e0ff",
-    "commits_since_first_baseline": 28,
+    "head_sha": "7a8ba90b799039b9ee2f4b0081da0efdc432e707",
+    "origin_head_sha": "b5531790c54a9f443bafe7ab0b67e3953abe1772",
+    "commits_since_first_baseline": 40,
     "per_area_commit_hint": {
       "D0": 2,
-      "D1": 14,
+      "D1": 16,
       "D2": 0,
       "D3": 3,
-      "D4": 3,
+      "D4": 11,
       "D5": 3
     }
   },
@@ -63,175 +63,97 @@
       "created": "2026-07-07",
       "baseline_commit": "3a6014c91d3aa445d023bada97cf760fc60e5080",
       "path": "_bmad-output/implementation-artifacts/spec-move-objects-background-task.md"
+    },
+    {
+      "id": "lock-objects-during-move",
+      "title": "Lock Objects During Queued Move",
+      "status": "done",
+      "created": "2026-07-14",
+      "baseline_commit": "61147818e7a342e3f6e234201ff79998ab34405c",
+      "path": "_bmad-output/implementation-artifacts/spec-lock-objects-during-move.md"
     }
   ],
   "deferred": {
-    "open_count": 18,
-    "items": [
-      {
-        "source": "background-tasks-infrastructure",
-        "title": "datetime.now() vs UTC across worker"
-      },
-      {
-        "source": "background-tasks-infrastructure",
-        "title": "_task_registry test isolation"
-      },
-      {
-        "source": "background-tasks-infrastructure",
-        "title": "register_task_type silent overwrite"
-      },
-      {
-        "source": "background-tasks-infrastructure",
-        "title": "Unknown task_type error type inconsistency"
-      },
-      {
-        "source": "background-tasks-infrastructure",
-        "title": "Checkpoint commit failure isolation"
-      },
-      {
-        "source": "background-tasks-infrastructure",
-        "title": "Multi-site worker support"
-      },
-      {
-        "source": "reindex-object-security-background-task",
-        "title": "RUNNING task not cancelled during dedup"
-      },
-      {
-        "source": "reindex-object-security-background-task",
-        "title": "Transaction abort silently loses reindex"
-      },
-      {
-        "source": "reindex-object-security-background-task",
-        "title": "No synchronous fallback when queue_task fails"
-      },
-      {
-        "source": "background-tasks-kill-switch",
-        "title": "Scheduling/priority/checkpoint semantics are no-ops when disabled"
-      },
-      {
-        "source": "update-reference-prefixes-background-task",
-        "title": "Stale child brain not guarded in reindex_children_with_new_prefix"
-      },
-      {
-        "source": "update-reference-prefixes-background-task",
-        "title": "results[0] assumes a single catalog match per UID"
-      },
-      {
-        "source": "update-reference-prefixes-background-task",
-        "title": "Fallback triggers only on admin_unit None, not on worker presence"
-      },
-      {
-        "source": "reindex-dossier-title-background-task",
-        "title": "admin_unit fallback runs full synchronous Solr walk with zero logging"
-      },
-      {
-        "source": "reindex-dossier-title-background-task",
-        "title": "No de-duplication of pending reindex-dossier-title tasks per UID"
-      },
-      {
-        "source": "reindex-dossier-title-background-task",
-        "title": "Dossier vs subdossier dispatch decided at execution time"
-      },
-      {
-        "source": "reindex-dossier-title-background-task",
-        "title": "reindex functions not wrapped in task try/except"
-      },
-      {
-        "source": "reindex-dossier-title-background-task",
-        "title": "No test asserts the actual Solr payload / sync_task call"
-      }
-    ]
+    "open_count": 19,
+    "items": []
   },
   "ci": {
     "source": "github-checks",
-    "commit": "d96de2b",
+    "commit": "b553179",
     "checks_total": 11,
-    "checks_passed": 8,
-    "checks_failed": 3,
-    "pass_rate_pct": 72.7,
-    "failing": [
-      {
-        "name": "test-solr.cfg",
-        "url": "https://jenkins.4teamwork.ch/job/opengever.core-test-solr.cfg/3435/display/redirect"
-      },
-      {
-        "name": "test-i18n-de.cfg",
-        "url": "https://jenkins.4teamwork.ch/job/opengever.core-test-i18n-de.cfg/3464/display/redirect"
-      },
-      {
-        "name": "test-plone-4.3.x.cfg",
-        "url": "https://jenkins.4teamwork.ch/job/opengever.core-test-plone-4.3.x.cfg/3517/display/redirect"
-      }
-    ],
+    "checks_passed": 11,
+    "checks_failed": 0,
+    "pass_rate_pct": 100.0,
+    "failing": [],
     "degraded": false,
-    "note": "GitHub Checks (Jenkins) auf origin/ai-playground @ d96de2b; lokaler Branch ist aktuell. 11 Check-Runs abgeschlossen: 8 grün, 3 rot (test-solr.cfg, test-i18n-de.cfg, test-plone-4.3.x.cfg). Die drei zuvor noch laufenden Checks sind seit dem letzten Lauf abgeschlossen -- test-solr und test-plone-4.3.x rot, test-functional-zserver-solr grün -- daher sinkt die Quote von 87.5% (mit ausgeschlossenen Pending) auf 72.7%."
+    "note": "GitHub Checks (Jenkins) auf origin/ai-playground @ b553179 (lokaler Branch 7a8ba90b7 einen Commit voraus, noch nicht gepusht). Alle 11 Check-Runs erfolgreich -- die drei zuvor roten Checks (test-solr, test-i18n-de, test-plone-4.3.x) sind seit dem letzten Lauf (09.07., 72.7%) gruen geworden."
   },
   "areas": [
     {
       "id": "D0",
       "progress_estimate": 85,
       "status_signal": "gruen",
-      "rationale": "Sechs BMAD-Specs sind sauber abgeschlossen (status: done) mit gepflegter Deferred-Work-Liste (18 Punkte); der Scope der drei geplanten Operationen ist durch die Umsetzung geklärt und Sync/Async ist pragmatisch über den Kill-Switch mit synchronem Fallback entschieden. Offen ist höchstens, ob zusätzlich Schwellwerte pro Operation nötig sind."
+      "rationale": "Unveraendert seit 09.07. -- keine neuen Commits in diesem Bereich."
     },
     {
       "id": "D1",
-      "progress_estimate": 80,
+      "progress_estimate": 85,
       "status_signal": "gruen",
-      "rationale": "opengever.bgtasks ist vollständig (Modell, Registry, Worker mit claim/run_forever/Reset unterbrochener Tasks, Runner, Checkpointing, Retries); der Dispatcher existiert als Feature-Flag mit synchronem Fallback, der Kill-Switch inkl. Upgrade-Step ist da, und Operation 1 (reindexObjectSecurity) ist produktiv gepatcht inkl. Dedup — ein echter Enqueue-Worker-Execute-Durchstich. Offen bleiben Objekt-Sperre (nur PENDING-Dedup) und Benutzerbenachrichtigung."
+      "rationale": "Framework unveraendert stark; zusaetzlich ist mit MOVE_LOCK (opengever/locking/lock.py) erstmals ein wiederverwendbarer Objekt-Sperr-Mechanismus fuer waehrend eines Tasks wartende Objekte im Framework vorhanden, bisher aber nur von der Verschieben-Operation genutzt. Benachrichtigung (S12) weiterhin nicht angebunden."
     },
     {
       "id": "D2",
       "progress_estimate": 5,
       "status_signal": "gelb-rot",
-      "rationale": "Kein Browser-View, kein Admin-Übersichts-Code unter opengever/ gefunden. Der Kill-Switch ist eine Registry-Einstellung, keine Anwender-/Support-Oberfläche; UI-Indikator, UI-Sperre und Log-Ansicht fehlen vollständig."
+      "rationale": "Unveraendert seit 09.07. -- kein Code."
     },
     {
       "id": "D3",
       "progress_estimate": 70,
       "status_signal": "gruen",
-      "rationale": "Die Ordnungssystem-Operation ist als update-reference-prefixes-Task samt Subscriber-Anbindung (opengever/repository) implementiert und getestet, ergänzt um reindex-dossier-title als weitere Metadaten-Reindex-Operation. Offen sind Ende-zu-Ende-/Konsistenztests der eigentlichen Solr-Mutation unter Last."
+      "rationale": "Unveraendert seit 09.07. -- keine neuen Commits in diesem Bereich."
     },
     {
       "id": "D4",
-      "progress_estimate": 65,
+      "progress_estimate": 80,
       "status_signal": "gruen",
-      "rationale": "Die risikoreichste Operation ist geliefert: MoveObjectsTask (bgtasks/move.py) mit run_as_user-Berechtigungslogik, Clipboard-Paste und gezielter Fehlerbehandlung, angebunden in dossier/move_items.py und mit 208 Zeilen Tests. Vollständige Konsistenz-/Sonderfallabdeckung (gesperrte/ausgecheckte Objekte, fehlende Rechte) steht noch aus."
+      "rationale": "11 neue Commits seit 09.07. in opengever/bgtasks/move.py, opengever/dossier/move_items.py, opengever/api/move.py und Tests: Objekt-Sperre waehrend Warteschlange (MOVE_LOCK, Spec lock-objects-during-move, done), plus mehrere Haertungs-Fixes. Schliesst den zuvor als groesstes Risiko benannten Sonderfall (paralleles Bearbeiten waehrend Move). Bekannte Restluecke: stealable Lock schuetzt nicht vor zwei gleichzeitigen Verschiebe-Anfragen."
     },
     {
       "id": "D5",
       "progress_estimate": 20,
       "status_signal": "gelb",
-      "rationale": "Kill-Switch/Notbremse als Hardening-Feature und breite Unit-/Integrationstests (test_move, test_worker, test_model, dossier/repository test_tasks) sind vorhanden, inkl. Upgrade-Steps. E2E-Test, Lasttest, Doku und formale Abnahme fehlen jedoch noch."
+      "rationale": "Unveraendert seit 09.07. -- keine neuen Commits in diesem Bereich."
     }
   ],
-  "overall_progress_estimate": 59,
+  "overall_progress_estimate": 63,
   "prognose": {
     "gesamtbeurteilung": {
       "verdict": "gruen",
-      "reason": "Klar vor Plan; alle 3 Operationen produktiv geliefert. Restarbeit bekannt und unkritisch für den Termin."
+      "reason": "Weiterhin klar vor Plan; zusaetzlich zur Operation-Lieferung ist nun auch das groesste Sonderfall-Risiko (paralleles Bearbeiten waehrend Verschieben) geschlossen und alle CI-Checks sind gruen."
     },
     "projektfortschritt": {
       "verdict": "gruen",
-      "reason": "59% Fortschritt bei 34% verstrichener Zeit; mehrere Operationen laufen produktiv end-to-end."
+      "reason": "63% Fortschritt bei 43% verstrichener Zeit; D4 (hoechstes Risiko) durch Objekt-Sperre gehaertet."
     },
     "kosten": {
       "verdict": "gruen",
-      "reason": "35% Budget verbraucht bei 59% Fortschritt; erarbeiteter Wert übersteigt Ist-Aufwand deutlich."
+      "reason": "38.1% Budget verbraucht (18.69 von 49 AT) bei 63% Fortschritt; erarbeiteter Wert uebersteigt Ist-Aufwand deutlich."
     },
     "personalaufwand": {
       "verdict": "gruen",
-      "reason": "Budgetverbrauch 35.3% liegt deutlich unter Fortschritt 59% — mehr Wert geliefert als Budget verbraucht."
+      "reason": "Budgetverbrauch 38.1% liegt deutlich unter Fortschritt 63% -- mehr Wert geliefert als Budget verbraucht."
     },
     "projektrisiken": {
-      "verdict": "gelb",
-      "reason": "2 Hoch-Risiken offen (CI rot, keine Benachrichtigung); Scope-Cut-Reserve bleibt komfortabel."
+      "verdict": "gruen",
+      "reason": "Groesstes technisches Sonderfall-Risiko (Move) und das Qualitaetsrisiko (rote CI-Checks) sind beide geschlossen; verbleibende Risiken sind bekannt und beobachtet."
     }
   },
   "hours": {
     "present": true,
     "hours_per_at": 8,
-    "ist_stunden": 138.5,
-    "ist_at": 17.31,
+    "ist_stunden": 149.5,
+    "ist_at": 18.69,
     "by_person": [
       {
         "person": "Buchberger Thomas",
@@ -240,8 +162,8 @@
       },
       {
         "person": "Cassina Manuel",
-        "ist_stunden": 26.5,
-        "ist_at": 3.31
+        "ist_stunden": 37.5,
+        "ist_at": 4.69
       }
     ],
     "by_week": [
@@ -272,11 +194,16 @@
       },
       {
         "week": "2026-W28",
-        "ist_stunden": 3.5,
-        "ist_at": 0.44
+        "ist_stunden": 7.5,
+        "ist_at": 0.94
+      },
+      {
+        "week": "2026-W29",
+        "ist_stunden": 7.0,
+        "ist_at": 0.88
       }
     ],
-    "rows_parsed": 29,
-    "note": "Person und Datum sind in der zusammengesetzten 'Name'-Spalte codiert ('<Person> vom <YYYY-MM-DD>'); Person = Text vor ' vom ', Datum = ISO-Datum danach. Die separate 'Datum'-Spalte ist unzuverlässig (vertauschte/US-Formate) und wurde ignoriert. Stunden = 'Geleistete Stunden'; 'Verrechnete PT' wurde nicht verwendet (bereits /8, sonst Doppelzählung)."
+    "rows_parsed": 33,
+    "note": "Neuer Export hintergrund-tasks-stunden-260716.xlsx (neueste Datei laut hours_file-Glob) eingelesen. Person und Datum sind in der zusammengesetzten 'Name'-Spalte codiert ('<Person> vom <YYYY-MM-DD>'); Person = Text vor ' vom ', Datum = ISO-Datum danach. Die separate 'Datum'-Spalte ist unzuverlaessig (vertauschte/US-Formate) und wurde ignoriert. Stunden = 'Geleistete Stunden'; 'Verrechnete PT' wurde nicht verwendet (bereits /8, sonst Doppelzaehlung)."
   }
 }
