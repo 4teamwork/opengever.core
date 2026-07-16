@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hintergrundtasks — Projektbericht</title>
+
+<style>
+/* ══════════════════════════════════════════════════════════════════
+   Swiss International Typographic Style — ink on paper.
+   Tokens/type/ledger/chart system reused wholesale from
+   /home/mca/Downloads/mockup-swiss.html. Content = project report.
+   ══════════════════════════════════════════════════════════════════ */
+:root {
+  --red:    #e30613;             /* the one accent */
+  --ease:   cubic-bezier(0.19, 1, 0.22, 1);
+  --sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* spacing scale */
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px; --s6: 40px; --s7: 72px;
+}
+
+:root[data-theme="light"] {
+  --paper:    #f7f5f0;
+  --ink:      #111111;
+  --ink-2:    #555550;
+  --ink-3:    #98948c;
+  --hairline: #d8d4cc;
+  --rule:     #111111;
+  --fill:     #eceae4;
+  --pos:      #111111;
+  --neg:      var(--red);
+  --tl-gruen:   #1f7a1f;
+  --tl-gelb:    #b3860a;
+  --tl-gelbrot: #c9560f;
+  --tl-rot:     var(--red);
+  --tl-grau:    #8a867e;
+  --seg-sep:    #b5ac9c;
+}
+:root[data-theme="dark"] {
+  --paper:    #161513;
+  --ink:      #ece9e2;
+  --ink-2:    #a5a19a;
+  --ink-3:    #6e6a63;
+  --hairline: #33312d;
+  --rule:     #ece9e2;
+  --fill:     #201f1c;
+  --pos:      #ece9e2;
+  --neg:      #ff4d57;
+  --tl-gruen:   #4caf50;
+  --tl-gelb:    #e0a800;
+  --tl-gelbrot: #ff8a3d;
+  --tl-rot:     #ff4d57;
+  --tl-grau:    #8a867e;
+  --seg-sep:    #6b6560;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.45;
+  font-size: 15px;
+  transition: background .4s, color .4s;
+}
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.num  { font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+
+/* faint paper grain */
+body::after {
+  content: ""; position: fixed; inset: 0; pointer-events: none; opacity: 0.03; z-index: 50;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+.page { max-width: 1060px; margin: 0 auto; padding: 0 32px 96px; }
+
+/* ── Masthead ─────────────────────────────────────────────────── */
+.masthead {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 26px 0 14px; flex-wrap: wrap; gap: var(--s3);
+}
+.masthead .title { font-size: 1.05rem; font-weight: 700; letter-spacing: 0.02em; }
+.masthead .folio { font-family: var(--mono); font-size: 0.7rem; color: var(--ink-2); display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+.thick-rule { border: 0; border-top: 3px solid var(--rule); }
+.hairline-rule { border: 0; border-top: 1px solid var(--hairline); }
+.masthead-note { padding: var(--s3) 0 var(--s5); }
+
+.ampel-dot { font-size: 0.75rem; margin-right: 4px; }
+.dot-gruen    { color: var(--tl-gruen); }
+.dot-gelb     { color: var(--tl-gelb); }
+.dot-gelb-rot { color: var(--tl-gelbrot); }
+.dot-rot      { color: var(--tl-rot); }
+.dot-grau     { color: var(--tl-grau); }
+
+.theme-btn {
+  font-family: var(--mono); font-size: 0.65rem; letter-spacing: .1em; text-transform: uppercase;
+  background: none; border: 1px solid var(--ink); color: var(--ink);
+  padding: 4px 12px; cursor: pointer; transition: background .2s, color .2s;
+}
+.theme-btn:hover { background: var(--ink); color: var(--paper); }
+
+/* ── Type system ──────────────────────────────────────────────── */
+.kicker {
+  font-family: var(--mono); font-size: 0.68rem; font-weight: 500;
+  letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-2);
+}
+.kicker .en { color: var(--ink-3); text-transform: none; letter-spacing: 0.06em; margin-left: 10px; font-style: italic; }
+.section-no { color: var(--red); font-weight: 700; margin-right: 10px; }
+
+.caption { font-size: 0.72rem; color: var(--ink-2); }
+.footnote { font-size: 0.78rem; color: var(--ink-2); max-width: 62ch; }
+.footnote b { color: var(--ink); font-weight: 700; }
+
+/* ── Sections: separated by rules, not boxes; collapsible via <details> ── */
+.section { padding: var(--s6) 0; }
+.section + .section { border-top: 1px solid var(--hairline); }
+.section > summary { list-style: none; cursor: pointer; user-select: none; }
+.section > summary::-webkit-details-marker { display: none; }
+.section > summary::marker { content: ""; }
+.section > summary.kicker { display: flex; align-items: center; margin-bottom: var(--s5); }
+.section > summary.kicker .toggle-ind {
+  margin-left: auto; font-family: var(--mono); font-size: 0.85rem; font-weight: 700;
+  color: var(--ink-3); transition: transform .25s var(--ease), color .2s;
+}
+.section > summary.kicker:hover .toggle-ind { color: var(--red); }
+.section[open] > summary.kicker .toggle-ind { transform: rotate(45deg); }
+.section:not([open]) { padding-bottom: var(--s5); }
+.section:not([open]) > summary.kicker { margin-bottom: 0; }
+
+/* subtle open/close animation, driven by JS (Web Animations API) on .section-body;
+   pure-CSS fallback (no-JS): native <details> toggling still works, just instant */
+.section-body { overflow: hidden; }
+@media (prefers-reduced-motion: reduce) { .section-body { overflow: visible; } }
+
+/* reveal — crisp, fast, typesetting feel */
+.reveal { opacity: 0; transform: translateY(14px); transition: opacity .5s var(--ease), transform .5s var(--ease); }
+.reveal.in { opacity: 1; transform: none; }
+
+/* ── Summary prose + traffic light ────────────────────────────── */
+.summary-grid { display: flex; gap: var(--s7); align-items: flex-start; }
+.summary-prose { font-size: 0.95rem; flex: 1; }
+.summary-prose ul, .dash-list { list-style: none; }
+.summary-prose li, .dash-list li { position: relative; padding: 5px 0 5px 18px; border-bottom: 1px solid var(--hairline); }
+.summary-prose li:last-child, .dash-list li:last-child { border-bottom: 0; }
+.summary-prose li::before, .dash-list li::before { content: "\2013"; position: absolute; left: 0; color: var(--red); font-weight: 700; }
+.summary-prose strong { font-weight: 700; }
+.dash-list { font-size: 0.85rem; }
+.ampel-tl { display: flex; flex-direction: column; gap: 10px; align-items: flex-start; flex-shrink: 0; padding-top: 2px; }
+.ampel-tl .lamp-item { display: flex; align-items: center; gap: 10px; }
+.ampel-tl .lamp { width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--ink-3); flex-shrink: 0; transition: background .3s, border-color .3s; }
+.ampel-tl .lamp-label { font-family: var(--mono); font-size: 0.62rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); }
+.ampel-tl.state-gruen .lamp-item-gruen .lamp,
+.ampel-tl.state-gelb .lamp-item-gelb .lamp,
+.ampel-tl.state-gelb-rot .lamp-item-gelb .lamp,
+.ampel-tl.state-gelb-rot .lamp-item-rot .lamp,
+.ampel-tl.state-rot .lamp-item-rot .lamp { border-color: transparent; }
+.ampel-tl.state-gruen .lamp-item-gruen .lamp { background: var(--tl-gruen); }
+.ampel-tl.state-gelb .lamp-item-gelb .lamp { background: var(--tl-gelb); }
+.ampel-tl.state-gelb-rot .lamp-item-gelb .lamp { background: var(--tl-gelb); }
+.ampel-tl.state-gelb-rot .lamp-item-rot .lamp { background: var(--tl-rot); }
+.ampel-tl.state-rot .lamp-item-rot .lamp { background: var(--tl-rot); }
+.ampel-tl.state-gruen .lamp-item-gruen .lamp-label,
+.ampel-tl.state-gelb .lamp-item-gelb .lamp-label,
+.ampel-tl.state-gelb-rot .lamp-item-gelb .lamp-label,
+.ampel-tl.state-gelb-rot .lamp-item-rot .lamp-label,
+.ampel-tl.state-rot .lamp-item-rot .lamp-label { color: var(--ink); font-weight: 700; }
+@media (max-width: 700px) { .summary-grid { flex-direction: column; } .ampel-tl { flex-direction: row; padding-top: var(--s4); } }
+
+/* ── KPI columns with vertical hairlines ──────────────────────── */
+.kpis { display: grid; grid-template-columns: repeat(4, 1fr); }
+@media (max-width: 820px) { .kpis { grid-template-columns: repeat(2, 1fr); row-gap: var(--s5); } }
+.kpi { padding: 0 var(--s5); border-left: 1px solid var(--hairline); }
+.kpi:first-child { padding-left: 0; border-left: 0; }
+.kpi .lbl { font-family: var(--mono); font-size: 0.62rem; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-2); margin-bottom: var(--s2); }
+.kpi .val { font-size: 2.1rem; font-weight: 800; letter-spacing: -0.02em; line-height: 1; }
+.kpi .val.neg { color: var(--neg); }
+.kpi .sub { font-size: 0.72rem; color: var(--ink-2); margin-top: var(--s2); }
+.kpi .bar { height: 3px; background: var(--fill); margin-top: var(--s3); position: relative; }
+.kpi .bar i { position: absolute; inset: 0; right: auto; background: var(--red); width: 0; transition: width .9s var(--ease) .2s; }
+.in .kpi .bar i { width: var(--w); }
+
+/* ── allocation — weight bar with progress fill + ledger table ── */
+.alloc-bar { display: flex; height: 40px; border: 1px solid var(--ink); margin-bottom: var(--s4); }
+.alloc-bar i { border-right: 2px solid var(--seg-sep); transition: background .9s var(--ease); position: relative; overflow: hidden; }
+.alloc-bar i:last-child { border-right: 0; }
+.alloc-bar i:hover { opacity: 0.85; }
+.alloc-bar .seg-label {
+  position: absolute; top: 3px; left: 3px;
+  font-family: var(--mono); font-size: 0.58rem; font-weight: 700; letter-spacing: .03em;
+  color: var(--paper); background: var(--ink); padding: 1px 4px; line-height: 1.4;
+}
+table.ledger { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+table.ledger th {
+  font-family: var(--mono); font-size: 0.62rem; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--ink-2); font-weight: 500; text-align: left; padding: 8px 14px 8px 0;
+  border-bottom: 2px solid var(--ink); white-space: nowrap;
+}
+table.ledger th.r, table.ledger td.r { text-align: right; }
+table.ledger td { padding: 13px 14px 13px 0; border-bottom: 1px solid var(--hairline); }
+table.ledger tfoot td { border-bottom: 0; border-top: 2px solid var(--ink); font-weight: 700; }
+table.ledger tr:last-child td { border-bottom: 0; }
+table.ledger tr:hover td { background: var(--fill); }
+table.ledger .name { font-weight: 500; }
+table.ledger .idx { font-family: var(--mono); font-size: 0.68rem; color: var(--ink-3); padding-right: 12px; }
+.check { color: var(--ink); font-weight: 700; }
+.flag  { color: var(--red); font-weight: 700; }
+.nowrap { white-space: nowrap; }
+
+/* full-width table caption — not the width-capped .footnote */
+.table-note { font-size: 0.72rem; color: var(--ink-2); margin-top: var(--s3); padding-top: var(--s3); border-top: 1px solid var(--hairline); }
+.table-note b { color: var(--ink); font-weight: 700; }
+td .verdict, .verdict { font-family: var(--mono); font-size: 0.66rem; letter-spacing: .08em; text-transform: uppercase; }
+.verdict-gruen    { color: var(--tl-gruen); }
+.verdict-gelb     { color: var(--tl-gelb); }
+.verdict-gelb-rot { color: var(--tl-gelbrot); }
+.verdict-rot      { color: var(--tl-rot); font-weight: 700; }
+.verdict-grau     { color: var(--tl-grau); }
+
+.divergence { display: block; font-size: 0.7rem; color: var(--ink-2); margin-top: 2px; }
+
+/* inline meter used inside table cells (story/area progress) */
+.mini-bar { width: 60px; height: 4px; background: var(--fill); display: inline-block; vertical-align: middle; margin-right: 6px; position: relative; }
+.mini-bar i { position: absolute; inset: 0; right: auto; background: var(--ink); }
+
+/* progress cell: bar on its own line, value below, both left-aligned */
+td.progress-cell { text-align: left; }
+td.progress-cell .mini-bar { display: block; margin: 0 0 5px; }
+td.progress-cell .nowrap { display: block; }
+
+.spec-badge {
+  font-family: var(--mono); font-size: 0.62rem; letter-spacing: .06em; text-transform: uppercase;
+  border: 1px solid var(--ink-3); padding: 1px 6px; color: var(--ink-2); text-decoration: none;
+}
+.spec-badge:hover { border-color: var(--ink); color: var(--ink); }
+
+/* ── Budget bars (ink, data-ink chart) ─────────────────────────── */
+.bar-chart-wrap { margin-bottom: var(--s5); }
+.chart-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: var(--s4); flex-wrap: wrap; gap: var(--s2); }
+svg text { font-family: var(--mono); fill: var(--ink-3); font-size: 9.5px; letter-spacing: .04em; }
+.axis { stroke: var(--hairline); stroke-width: 1; }
+.axis.zero { stroke: var(--ink); }
+.bar-el { fill: var(--ink); }
+.bar-el:hover { opacity: 0.75; }
+.chart-labels { display: flex; justify-content: space-around; font-family: var(--mono); font-size: 0.64rem; color: var(--ink-3); margin-top: var(--s2); }
+
+.budget-figures { display: flex; gap: var(--s6); flex-wrap: wrap; margin-top: var(--s5); }
+.budget-figures .fig .lbl { font-family: var(--mono); font-size: 0.62rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-2); margin-bottom: 4px; }
+.budget-figures .fig .val { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; }
+.budget-figures .fig .val.neg { color: var(--neg); }
+
+/* ── CI section ───────────────────────────────────────────────── */
+.ci-headline { display: flex; align-items: baseline; gap: var(--s5); flex-wrap: wrap; }
+.ci-headline .stat-value { font-size: 3rem; font-weight: 800; letter-spacing: -0.02em; line-height: 1; }
+.ci-headline .stat-value .unit { font-size: 0.9rem; font-weight: 500; color: var(--ink-2); letter-spacing: 0; }
+.ci-headline .stat-value.degraded { font-size: 1.6rem; color: var(--ink-2); }
+.ci-link { font-family: var(--mono); font-size: 0.72rem; }
+.ci-link a { color: var(--ink); }
+
+/* ── Scope cuts / open decisions ─────────────────────────────────*/
+.decisions { margin-top: var(--s5); }
+.decisions ul { list-style: none; }
+.decisions li { padding: 6px 0; border-bottom: 1px solid var(--hairline); font-size: 0.85rem; }
+.decisions li:last-child { border-bottom: 0; }
+.decisions a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--ink-3); text-underline-offset: 2px; transition: color .2s; }
+.decisions a:visited { color: var(--ink-2); }
+.decisions a:hover { color: var(--red); }
+
+/* ── Trajectory / projection ─────────────────────────────────────*/
+.proj-line { fill: none; stroke: var(--ink); stroke-width: 2; stroke-dasharray: 1400; stroke-dashoffset: 1400; }
+.in .proj-line { animation: draw 1.4s var(--ease) forwards .1s; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+.ideal-line { fill: none; stroke: var(--ink-3); stroke-width: 1.5; stroke-dasharray: 6 5; }
+.ideal-label { font-style: italic; }
+.hist-pt { fill: var(--ink); stroke: var(--paper); stroke-width: 1.5; }
+.marker-line { stroke: var(--ink-2); stroke-width: 1; stroke-dasharray: 3 4; }
+.marker-line.stretch { stroke: var(--red); }
+.marker-label { font-size: 9px; }
+.traj-legend { display: flex; gap: var(--s5); margin-top: var(--s3); font-family: var(--mono); font-size: 0.62rem; color: var(--ink-2); align-items: center; }
+.traj-legend .swatch { display: inline-block; width: 18px; height: 0; border-top: 2px solid var(--ink); margin-right: 6px; vertical-align: middle; }
+.traj-legend .swatch.ideal { border-top: 2px dashed var(--ink-3); }
+
+/* ── Tooltip: solid ink block, sharp corners ──────────────────── */
+#tip {
+  position: fixed; z-index: 999; pointer-events: none;
+  opacity: 0; transform: translateY(4px);
+  transition: opacity .16s ease-out, transform .2s var(--ease);
+  background: var(--ink); color: var(--paper);
+  padding: 7px 10px; max-width: 280px;
+}
+#tip.show { opacity: 1; transform: none; }
+#tip .tt-l { font-family: var(--mono); font-size: 0.56rem; letter-spacing: .14em; text-transform: uppercase; opacity: 0.6; margin-bottom: 2px; }
+#tip .tt-v { font-family: var(--mono); font-size: 0.78rem; font-weight: 700; white-space: nowrap; }
+[data-tip] { cursor: default; }
+
+.countup { font-variant-numeric: tabular-nums; }
+
+.colophon { font-family: var(--mono); font-size: 0.62rem; letter-spacing: .08em; color: var(--ink-3); display: flex; justify-content: space-between; padding-top: var(--s4); flex-wrap: wrap; gap: var(--s2); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, .reveal, .proj-line { animation: none !important; transition: none !important; }
+  .reveal { opacity: 1; transform: none; }
+  .in .kpi .bar i { width: var(--w); }
+}
+</style>
+</head>
+<body>
+
+<div id="tip"><div class="tt-l"></div><div class="tt-v"></div></div>
+
+<div class="page">
+
+  <!-- ══════════════════════════════════════════════════════════
+       01 · MASTHEAD
+       ══════════════════════════════════════════════════════════ -->
+  <div class="masthead">
+    <div class="title">Hintergrundtasks — Projektbericht</div>
+    <div class="folio">
+      <span class="ampel-dot dot-gruen" data-tip="Ampel|gruen">●</span>
+      <span>STAND 09.07.2026</span>
+      <span>BRANCH: ai-playground</span>
+      <button class="theme-btn" id="themeToggle">Invert</button>
+    </div>
+  </div>
+  <hr class="thick-rule">
+  <div class="masthead-note caption">
+    Branch wird nicht gemerged — Merges sind kein Fortschrittssignal.
+    <span class="en" style="font-family:var(--mono); font-style:italic; margin-left:8px;">branch is not merged — merges are not a progress signal</span>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       01 · MANAGEMENT SUMMARY
+       ══════════════════════════════════════════════════════════ -->
+  <details class="section reveal" open>
+    <summary class="kicker"><span class="section-no">01</span>Management Summary <span class="en">management summary</span><span class="toggle-ind">+</span></summary>
+    <div class="section-body">
+    <div class="summary-grid">
+      <div class="summary-prose"><ul><li><strong>Fortschritt:</strong> 59% gewichtet — deutlich vor Plan (34% der Zeit verstrichen).</li><li><strong>Kernnutzen geliefert:</strong> Alle drei Operationen (Berechtigungen, Ordnungssystem-Metadaten, Verschieben) produktiv und getestet.</li><li><strong>Budget:</strong> 35% verbraucht (17.3 von 49 AT); erarbeiteter Wert übersteigt Ist-Aufwand — kosteneffizient.</li><li><strong>Offen:</strong> Benutzerbenachrichtigung, Objekt-Sperre, Admin-Übersicht (D2), Abnahme/Hardening (D5).</li><li><strong>Risiko:</strong> 3 von 11 CI-Checks rot.</li><li><strong>Ampel-Empfehlung:</strong> Grün — vor Plan, Restarbeit bekannt und begrenzt.</li></ul></div>
+      <div class="ampel-tl state-gruen" data-tip="Ampel|gruen">
+        <div class="lamp-item lamp-item-gruen"><span class="lamp"></span><span class="lamp-label">gruen</span></div>
+        <div class="lamp-item lamp-item-gelb"><span class="lamp"></span><span class="lamp-label">gelb</span></div>
+        <div class="lamp-item lamp-item-rot"><span class="lamp"></span><span class="lamp-label">rot</span></div>
+      </div>
+    </div>
+    </div>
+  </details>
+
+  <!-- ══════════════════════════════════════════════════════════
+       02 · KPI-LEISTE
+       ══════════════════════════════════════════════════════════ -->
+  <details class="section reveal" open>
+    <summary class="kicker"><span class="section-no">02</span>Kennzahlen <span class="en">kpi overview</span><span class="toggle-ind">+</span></summary>
+    <div class="section-body">
+    <div class="kpis">
+      <div class="kpi">
+        <div class="lbl">Gesamtfortschritt</div>
+        <div class="val num"><span class="countup" data-target="59">0</span> %</div>
+        <div class="bar" data-tip="Gesamtfortschritt|59 %"><i style="--w:59%"></i></div>
+      </div>
+      <div class="kpi">
+        <div class="lbl">Budgetverbrauch</div>
+        <div class="val num"><span class="countup" data-target="35.33">0</span> %</div>
+        <div class="bar" data-tip="Budgetverbrauch|35.33 %"><i style="--w:35.33%"></i></div>
+      </div>
+      <div class="kpi">
+        <div class="lbl">CI-Checks</div>
+
+        <div class="val num">8/11</div>
+        <div class="bar" data-tip="CI-Checks|72.7 %"><i style="--w:72.7%"></i></div>
+              </div>
+      <div class="kpi">
+        <div class="lbl">Tage bis Zieltermin</div>
+        <div class="val num">37</div>
+        <div class="sub">Zieltermin 31.08.2026</div>
+      </div>
+    </div>
+    </div>
+  </details>
+
+  <!-- ══════════════════════════════════════════════════════════
+       03 · PROGNOSE-AMPEL
+       ══════════════════════════════════════════════════════════ -->
+  <details class="section reveal" open>
+    <summary class="kicker"><span class="section-no">03</span>Prognose-Ampel <span class="en">forecast signal</span><span class="toggle-ind">+</span></summary>
+    <div class="section-body">
+    <table class="ledger">
+      <thead>
+        <tr><th>Bereich</th><th>Verdict</th><th>Begründung</th></tr>
+      </thead>
+      <tbody>
+
+        <tr>
+          <td class="name">Gesamtbeurteilung</td>
+          <td><span class="verdict verdict-gruen">gruen</span></td>
+          <td>Klar vor Plan; alle 3 Operationen produktiv geliefert. Restarbeit bekannt und unkritisch für den Termin.
+          </td>
+        </tr>
+        
+        <tr>
+          <td class="name">Projektfortschritt</td>
+          <td><span class="verdict verdict-gruen">gruen</span></td>
+          <td>59% Fortschritt bei 34% verstrichener Zeit; mehrere Operationen laufen produktiv end-to-end.
+          </td>
+        </tr>
+        
+        <tr>
+          <td class="name">Kosten</td>
+          <td><span class="verdict verdict-gruen">gruen</span></td>
+          <td>35% Budget verbraucht bei 59% Fortschritt; erarbeiteter Wert übersteigt Ist-Aufwand deutlich.
+          </td>
+        </tr>
+        
+        <tr>
+          <td class="name">Personalaufwand</td>
+          <td><span class="verdict verdict-gruen">gruen</span></td>
+          <td>Budgetverbrauch 35.3% liegt deutlich unter Fortschritt 59% — mehr Wert geliefert als Budget verbraucht.
+          </td>
+        </tr>
+        
+        <tr>
+          <td class="name">Projektrisiken</td>
+          <td><span class="verdict verdict-gelb">gelb</span></td>
+          <td>2 Hoch-Risiken offen (CI rot, keine Benachrichtigung); Scope-Cut-Reserve bleibt komfortabel.
+          </td>
+        </tr>
+              </tbody>
+    </table>
+    </div>
+  </details>
+
+  <!-- ══════════════════════════════════════════════════════════
+       04 · FORTSCHRITT NACH LIEFERBEREICH
+       ══════════════════════════════════════════════════════════ -->
+  <details class="section reveal" open>
+    <summary class="kicker"><span class="section-no">04</span>Fortschritt nach Lieferbereich <span class="en">progress by delivery area</span><span class="toggle-ind">+</span></summary>
+    <div class="section-body">
+    <table class="ledger">
+      <thead>
+        <tr><th>Bereich</th><th>Name</th><th>Gewicht %</th><th>Fortschritt</th><th>Status</th><th>Beitrag %</th><th>Kommentar</th></tr>
+      </thead>
+      <tbody>
+
+        <tr>
+          <td class="name">D0</td>
+          <td>Solution Design & Spec-Backlog</td>
+          <td class="num">10</td>
+          <td class="progress-cell num"><span class="mini-bar" data-tip="Fortschritt|85 %"><i style="width:85%"></i></span><span class="nowrap">85 %</span>
+          </td>
+          <td><span class="verdict verdict-gruen">gruen</span></td>
+          <td class="num">8.5</td>
+          <td>6 Specs abgeschlossen; Scope geklärt; Sync/Async über Kill-Switch gelöst</td>
+        </tr>
+        
+        <tr>
+          <td class="name">D1</td>
+          <td>Framework + Operation 1 "Berechtigungen setzen"</td>
+          <td class="num">30</td>
+          <td class="progress-cell num"><span class="mini-bar" data-tip="Fortschritt|80 %"><i style="width:80%"></i></span><span class="nowrap">80 %</span>
+          </td>
+          <td><span class="verdict verdict-gruen">gruen</span></td>
+          <td class="num">24</td>
+          <td>Framework + Operation 1 produktiv. Offen: Objekt-Sperre, Benachrichtigung</td>
+        </tr>
+        
+        <tr>
+          <td class="name">D2</td>
+          <td>UI-Transparenz & Admin-Übersicht</td>
+          <td class="num">15</td>
+          <td class="progress-cell num"><span class="mini-bar" data-tip="Fortschritt|5 %"><i style="width:5%"></i></span><span class="nowrap">5 %</span>
+          </td>
+          <td><span class="verdict verdict-gelb-rot">gelb-rot</span></td>
+          <td class="num">0.75</td>
+          <td>Nicht gestartet; kein Code</td>
+        </tr>
+        
+        <tr>
+          <td class="name">D3</td>
+          <td>Operation "Metadaten Ordnungssystem anpassen"</td>
+          <td class="num">15</td>
+          <td class="progress-cell num"><span class="mini-bar" data-tip="Fortschritt|70 %"><i style="width:70%"></i></span><span class="nowrap">70 %</span>
+          </td>
+          <td><span class="verdict verdict-gruen">gruen</span></td>
+          <td class="num">10.5</td>
+          <td>Beide Operationen implementiert & getestet; Abnahmetests offen</td>
+        </tr>
+        
+        <tr>
+          <td class="name">D4</td>
+          <td>Operation "Dossiers innerhalb Mandant verschieben"</td>
+          <td class="num">20</td>
+          <td class="progress-cell num"><span class="mini-bar" data-tip="Fortschritt|65 %"><i style="width:65%"></i></span><span class="nowrap">65 %</span>
+          </td>
+          <td><span class="verdict verdict-gruen">gruen</span></td>
+          <td class="num">13</td>
+          <td>Geliefert (höchstes Risiko); Sonderfälle noch auszubauen</td>
+        </tr>
+        
+        <tr>
+          <td class="name">D5</td>
+          <td>Hardening, Performance & Abnahme</td>
+          <td class="num">10</td>
+          <td class="progress-cell num"><span class="mini-bar" data-tip="Fortschritt|20 %"><i style="width:20%"></i></span><span class="nowrap">20 %</span>
+          </td>
+          <td><span class="verdict verdict-gelb">gelb</span></td>
+          <td class="num">2</td>
+          <td>Kill-Switch + Tests vorhanden; E2E, Lasttest, Doku, Abnahme offen</td>
+        </tr>
+              </tbody>
+    </table>
+    <p class="table-note"><b>Gewicht</b> = Anteil des Bereichs am Gesamtprojekt. <b>Beitrag</b> = Beitrag zum Gesamtfortschritt (Gewicht x Fortschritt).</p>
+    </div>
+  </details>
+
+  <!-- ══════════════════════════════════════════════════════════
+       05 · STORY-BURNUP
+       ══════════════════════════════════════════════════════════ -->
+  <details class="section reveal">
+    <summary class="kicker"><span class="section-no">05</span>Story-Burnup <span class="en">story burnup</span><span class="toggle-ind">+</span></summary>
+    <div class="section-body">
+    <table class="ledger">
+      <thead>
+        <tr><th>ID</th><th>Thema</th><th>Bereich</th><th>Fortschritt</th><th>Status</th><th>Nächster Nachweis</th></tr>
+      </thead>
+      <tbody>
+
+        <tr>
+          <td class="name">S01</td>
+          <td>Solution Design Hintergrund-Task-Framework</td>
+          <td>D0</td>
+          <td class="progress-cell num"><span class="mini-bar" data-tip="Fortschritt|100 %"><i style="width:100%"></i></span><span class="nowrap">100 %</span></td>
+          <td><span class="verdict verdict-gruen">gruen</span></td>
+          <td>Abgeschlossen</td>
+        </tr>
+        
+        <tr>
+          <td class="name">S02</td>
+          <td>Sync/Async-Verhalten definieren</td>
+          <td>D0</td>
+          <td class="progress-cell num"><span class="mini-bar" data-tip="Fortschritt|75 %"><i style="width:75%"></i></span><span class="nowrap">75 %</span></td>
+          <td><span class="verdict verdict-gruen">gruen</span></td>
+          <td>Entschieden: globaler Kill-Switch + synchroner Fallback; Schwellwerte pro Operation bei Bedarf nachziehen</td>
+        </tr>
+        
+        <tr>
+          <td class="name">S03</td>
+          <td>Scope-Schärfung der Operationen</td>
+          <td>D0</td>
+          <td class="progress-cell num"><span class="mini-bar" data-tip="Fortschritt|100 %"><i style="width:100%"></i></span><span class="nowrap">100 %</span></td>
+          <td><span class="verdict verdict-gruen">gruen</span></td>
+          <td>Alle drei Operationen als Spec + Code umgesetzt</td>
+        </tr>
+        
+        <tr>
+          <td class="name">S04</td>
+          <td>Spec- & Akzeptanz-Template + priorisiertes Backlog</td>
+          <td>D0</td>
+          <td class="progress-cell num"><span class="mini-bar" data-tip="Fortschritt|100 %"><i style="width:100%"></i></span><span class="nowrap">100 %</span></td>
+          <td><span class="verdict verdict-gruen">gruen</span></td>
+          <td>Sechs Specs nach Template erstellt</td>
+        </tr>
+        
+        <tr>
+          <td class="name">S05</td>
+          <td>Persistente Task-Warteschlange & Datenmodell</td>
+          <td>D1</td>
+          <td class="progress-cell num"><span class="mini-bar" data-tip="Fortschritt|100 %"><i style="width:100%"></i></span><span class="nowrap">100 %</span></td>
+          <td><span class="verdict verdict-gruen">gruen</span></td>
+          <td>Modell + Upgrade-Step für Tabelle vorhanden</td>
+        </tr>
+        
+        <tr>
+          <td class="name">S06</td>
+          <td>Task-Lebenszyklus & Statusmaschine</td>
+          <td>D1</td>
+          <td class="progress-cell num"><span class="mini-bar" data-tip="Fortschritt|100 %"><i style="width:100%"></i></span><span class="nowrap">100 %</span></td>
+          <td><span class="verdict verdict-gruen">gruen</span></td>
+          <td>pending/running/succeeded/failed + Reset unterbrochener Tasks getestet</td>
+        </tr>
+        
+        <tr>
+          <td class="name">S07</td>
+          <td>Sequenzieller Worker</td>
+          <td>D1</td>
+          <td class="progress-cell num"><span class="mini-bar" data-tip="Fortschritt|100 %"><i style="width:100%"></i></span><span class="nowrap">100 %</span></td>
+          <td><span class="verdict verdict-gruen">gruen</span></td>
+          <td>run_forever/claim_next_task + Worker-Tests vorhanden</td>
+        </tr>
+        
+        <tr>
+          <td class="name">S08</td>
+          <td>Single-Flight / Run-Lock</td>
+          <td>D1</td>
+          <td class="progress-cell num"><span class="mini-bar" data-tip="Fortschritt|50 %"><i style="width:50%"></i></span><span class="nowrap">50 %</span></td>
+          <td><span class="verdict verdict-gelb">gelb</span></td>
+          <td>Ein Worker pro Admin-Unit angenommen; expliziter Lock gegen Mehrfach-Worker offen</td>
+        </tr>
+        
+        <tr>
+          <td class="name">S09</td>
+          <td>Konfliktrobuste, wiederaufnehmbare Verarbeitung</td>
+          <td>D1</td>
+          <td class="progress-cell num"><span class="mini-bar" data-tip="Fortschritt|75 %"><i style="width:75%"></i></span><span class="nowrap">75 %</span></td>
+          <td><span class="verdict verdict-gruen">gruen</span></td>
+          <td>Checkpointing/Retries/Reset vorhanden; unter Last an echter Operation nachweisen</td>
+        </tr>
+        
+        <tr>
+          <td class="name">S10</td>
+          <td>Objekt-Sperre während aktivem Task</td>
+          <td>D1</td>
+          <td class="progress-cell num"><span class="mini-bar" data-tip="Fortschritt|25 %"><i style="width:25%"></i></span><span class="nowrap">25 %</span></td>
+          <td><span class="verdict verdict-rot">rot</span></td>
+          <td>Bewusst zurückgestellt; Dedup storniert nur PENDING, keine echte Sperre</td>
+        </tr>
+        
+        <tr>
+          <td class="name">S11</td>
+          <td>Dispatcher sync/async</td>
+          <td>D1</td>
+          <td class="progress-cell num"><span class="mini-bar" data-tip="Fortschritt|100 %"><i style="width:100%"></i></span><span class="nowrap">100 %</span></td>
+          <td><span class="verdict verdict-gruen">gruen</span></td>
+          <td>queue_task + synchroner Fallback bei deaktiviertem Feature</td>
+        </tr>
+        
+        <tr>
+          <td class="name">S12</td>
+          <td>Benachrichtigung bei Abschluss/Fehler</td>
+          <td>D1</td>
+          <td class="progress-cell num"><span class="mini-bar" data-tip="Fortschritt|0 %"><i style="width:0%"></i></span><span class="nowrap">0 %</span></td>
+          <td><span class="verdict verdict-rot">rot</span></td>
+          <td>Nur Sentry/Logging; Anbindung ans Activity-/Benachrichtigungssystem fehlt</td>
+        </tr>
+        
+        <tr>
+          <td class="name">S13</td>
+          <td>Operation 1 "Berechtigungen setzen"</td>
+          <td>D1</td>
+          <td class="progress-cell num"><span class="mini-bar" data-tip="Fortschritt|100 %"><i style="width:100%"></i></span><span class="nowrap">100 %</span></td>
+          <td><span class="verdict verdict-gruen">gruen</span></td>
+          <td>reindexObjectSecurity produktiv gepatcht, Enqueue-Worker-Execute + Dedup belegt</td>
+        </tr>
+        
+        <tr>
+          <td class="name">S14</td>
+          <td>Kill-Switch / Notbremse (Registry + Upgrade)</td>
+          <td>D5</td>
+          <td class="progress-cell num"><span class="mini-bar" data-tip="Fortschritt|100 %"><i style="width:100%"></i></span><span class="nowrap">100 %</span></td>
+          <td><span class="verdict verdict-gruen">gruen</span></td>
+          <td>Feature-Flag mit Fail-Safe (deaktiviert = synchron) + Upgrade-Step</td>
+        </tr>
+        
+        <tr>
+          <td class="name">S15-S18</td>
+          <td>UI-Indikator, UI-Sperre, Admin-Übersicht, Logs</td>
+          <td>D2</td>
+          <td class="progress-cell num"><span class="mini-bar" data-tip="Fortschritt|0 %"><i style="width:0%"></i></span><span class="nowrap">0 %</span></td>
+          <td><span class="verdict verdict-grau">grau</span></td>
+          <td>Start nach Stabilisierung; kein Code vorhanden</td>
+        </tr>
+        
+        <tr>
+          <td class="name">S19</td>
+          <td>Operation "Referenz-Präfixe aktualisieren" (Ordnungssystem)</td>
+          <td>D3</td>
+          <td class="progress-cell num"><span class="mini-bar" data-tip="Fortschritt|100 %"><i style="width:100%"></i></span><span class="nowrap">100 %</span></td>
+          <td><span class="verdict verdict-gruen">gruen</span></td>
+          <td>update-reference-prefixes-Task + Subscriber angebunden, getestet</td>
+        </tr>
+        
+        <tr>
+          <td class="name">S20</td>
+          <td>Operation "Dossier-Titel reindexieren"</td>
+          <td>D3</td>
+          <td class="progress-cell num"><span class="mini-bar" data-tip="Fortschritt|100 %"><i style="width:100%"></i></span><span class="nowrap">100 %</span></td>
+          <td><span class="verdict verdict-gruen">gruen</span></td>
+          <td>reindex-dossier-title-Task + Handler getestet</td>
+        </tr>
+        
+        <tr>
+          <td class="name">S21</td>
+          <td>Konsistenz-/Abnahmetests Ordnungssystem-Operation</td>
+          <td>D3</td>
+          <td class="progress-cell num"><span class="mini-bar" data-tip="Fortschritt|25 %"><i style="width:25%"></i></span><span class="nowrap">25 %</span></td>
+          <td><span class="verdict verdict-gelb">gelb</span></td>
+          <td>Ende-zu-Ende-Nachweis der Solr-Mutation unter Last</td>
+        </tr>
+        
+        <tr>
+          <td class="name">S22</td>
+          <td>Operation "Dossiers/Objekte verschieben"</td>
+          <td>D4</td>
+          <td class="progress-cell num"><span class="mini-bar" data-tip="Fortschritt|100 %"><i style="width:100%"></i></span><span class="nowrap">100 %</span></td>
+          <td><span class="verdict verdict-gruen">gruen</span></td>
+          <td>move-objects-Task + Anbindung in move_items; 208-Zeilen-Testsuite</td>
+        </tr>
+        
+        <tr>
+          <td class="name">S23</td>
+          <td>Konsistenztests Verschieben (Berechtigungen, Sperren, Sonderfälle)</td>
+          <td>D4</td>
+          <td class="progress-cell num"><span class="mini-bar" data-tip="Fortschritt|40 %"><i style="width:40%"></i></span><span class="nowrap">40 %</span></td>
+          <td><span class="verdict verdict-gelb">gelb</span></td>
+          <td>Sonderfälle (gesperrte/ausgecheckte Objekte, fehlende Rechte) vollständig abdecken</td>
+        </tr>
+        
+        <tr>
+          <td class="name">S24-S26</td>
+          <td>E2E, Lasttest, Doku, Release-Vorbereitung</td>
+          <td>D5</td>
+          <td class="progress-cell num"><span class="mini-bar" data-tip="Fortschritt|0 %"><i style="width:0%"></i></span><span class="nowrap">0 %</span></td>
+          <td><span class="verdict verdict-grau">grau</span></td>
+          <td>Am Ende, aber nicht komplett kürzbar</td>
+        </tr>
+              </tbody>
+    </table>
+    </div>
+  </details>
+
+  <!-- ══════════════════════════════════════════════════════════
+       06 · BUDGET
+       ══════════════════════════════════════════════════════════ -->
+  <details class="section reveal">
+    <summary class="kicker"><span class="section-no">06</span>Budget <span class="en">budget</span><span class="toggle-ind">+</span></summary>
+    <div class="section-body">
+    <div class="bar-chart-wrap">
+      <div class="chart-head">
+        <span class="caption">Ist-AT pro Woche</span>
+      </div>
+      <svg width="100%" height="160" viewBox="0 0 1000 160" preserveAspectRatio="none">
+        <line class="axis zero" x1="0" y1="159" x2="1000" y2="159"/>
+        <rect class="bar-el" data-tip="2026-W23|3 AT" x="41.7" y="82.6" width="83.3" height="76.4"></rect>
+        <rect class="bar-el" data-tip="2026-W24|5 AT" x="208.3" y="31.7" width="83.3" height="127.3"></rect>
+        <rect class="bar-el" data-tip="2026-W25|1.44 AT" x="375.0" y="122.3" width="83.3" height="36.7"></rect>
+        <rect class="bar-el" data-tip="2026-W26|5.5 AT" x="541.7" y="19.0" width="83.3" height="140.0"></rect>
+        <rect class="bar-el" data-tip="2026-W27|1.94 AT" x="708.3" y="109.6" width="83.3" height="49.4"></rect>
+        <rect class="bar-el" data-tip="2026-W28|0.44 AT" x="875.0" y="147.8" width="83.3" height="11.2"></rect>
+      </svg>
+      <div class="chart-labels">
+
+        <span>2026-W23</span>
+        
+        <span>2026-W24</span>
+        
+        <span>2026-W25</span>
+        
+        <span>2026-W26</span>
+        
+        <span>2026-W27</span>
+        
+        <span>2026-W28</span>
+              </div>
+    </div>
+
+    <div class="kpi" style="padding:0; border-left:0; max-width:340px;">
+      <div class="lbl">Budgetverbrauch</div>
+      <div class="val num">35.33 %</div>
+      <div class="bar" data-tip="Budgetverbrauch|17.31 von 49 AT"><i style="--w:35.33%"></i></div>
+    </div>
+
+    <div class="budget-figures">
+      <div class="fig"><div class="lbl">Ist-AT</div><div class="val num">17.31</div></div>
+      <div class="fig"><div class="lbl">Earned Value AT</div><div class="val num">28.91</div></div>
+      <div class="fig">
+        <div class="lbl">Wert vs. Ist-Aufwand</div>
+        <div class="val num" data-neg-if-negative>11.6</div>
+        <div class="caption" style="max-width:32ch; margin-top:4px;">Earned Value abzüglich verbuchtem Ist-Aufwand — Kosteneffizienz, keine Terminaussage.</div>
+      </div>
+    </div>
+
+    <table class="ledger" style="margin-top:var(--s5);">
+      <thead><tr><th>Person</th><th class="r">Ist-Stunden</th><th class="r">Ist-AT</th></tr></thead>
+      <tbody>
+
+        <tr>
+          <td class="name">Buchberger Thomas</td>
+          <td class="r num">112</td>
+          <td class="r num">14</td>
+        </tr>
+        
+        <tr>
+          <td class="name">Cassina Manuel</td>
+          <td class="r num">26.5</td>
+          <td class="r num">3.31</td>
+        </tr>
+              </tbody>
+    </table>
+    </div>
+  </details>
+
+  <!-- ══════════════════════════════════════════════════════════
+       07 · CI-QUALITAET
+       ══════════════════════════════════════════════════════════ -->
+  <details class="section reveal">
+    <summary class="kicker"><span class="section-no">07</span>CI-Qualität <span class="en">ci quality</span><span class="toggle-ind">+</span></summary>
+    <div class="section-body">
+    <div class="ci-headline">
+
+      <div class="stat-value num">8/11<span class="unit"> Checks grün</span></div>
+      <div class="caption num">72.7 % Erfolgsquote</div>
+          </div>
+    <div class="ci-link" style="margin-top:var(--s3);">GitHub Checks (Jenkins) · Commit d96de2b</div>
+
+
+    <div class="decisions" style="margin-top:var(--s5);">
+      <span class="kicker" style="font-size:0.6rem;">Fehlgeschlagene Checks <span class="en">failing checks</span></span>
+      <ul>
+
+        <li><a href="https://jenkins.4teamwork.ch/job/opengever.core-test-solr.cfg/3435/display/redirect">test-solr.cfg</a></li>
+        
+        <li><a href="https://jenkins.4teamwork.ch/job/opengever.core-test-i18n-de.cfg/3464/display/redirect">test-i18n-de.cfg</a></li>
+        
+        <li><a href="https://jenkins.4teamwork.ch/job/opengever.core-test-plone-4.3.x.cfg/3517/display/redirect">test-plone-4.3.x.cfg</a></li>
+              </ul>
+    </div>
+    
+    <div class="bar-chart-wrap" style="margin-top:var(--s5);">
+      <div class="chart-head"><span class="caption">Testrate — Verlauf</span></div>
+      <svg width="100%" height="90" viewBox="0 0 1000 90" preserveAspectRatio="none">
+        <line class="axis zero" x1="0" y1="89" x2="1000" y2="89"/>
+        <circle class="hist-pt" r="4" cx="500" cy="36.4" data-tip="09.07.2026 · 72.7 %"></circle>
+      </svg>
+      <div class="chart-labels">
+
+        <span>09.07.2026</span>
+              </div>
+    </div>
+    </div>
+  </details>
+
+  <!-- ══════════════════════════════════════════════════════════
+       08 · OFFENE ENTSCHEIDUNGEN
+       ══════════════════════════════════════════════════════════ -->
+  <details class="section reveal">
+    <summary class="kicker"><span class="section-no">08</span>Offene Entscheidungen <span class="en">open decisions</span><span class="toggle-ind">+</span></summary>
+    <div class="section-body">
+
+    <ul class="dash-list">
+
+      <li>Objekt-Sperre während aktivem Task: Minimalstrategie definieren (aktuell nur PENDING-Dedup)</li>
+      
+      <li>Benutzerbenachrichtigung: Umfang (nur Fehler vs. Abschluss+Fehler) und Anbindung ans Activity-System</li>
+      
+      <li>Minimalumfang der Admin-Übersicht (D2) festlegen</li>
+      
+      <li>Ob Sync/Async-Schwellwerte pro Operation zusätzlich zum globalen Kill-Switch nötig sind</li>
+      
+      <li>Umgang mit stillem Verlust bei abgebrochener Transaktion / fehlendem Worker (After-Commit-Hook?)</li>
+          </ul>
+        </div>
+  </details>
+
+  <!-- ══════════════════════════════════════════════════════════
+       09 · RISIKEN
+       ══════════════════════════════════════════════════════════ -->
+  <details class="section reveal">
+    <summary class="kicker"><span class="section-no">09</span>Risiken <span class="en">risks</span><span class="toggle-ind">+</span></summary>
+    <div class="section-body">
+    <table class="ledger">
+      <thead>
+        <tr><th>Risiko</th><th>Kategorie</th><th>Auswirkung</th><th>Wahrscheinlichkeit</th><th>Frühwarnsignal</th><th>Nächste Aktion</th><th>Owner</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+
+        <tr>
+          <td class="name">Drei CI-Checks rot (test-solr, test-i18n-de, test-plone-4.3.x)</td>
+          <td>Qualität</td>
+          <td><span class="flag">Regressionen bleiben unentdeckt, Abnahme verzögert</span></td>
+          <td>Hoch</td>
+          <td>Rote Checks auf origin-Head</td>
+          <td>Ursachen je Check analysieren und grün stellen</td>
+          <td>Entwickler</td>
+          <td><span class="verdict">Offen</span></td>
+        </tr>
+        
+        <tr>
+          <td class="name">Benutzerbenachrichtigung fehlt</td>
+          <td>Funktion</td>
+          <td><span class="flag">Anwender erfährt Abschluss/Fehler eines Tasks nicht</span></td>
+          <td>Hoch</td>
+          <td>Task schlägt still fehl, nur im Log sichtbar</td>
+          <td>Anbindung ans Activity-System umsetzen</td>
+          <td>Entwickler</td>
+          <td><span class="verdict">Offen</span></td>
+        </tr>
+        
+        <tr>
+          <td class="name">Objekt-Sperre während aktivem Task offen</td>
+          <td>Technik</td>
+          <td><span class="flag">Inkonsistente Daten bei parallelen Änderungen</span></td>
+          <td>Mittel/Hoch</td>
+          <td>Doppelte/kollidierende Tasks auf demselben Objekt</td>
+          <td>Minimalstrategie definieren und testen</td>
+          <td>Entwickler</td>
+          <td><span class="verdict">Offen</span></td>
+        </tr>
+        
+        <tr>
+          <td class="name">Silent-Fail bei fehlendem Worker / abgebrochener Transaktion</td>
+          <td>Technik</td>
+          <td><span class="flag">Reindex/Verschiebung geht ohne Fehler verloren</span></td>
+          <td>Mittel</td>
+          <td>Deferred-Work-Punkte (Transaction abort, kein Worker)</td>
+          <td>After-Commit-Hook / Fallback-Logging prüfen</td>
+          <td>Entwickler</td>
+          <td><span class="verdict">Beobachten</span></td>
+        </tr>
+        
+        <tr>
+          <td class="name">UI-Transparenz (D2) noch nicht gestartet</td>
+          <td>Termin/Scope</td>
+          <td><span class="flag">Kein Einblick in Task-Status für Anwender/Support</span></td>
+          <td>Mittel</td>
+          <td>D2 startet erst spät</td>
+          <td>Minimal-Admin-Übersicht früh einplanen</td>
+          <td>PL</td>
+          <td><span class="verdict">Offen</span></td>
+        </tr>
+        
+        <tr>
+          <td class="name">Abnahme/Hardening (D5) offen</td>
+          <td>Termin</td>
+          <td><span class="flag">E2E-, Last- und Abnahmenachweis fehlt am Ende</span></td>
+          <td>Mittel</td>
+          <td>Kein E2E-/Lasttest bis KW32</td>
+          <td>D5-Scope früh festlegen</td>
+          <td>PL</td>
+          <td><span class="verdict">Beobachten</span></td>
+        </tr>
+        
+        <tr>
+          <td class="name">Ferien / Verfügbarkeit</td>
+          <td>Organisation</td>
+          <td><span class="flag">Review- und Entscheidungsverzug</span></td>
+          <td>Mittel</td>
+          <td>Antwortzeiten > 2 Arbeitstage</td>
+          <td>Abwesenheiten im Dashboard ergänzen</td>
+          <td>PL</td>
+          <td><span class="verdict">Offen</span></td>
+        </tr>
+              </tbody>
+    </table>
+    </div>
+  </details>
+
+  <!-- ══════════════════════════════════════════════════════════
+       10 · TRAJEKTORIE
+       ══════════════════════════════════════════════════════════ -->
+  <details class="section reveal">
+    <summary class="kicker"><span class="section-no">10</span>Fortschritt <span class="en">trajectory</span><span class="toggle-ind">+</span></summary>
+    <div class="section-body">
+    <svg width="100%" height="230" viewBox="0 0 1000 230" preserveAspectRatio="none">
+      <line class="axis" x1="0" y1="20"  x2="1000" y2="20"/>
+      <text x="994" y="16" text-anchor="end">100 %</text>
+      <line class="axis" x1="0" y1="65"  x2="1000" y2="65"/>
+      <text x="994" y="61" text-anchor="end">75 %</text>
+      <line class="axis" x1="0" y1="110" x2="1000" y2="110"/>
+      <text x="994" y="106" text-anchor="end">50 %</text>
+      <line class="axis" x1="0" y1="155" x2="1000" y2="155"/>
+      <text x="994" y="151" text-anchor="end">25 %</text>
+      <line class="axis zero" x1="0" y1="200" x2="1000" y2="200"/>
+      <text x="994" y="196" text-anchor="end">0 %</text>
+
+      <line class="ideal-line" x1="0.0" y1="200.0" x2="851.1" y2="20.0" data-tip="Ideal|12.06.2026 bis 31.08.2026"></line>
+      <text class="ideal-label" x="851.1" y="16" text-anchor="end">Ideal</text>
+
+      <path class="proj-line" d="M0.0,200.0 L74.5,176.6 L117.0,176.6 L148.9,171.2 L223.4,158.6 L287.2,93.8"></path>
+      <circle class="hist-pt" r="4" cx="0.0" cy="200.0" data-tip="12.06.2026 · 0 %"></circle>
+      <circle class="hist-pt" r="4" cx="74.5" cy="176.6" data-tip="19.06.2026 · 13 %"></circle>
+      <circle class="hist-pt" r="4" cx="117.0" cy="176.6" data-tip="23.06.2026 · 13 %"></circle>
+      <circle class="hist-pt" r="4" cx="148.9" cy="171.2" data-tip="26.06.2026 · 16 %"></circle>
+      <circle class="hist-pt" r="4" cx="223.4" cy="158.6" data-tip="03.07.2026 · 23 %"></circle>
+      <circle class="hist-pt" r="4" cx="287.2" cy="93.8" data-tip="09.07.2026 · 59 %"></circle>
+
+      <line class="marker-line" x1="287.2" y1="20" x2="287.2" y2="200" data-tip="Heute|09.07.2026"></line>
+      <text class="marker-label" x="287.2" y="214" text-anchor="middle">HEUTE</text>
+
+      <line class="marker-line" x1="851.1" y1="20" x2="851.1" y2="200" data-tip="Zieltermin|31.08.2026"></line>
+      <text class="marker-label" x="851.1" y="214" text-anchor="end">ZIELTERMIN 31.08.2026</text>
+
+      <line class="marker-line stretch" x1="1000.0" y1="20" x2="1000.0" y2="200" data-tip="Streckungsende|14.09.2026"></line>
+      <text class="marker-label" x="998.0" y="228" text-anchor="end" style="fill:var(--red)">STRECKUNGSENDE 14.09.2026</text>
+    </svg>
+    <div class="traj-legend">
+      <span><span class="swatch"></span>Ist <span class="en" style="font-style:italic;">actual</span></span>
+      <span><span class="swatch ideal"></span>Ideal</span>
+    </div>
+    <div class="chart-labels">
+
+      <span>12.06.2026</span>
+      
+      <span>19.06.2026</span>
+      
+      <span>23.06.2026</span>
+      
+      <span>26.06.2026</span>
+      
+      <span>03.07.2026</span>
+      
+      <span>09.07.2026</span>
+          </div>
+    </div>
+  </details>
+
+  <hr class="thick-rule">
+  <div class="colophon">
+    <span>ERZEUGT 2026-07-09T18:20:00+02:00 · BRANCH ai-playground</span>
+    <span>Hintergrundtasks · STAND 09.07.2026</span>
+  </div>
+</div>
+
+<script>
+// ── theme toggle ────────────────────────────────────────────────
+const root = document.documentElement;
+document.getElementById('themeToggle').addEventListener('click', () => {
+  root.dataset.theme = root.dataset.theme === 'light' ? 'dark' : 'light';
+});
+
+// ── scroll reveal ───────────────────────────────────────────────
+const io = new IntersectionObserver(es => es.forEach(e => {
+  if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+}), { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+// ── smooth section collapse/expand ────────────────────────────────
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const SECTION_EASE = 'cubic-bezier(0.19, 1, 0.22, 1)';
+document.querySelectorAll('details.section').forEach(det => {
+  const summary = det.querySelector(':scope > summary');
+  const body = det.querySelector(':scope > .section-body');
+  if (!summary || !body || reduceMotion) return;
+  let anim = null;
+  summary.addEventListener('click', e => {
+    e.preventDefault();
+    if (det.open) collapse(); else expand();
+  });
+  function expand() {
+    anim?.cancel();
+    det.open = true;
+    const target = body.scrollHeight;
+    anim = body.animate(
+      { height: ['0px', target + 'px'] },
+      { duration: 260, easing: SECTION_EASE }
+    );
+    anim.onfinish = () => { body.style.height = ''; };
+  }
+  function collapse() {
+    anim?.cancel();
+    const start = body.scrollHeight;
+    anim = body.animate(
+      { height: [start + 'px', '0px'] },
+      { duration: 220, easing: SECTION_EASE }
+    );
+    anim.onfinish = () => { det.open = false; body.style.height = ''; };
+  }
+});
+
+// ── count-up ────────────────────────────────────────────────────
+const fmt = v => {
+  const r = Math.round(v * 10) / 10;
+  return Number.isInteger(r) ? String(r) : r.toFixed(1);
+};
+document.querySelectorAll('.countup').forEach(el => {
+  const target = +el.dataset.target, t0 = performance.now(), dur = 1000;
+  const tick = t => {
+    const p = Math.min((t - t0) / dur, 1), e = 1 - Math.pow(1 - p, 4);
+    el.textContent = fmt(target * e);
+    if (p < 1) requestAnimationFrame(tick);
+  };
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) el.textContent = fmt(target);
+  else requestAnimationFrame(tick);
+});
+
+// ── negative-value styling (budget variance etc.) ────────────────
+document.querySelectorAll('[data-neg-if-negative]').forEach(el => {
+  if (parseFloat(el.textContent) < 0) el.classList.add('neg');
+});
+
+// ── ink-block tooltip ────────────────────────────────────────────
+const tip = document.getElementById('tip');
+const tipL = tip.querySelector('.tt-l'), tipV = tip.querySelector('.tt-v');
+const TIP_DELAY = 550;
+let tipOn = false, tipTimer = null;
+
+function moveTip(e) {
+  const pad = 12, r = tip.getBoundingClientRect();
+  let x = e.clientX + pad, y = e.clientY - r.height - pad;
+  if (x + r.width > innerWidth - 8) x = e.clientX - r.width - pad;
+  if (y < 8) y = e.clientY + pad;
+  tip.style.left = x + 'px';
+  tip.style.top  = y + 'px';
+}
+document.addEventListener('mouseover', e => {
+  const t = e.target.closest?.('[data-tip]');
+  if (!t) return;
+  const [l, v] = t.dataset.tip.split('|');
+  tipL.textContent = l; tipV.textContent = v || '';
+  tipV.style.display = v ? '' : 'none';
+  tipOn = true; moveTip(e);
+  clearTimeout(tipTimer);
+  tipTimer = setTimeout(() => { if (tipOn) tip.classList.add('show'); }, TIP_DELAY);
+});
+document.addEventListener('mouseout', e => {
+  if (e.target.closest?.('[data-tip]')) {
+    tipOn = false; clearTimeout(tipTimer); tip.classList.remove('show');
+  }
+});
+document.addEventListener('mousemove', e => { if (tipOn) moveTip(e); });
+</script>
+</body>
+</html>
