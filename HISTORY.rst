@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2024.18.4 (2026-07-16)
+----------------------
+
+Bug fixes:
+
+
+- Fix group white-/black-list prefix filter in sharing view to match on the group name instead of the group id  [elioschmutz] [TI-3930]
+
+
 2024.18.3 (2026-02-17)
 ----------------------
 
