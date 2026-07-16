@@ -499,8 +499,8 @@ class OpengeverSharingView(SharingView):
                     results.append(principal)
 
             # groups
-            elif re.search(sharing_config.black_list_prefix, principal.get('id')):
-                if re.search(sharing_config.white_list_prefix, principal.get('id')):
+            elif re.search(sharing_config.black_list_prefix, principal.get('title')):
+                if re.search(sharing_config.white_list_prefix, principal.get('title')):
                     results.append(principal)
             else:
                 results.append(principal)

@@ -1,0 +1,1 @@
+Fix group white-/black-list prefix filter in sharing view to match on the group name instead of the group id  [elioschmutz]
