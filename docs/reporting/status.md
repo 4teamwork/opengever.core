@@ -71,7 +71,7 @@ hours_file: "hintergrund-tasks-stunden-*.xlsx"
 | Bereich | Name | Gewicht % | Fortschritt-Override % | Status-Override | Kommentar |
 |---|---|---:|---:|---|---|
 | D0 | Solution Design & Spec-Backlog | 10 |  |  | 6 Specs abgeschlossen; Scope geklärt; Sync/Async über Kill-Switch gelöst |
-| D1 | Framework + Operation 1 "Berechtigungen setzen" | 30 |  |  | Framework + Operation 1 produktiv. Objekt-Sperre für Verschieben gelöst (MOVE_LOCK), für andere Task-Typen offen. Benachrichtigung weiterhin offen |
+| D1 | Framework + Operation 1 "Berechtigungen setzen" | 30 |  |  | Framework + Operation 1 umgesetzt und getestet. Objekt-Sperre für Verschieben gelöst (MOVE_LOCK), für andere Task-Typen offen. Benachrichtigung weiterhin offen |
 | D2 | UI-Transparenz & Admin-Übersicht | 15 |  |  | Nicht gestartet; kein Code |
 | D3 | Operation "Metadaten Ordnungssystem anpassen" | 15 |  |  | Beide Operationen implementiert & getestet; Abnahmetests offen |
 | D4 | Operation "Dossiers innerhalb Mandant verschieben" | 20 |  |  | Geliefert; Objekt-Sperre während Warteschlange schliesst grössten Sonderfall (MOVE_LOCK); übrige Sonderfälle (gesperrte/ausgecheckte Objekte, fehlende Rechte) weiter auszubauen |
@@ -97,7 +97,7 @@ hours_file: "hintergrund-tasks-stunden-*.xlsx"
 | S10 | Objekt-Sperre während aktivem Task | D1 | 60 | gelb | MOVE_LOCK für Verschieben-Operation umgesetzt & getestet (Lock vor Queue, Unlock im finally); für Reindex-/Referenz-Präfix-Tasks weiterhin offen. Bekannte Lücke: stealable Lock schliesst Race bei doppelten Verschiebe-Anfragen nicht vollständig | spec-background-tasks-infrastructure.md |
 | S11 | Dispatcher sync/async | D1 | 100 | gruen | queue_task + synchroner Fallback bei deaktiviertem Feature | spec-background-tasks-kill-switch.md |
 | S12 | Benachrichtigung bei Abschluss/Fehler | D1 | 0 | rot | Nur Sentry/Logging; Anbindung ans Activity-/Benachrichtigungssystem fehlt | |
-| S13 | Operation 1 "Berechtigungen setzen" | D1 | 100 | gruen | reindexObjectSecurity produktiv gepatcht, Enqueue-Worker-Execute + Dedup belegt | spec-reindex-object-security-background-task.md |
+| S13 | Operation 1 "Berechtigungen setzen" | D1 | 100 | gruen | reindexObjectSecurity gepatcht, Enqueue-Worker-Execute + Dedup belegt | spec-reindex-object-security-background-task.md |
 | S14 | Kill-Switch / Notbremse (Registry + Upgrade) | D5 | 100 | gruen | Feature-Flag mit Fail-Safe (deaktiviert = synchron) + Upgrade-Step | spec-background-tasks-kill-switch.md |
 | S15-S18 | UI-Indikator, UI-Sperre, Admin-Übersicht, Logs | D2 | 0 | grau | Start nach Stabilisierung; kein Code vorhanden | |
 | S19 | Operation "Referenz-Präfixe aktualisieren" (Ordnungssystem) | D3 | 100 | gruen | update-reference-prefixes-Task + Subscriber angebunden, getestet | spec-update-reference-prefixes-background-task.md |
@@ -177,7 +177,7 @@ hours_file: "hintergrund-tasks-stunden-*.xlsx"
      Dies ist der EINZIGE Ort für die narrative Einschätzung. Die Harness schreibt hier nichts. -->
 
 - **Fortschritt:** 63% gewichtet — weiterhin deutlich vor Plan (43% der Zeit verstrichen).
-- **Kernnutzen geliefert:** Alle drei Operationen produktiv; zusätzlich Objekt-Sperre während Warteschlange für Verschieben (MOVE_LOCK) — schliesst das grösste Sonderfall-Risiko in D4.
+- **Kernnutzen geliefert:** Alle drei Operationen umgesetzt; zusätzlich Objekt-Sperre während Warteschlange für Verschieben (MOVE_LOCK) — schliesst das grösste Sonderfall-Risiko in D4.
 - **Qualität:** Alle 11 CI-Checks grün (vorher 3 rot) — Qualitätsrisiko behoben.
 - **Budget:** 38.1% verbraucht (18.7 von 49 AT); erarbeiteter Wert übersteigt Ist-Aufwand deutlich — kosteneffizient.
 - **Offen:** Benutzerbenachrichtigung, Objekt-Sperre für weitere Task-Typen, Admin-Übersicht (D2), Abnahme/Hardening (D5).
