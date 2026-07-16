@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{meta.project_name}} — Projektbericht</title>
+<!--
+  ══════════════════════════════════════════════════════════════════════
+  TEMPLATE CONVENTIONS (this file is filled by an LLM, not a JS engine —
+  read docs/reporting/CONTRACT.md §3 for the exact data shape):
+
+    {{path.to.field}}          scalar token — verbatim substitution.
+                                Every token here corresponds to a real
+                                field/path in report-data.json.
+
+    <!-- REPEAT xyz -->  ...  <!-- /REPEAT xyz -->
+                                Wrap ONE template row/element. Repeat it
+                                once per item in the named array, using
+                                the loop-var prefix shown inside the
+                                block (area., story., risk., cut., ...).
+                                Delete the markers in the rendered output,
+                                keep only the repeated rows.
+
+    <!-- IF cond -->  ...  <!-- /IF -->
+    <!-- IF NOT cond -->  ...  <!-- /IF -->
+                                Conditional block. Keep the enclosed
+                                markup only if the condition is
+                                true/false; drop the markers themselves.
+
+    <!-- COMPUTE: description -->
+                                Not a literal data field but a small
+                                rendering computation the filling agent
+                                must perform from the named contract
+                                fields (e.g. mapping a date range onto an
+                                SVG viewBox). Replace the comment with
+                                the computed markup/attribute.
+
+  Delete ALL markers (REPEAT/IF/COMPUTE comments) in the final rendered
+  report.html — only plain markup with real values should remain.
+  ══════════════════════════════════════════════════════════════════════
+-->
+<style>
+/* ══════════════════════════════════════════════════════════════════
+   Swiss International Typographic Style — ink on paper.
+   Tokens/type/ledger/chart system reused wholesale from
+   /home/mca/Downloads/mockup-swiss.html. Content = project report.
+   ══════════════════════════════════════════════════════════════════ */
+:root {
+  --red:    #e30613;             /* the one accent */
+  --ease:   cubic-bezier(0.19, 1, 0.22, 1);
+  --sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* spacing scale */
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px; --s6: 40px; --s7: 72px;
+}
+
+:root[data-theme="light"] {
+  --paper:    #f7f5f0;
+  --ink:      #111111;
+  --ink-2:    #555550;
+  --ink-3:    #98948c;
+  --hairline: #d8d4cc;
+  --rule:     #111111;
+  --fill:     #eceae4;
+  --pos:      #111111;
+  --neg:      var(--red);
+  --tl-gruen:   #1f7a1f;
+  --tl-gelb:    #b3860a;
+  --tl-gelbrot: #c9560f;
+  --tl-rot:     var(--red);
+  --tl-grau:    #8a867e;
+  --seg-sep:    #b5ac9c;
+}
+:root[data-theme="dark"] {
+  --paper:    #161513;
+  --ink:      #ece9e2;
+  --ink-2:    #a5a19a;
+  --ink-3:    #6e6a63;
+  --hairline: #33312d;
+  --rule:     #ece9e2;
+  --fill:     #201f1c;
+  --pos:      #ece9e2;
+  --neg:      #ff4d57;
+  --tl-gruen:   #4caf50;
+  --tl-gelb:    #e0a800;
+  --tl-gelbrot: #ff8a3d;
+  --tl-rot:     #ff4d57;
+  --tl-grau:    #8a867e;
+  --seg-sep:    #6b6560;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.45;
+  font-size: 15px;
+  transition: background .4s, color .4s;
+}
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.num  { font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+
+/* faint paper grain */
+body::after {
+  content: ""; position: fixed; inset: 0; pointer-events: none; opacity: 0.03; z-index: 50;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+.page { max-width: 1060px; margin: 0 auto; padding: 0 32px 96px; }
+
+/* ── Masthead ─────────────────────────────────────────────────── */
+.masthead {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 26px 0 14px; flex-wrap: wrap; gap: var(--s3);
+}
+.masthead .title { font-size: 1.05rem; font-weight: 700; letter-spacing: 0.02em; }
+.masthead .folio { font-family: var(--mono); font-size: 0.7rem; color: var(--ink-2); display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+.thick-rule { border: 0; border-top: 3px solid var(--rule); }
+.hairline-rule { border: 0; border-top: 1px solid var(--hairline); }
+.masthead-note { padding: var(--s3) 0 var(--s5); }
+
+.ampel-dot { font-size: 0.75rem; margin-right: 4px; }
+.dot-gruen    { color: var(--tl-gruen); }
+.dot-gelb     { color: var(--tl-gelb); }
+.dot-gelb-rot { color: var(--tl-gelbrot); }
+.dot-rot      { color: var(--tl-rot); }
+.dot-grau     { color: var(--tl-grau); }
+
+.theme-btn {
+  font-family: var(--mono); font-size: 0.65rem; letter-spacing: .1em; text-transform: uppercase;
+  background: none; border: 1px solid var(--ink); color: var(--ink);
+  padding: 4px 12px; cursor: pointer; transition: background .2s, color .2s;
+}
+.theme-btn:hover { background: var(--ink); color: var(--paper); }
+
+/* ── Type system ──────────────────────────────────────────────── */
+.kicker {
+  font-family: var(--mono); font-size: 0.68rem; font-weight: 500;
+  letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-2);
+}
+.kicker .en { color: var(--ink-3); text-transform: none; letter-spacing: 0.06em; margin-left: 10px; font-style: italic; }
+.section-no { color: var(--red); font-weight: 700; margin-right: 10px; }
+
+.caption { font-size: 0.72rem; color: var(--ink-2); }
+.footnote { font-size: 0.78rem; color: var(--ink-2); max-width: 62ch; }
+.footnote b { color: var(--ink); font-weight: 700; }
+
+/* ── Sections: separated by rules, not boxes; collapsible via <details> ── */
+.section { padding: var(--s6) 0; }
+.section + .section { border-top: 1px solid var(--hairline); }
+.section > summary { list-style: none; cursor: pointer; user-select: none; }
+.section > summary::-webkit-details-marker { display: none; }
+.section > summary::marker { content: ""; }
+.section > summary.kicker { display: flex; align-items: center; margin-bottom: var(--s5); }
+.section > summary.kicker .toggle-ind {
+  margin-left: auto; font-family: var(--mono); font-size: 0.85rem; font-weight: 700;
+  color: var(--ink-3); transition: transform .25s var(--ease), color .2s;
+}
+.section > summary.kicker:hover .toggle-ind { color: var(--red); }
+.section[open] > summary.kicker .toggle-ind { transform: rotate(45deg); }
+.section:not([open]) { padding-bottom: var(--s5); }
+.section:not([open]) > summary.kicker { margin-bottom: 0; }
+
+/* subtle open/close animation, driven by JS (Web Animations API) on .section-body;
+   pure-CSS fallback (no-JS): native <details> toggling still works, just instant */
+.section-body { overflow: hidden; }
+@media (prefers-reduced-motion: reduce) { .section-body { overflow: visible; } }
+
+/* reveal — crisp, fast, typesetting feel */
+.reveal { opacity: 0; transform: translateY(14px); transition: opacity .5s var(--ease), transform .5s var(--ease); }
+.reveal.in { opacity: 1; transform: none; }
+
+/* ── Summary prose + traffic light ────────────────────────────── */
+.summary-grid { display: flex; gap: var(--s7); align-items: flex-start; }
+.summary-prose { font-size: 0.95rem; flex: 1; }
+.summary-prose ul, .dash-list { list-style: none; }
+.summary-prose li, .dash-list li { position: relative; padding: 5px 0 5px 18px; border-bottom: 1px solid var(--hairline); }
+.summary-prose li:last-child, .dash-list li:last-child { border-bottom: 0; }
+.summary-prose li::before, .dash-list li::before { content: "\2013"; position: absolute; left: 0; color: var(--red); font-weight: 700; }
+.summary-prose strong { font-weight: 700; }
+.dash-list { font-size: 0.85rem; }
+.ampel-tl { display: flex; flex-direction: column; gap: 10px; align-items: flex-start; flex-shrink: 0; padding-top: 2px; }
+.ampel-tl .lamp-item { display: flex; align-items: center; gap: 10px; }
+.ampel-tl .lamp { width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--ink-3); flex-shrink: 0; transition: background .3s, border-color .3s; }
+.ampel-tl .lamp-label { font-family: var(--mono); font-size: 0.62rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); }
+.ampel-tl.state-gruen .lamp-item-gruen .lamp,
+.ampel-tl.state-gelb .lamp-item-gelb .lamp,
+.ampel-tl.state-gelb-rot .lamp-item-gelb .lamp,
+.ampel-tl.state-gelb-rot .lamp-item-rot .lamp,
+.ampel-tl.state-rot .lamp-item-rot .lamp { border-color: transparent; }
+.ampel-tl.state-gruen .lamp-item-gruen .lamp { background: var(--tl-gruen); }
+.ampel-tl.state-gelb .lamp-item-gelb .lamp { background: var(--tl-gelb); }
+.ampel-tl.state-gelb-rot .lamp-item-gelb .lamp { background: var(--tl-gelb); }
+.ampel-tl.state-gelb-rot .lamp-item-rot .lamp { background: var(--tl-rot); }
+.ampel-tl.state-rot .lamp-item-rot .lamp { background: var(--tl-rot); }
+.ampel-tl.state-gruen .lamp-item-gruen .lamp-label,
+.ampel-tl.state-gelb .lamp-item-gelb .lamp-label,
+.ampel-tl.state-gelb-rot .lamp-item-gelb .lamp-label,
+.ampel-tl.state-gelb-rot .lamp-item-rot .lamp-label,
+.ampel-tl.state-rot .lamp-item-rot .lamp-label { color: var(--ink); font-weight: 700; }
+@media (max-width: 700px) { .summary-grid { flex-direction: column; } .ampel-tl { flex-direction: row; padding-top: var(--s4); } }
+
+/* ── KPI columns with vertical hairlines ──────────────────────── */
+.kpis { display: grid; grid-template-columns: repeat(4, 1fr); }
+@media (max-width: 820px) { .kpis { grid-template-columns: repeat(2, 1fr); row-gap: var(--s5); } }
+.kpi { padding: 0 var(--s5); border-left: 1px solid var(--hairline); }
+.kpi:first-child { padding-left: 0; border-left: 0; }
+.kpi .lbl { font-family: var(--mono); font-size: 0.62rem; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-2); margin-bottom: var(--s2); }
+.kpi .val { font-size: 2.1rem; font-weight: 800; letter-spacing: -0.02em; line-height: 1; }
+.kpi .val.neg { color: var(--neg); }
+.kpi .sub { font-size: 0.72rem; color: var(--ink-2); margin-top: var(--s2); }
+.kpi .bar { height: 3px; background: var(--fill); margin-top: var(--s3); position: relative; }
+.kpi .bar i { position: absolute; inset: 0; right: auto; background: var(--red); width: 0; transition: width .9s var(--ease) .2s; }
+.in .kpi .bar i { width: var(--w); }
+
+/* ── allocation — weight bar with progress fill + ledger table ── */
+.alloc-bar { display: flex; height: 40px; border: 1px solid var(--ink); margin-bottom: var(--s4); }
+.alloc-bar i { border-right: 2px solid var(--seg-sep); transition: background .9s var(--ease); position: relative; overflow: hidden; }
+.alloc-bar i:last-child { border-right: 0; }
+.alloc-bar i:hover { opacity: 0.85; }
+.alloc-bar .seg-label {
+  position: absolute; top: 3px; left: 3px;
+  font-family: var(--mono); font-size: 0.58rem; font-weight: 700; letter-spacing: .03em;
+  color: var(--paper); background: var(--ink); padding: 1px 4px; line-height: 1.4;
+}
+table.ledger { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+table.ledger th {
+  font-family: var(--mono); font-size: 0.62rem; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--ink-2); font-weight: 500; text-align: left; padding: 8px 14px 8px 0;
+  border-bottom: 2px solid var(--ink); white-space: nowrap;
+}
+table.ledger th.r, table.ledger td.r { text-align: right; }
+table.ledger td { padding: 13px 14px 13px 0; border-bottom: 1px solid var(--hairline); }
+table.ledger tfoot td { border-bottom: 0; border-top: 2px solid var(--ink); font-weight: 700; }
+table.ledger tr:last-child td { border-bottom: 0; }
+table.ledger tr:hover td { background: var(--fill); }
+table.ledger .name { font-weight: 500; }
+table.ledger .idx { font-family: var(--mono); font-size: 0.68rem; color: var(--ink-3); padding-right: 12px; }
+.check { color: var(--ink); font-weight: 700; }
+.flag  { color: var(--red); font-weight: 700; }
+.nowrap { white-space: nowrap; }
+
+/* full-width table caption — not the width-capped .footnote */
+.table-note { font-size: 0.72rem; color: var(--ink-2); margin-top: var(--s3); padding-top: var(--s3); border-top: 1px solid var(--hairline); }
+.table-note b { color: var(--ink); font-weight: 700; }
+td .verdict, .verdict { font-family: var(--mono); font-size: 0.66rem; letter-spacing: .08em; text-transform: uppercase; }
+.verdict-gruen    { color: var(--tl-gruen); }
+.verdict-gelb     { color: var(--tl-gelb); }
+.verdict-gelb-rot { color: var(--tl-gelbrot); }
+.verdict-rot      { color: var(--tl-rot); font-weight: 700; }
+.verdict-grau     { color: var(--tl-grau); }
+
+.divergence { display: block; font-size: 0.7rem; color: var(--ink-2); margin-top: 2px; }
+
+/* inline meter used inside table cells (story/area progress) */
+.mini-bar { width: 60px; height: 4px; background: var(--fill); display: inline-block; vertical-align: middle; margin-right: 6px; position: relative; }
+.mini-bar i { position: absolute; inset: 0; right: auto; background: var(--ink); }
+
+/* progress cell: bar on its own line, value below, both left-aligned */
+td.progress-cell { text-align: left; }
+td.progress-cell .mini-bar { display: block; margin: 0 0 5px; }
+td.progress-cell .nowrap { display: block; }
+
+.spec-badge {
+  font-family: var(--mono); font-size: 0.62rem; letter-spacing: .06em; text-transform: uppercase;
+  border: 1px solid var(--ink-3); padding: 1px 6px; color: var(--ink-2); text-decoration: none;
+}
+.spec-badge:hover { border-color: var(--ink); color: var(--ink); }
+
+/* ── Budget bars (ink, data-ink chart) ─────────────────────────── */
+.bar-chart-wrap { margin-bottom: var(--s5); }
+.chart-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: var(--s4); flex-wrap: wrap; gap: var(--s2); }
+svg text { font-family: var(--mono); fill: var(--ink-3); font-size: 9.5px; letter-spacing: .04em; }
+.axis { stroke: var(--hairline); stroke-width: 1; }
+.axis.zero { stroke: var(--ink); }
+.bar-el { fill: var(--ink); }
+.bar-el:hover { opacity: 0.75; }
+.chart-labels { display: flex; justify-content: space-around; font-family: var(--mono); font-size: 0.64rem; color: var(--ink-3); margin-top: var(--s2); }
+
+.budget-figures { display: flex; gap: var(--s6); flex-wrap: wrap; margin-top: var(--s5); }
+.budget-figures .fig .lbl { font-family: var(--mono); font-size: 0.62rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-2); margin-bottom: 4px; }
+.budget-figures .fig .val { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; }
+.budget-figures .fig .val.neg { color: var(--neg); }
+
+/* ── CI section ───────────────────────────────────────────────── */
+.ci-headline { display: flex; align-items: baseline; gap: var(--s5); flex-wrap: wrap; }
+.ci-headline .stat-value { font-size: 3rem; font-weight: 800; letter-spacing: -0.02em; line-height: 1; }
+.ci-headline .stat-value .unit { font-size: 0.9rem; font-weight: 500; color: var(--ink-2); letter-spacing: 0; }
+.ci-headline .stat-value.degraded { font-size: 1.6rem; color: var(--ink-2); }
+.ci-link { font-family: var(--mono); font-size: 0.72rem; }
+.ci-link a { color: var(--ink); }
+
+/* ── Scope cuts / open decisions ─────────────────────────────────*/
+.decisions { margin-top: var(--s5); }
+.decisions ul { list-style: none; }
+.decisions li { padding: 6px 0; border-bottom: 1px solid var(--hairline); font-size: 0.85rem; }
+.decisions li:last-child { border-bottom: 0; }
+.decisions a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--ink-3); text-underline-offset: 2px; transition: color .2s; }
+.decisions a:visited { color: var(--ink-2); }
+.decisions a:hover { color: var(--red); }
+
+/* ── Trajectory / projection ─────────────────────────────────────*/
+.proj-line { fill: none; stroke: var(--ink); stroke-width: 2; stroke-dasharray: 1400; stroke-dashoffset: 1400; }
+.in .proj-line { animation: draw 1.4s var(--ease) forwards .1s; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+.ideal-line { fill: none; stroke: var(--ink-3); stroke-width: 1.5; stroke-dasharray: 6 5; }
+.ideal-label { font-style: italic; }
+.hist-pt { fill: var(--ink); stroke: var(--paper); stroke-width: 1.5; }
+.marker-line { stroke: var(--ink-2); stroke-width: 1; stroke-dasharray: 3 4; }
+.marker-line.stretch { stroke: var(--red); }
+.marker-label { font-size: 9px; }
+.traj-legend { display: flex; gap: var(--s5); margin-top: var(--s3); font-family: var(--mono); font-size: 0.62rem; color: var(--ink-2); align-items: center; }
+.traj-legend .swatch { display: inline-block; width: 18px; height: 0; border-top: 2px solid var(--ink); margin-right: 6px; vertical-align: middle; }
+.traj-legend .swatch.ideal { border-top: 2px dashed var(--ink-3); }
+
+/* ── Tooltip: solid ink block, sharp corners ──────────────────── */
+#tip {
+  position: fixed; z-index: 999; pointer-events: none;
+  opacity: 0; transform: translateY(4px);
+  transition: opacity .16s ease-out, transform .2s var(--ease);
+  background: var(--ink); color: var(--paper);
+  padding: 7px 10px; max-width: 280px;
+}
+#tip.show { opacity: 1; transform: none; }
+#tip .tt-l { font-family: var(--mono); font-size: 0.56rem; letter-spacing: .14em; text-transform: uppercase; opacity: 0.6; margin-bottom: 2px; }
+#tip .tt-v { font-family: var(--mono); font-size: 0.78rem; font-weight: 700; white-space: nowrap; }
+[data-tip] { cursor: default; }
+
+.countup { font-variant-numeric: tabular-nums; }
+
+.colophon { font-family: var(--mono); font-size: 0.62rem; letter-spacing: .08em; color: var(--ink-3); display: flex; justify-content: space-between; padding-top: var(--s4); flex-wrap: wrap; gap: var(--s2); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, .reveal, .proj-line { animation: none !important; transition: none !important; }
+  .reveal { opacity: 1; transform: none; }
+  .in .kpi .bar i { width: var(--w); }
+}
+</style>
+</head>
+<body>
+
+<div id="tip"><div class="tt-l"></div><div class="tt-v"></div></div>
+
+<div class="page">
+
+  <!-- ══════════════════════════════════════════════════════════
+       01 · MASTHEAD
+       ══════════════════════════════════════════════════════════ -->
+  <div class="masthead">
+    <div class="title">{{meta.project_name}} — Projektbericht</div>
+    <div class="folio">
+      <!-- label: map token→Grün/Gelb/Rot/Grau/Gelb-Rot; class keeps token -->
+      <span class="ampel-dot dot-{{ampel.display}}" data-tip="Ampel|{{ampel.display}}">●</span>
+      <span>STAND {{meta.report_date_de}}</span>
+      <span>BRANCH: {{meta.branch}}</span>
+      <button class="theme-btn" id="themeToggle">Invert</button>
+    </div>
+  </div>
+  <hr class="thick-rule">
+  <div class="masthead-note caption">
+    Branch wird nicht gemerged — Merges sind kein Fortschrittssignal.
+    <span class="en" style="font-family:var(--mono); font-style:italic; margin-left:8px;">branch is not merged — merges are not a progress signal</span>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       01 · MANAGEMENT SUMMARY
+       ══════════════════════════════════════════════════════════ -->
+  <details class="section reveal" open>
+    <summary class="kicker"><span class="section-no">01</span>Management Summary <span class="en">management summary</span><span class="toggle-ind">+</span></summary>
+    <div class="section-body">
+    <div class="summary-grid">
+      <div class="summary-prose">{{summary_de}}</div>
+      <!-- COMPUTE: ampel.display is one of gruen|gelb|gelb-rot|rot|grau. The outer div's
+           state-{{ampel.display}} class drives which lamp(s) light via CSS (gelb-rot lights
+           both gelb and rot; grau lights none). Do not compute anything else here, just
+           substitute the token. -->
+      <!-- label: map token→Grün/Gelb/Rot/Grau/Gelb-Rot in the data-tip value; class keeps token -->
+      <div class="ampel-tl state-{{ampel.display}}" data-tip="Ampel|{{ampel.display}}">
+        <div class="lamp-item lamp-item-gruen"><span class="lamp"></span><span class="lamp-label">gruen</span></div>
+        <div class="lamp-item lamp-item-gelb"><span class="lamp"></span><span class="lamp-label">gelb</span></div>
+        <div class="lamp-item lamp-item-rot"><span class="lamp"></span><span class="lamp-label">rot</span></div>
+      </div>
+    </div>
+    </div>
+  </details>
+
+  <!-- ══════════════════════════════════════════════════════════
+       02 · KPI-LEISTE
+       ══════════════════════════════════════════════════════════ -->
+  <details class="section reveal" open>
+    <summary class="kicker"><span class="section-no">02</span>Kennzahlen <span class="en">kpi overview</span><span class="toggle-ind">+</span></summary>
+    <div class="section-body">
+    <div class="kpis">
+      <div class="kpi">
+        <div class="lbl">Gesamtfortschritt</div>
+        <div class="val num"><span class="countup" data-target="{{kpis.gesamtfortschritt_pct}}">0</span> %</div>
+        <div class="bar" data-tip="Gesamtfortschritt|{{kpis.gesamtfortschritt_pct}} %"><i style="--w:{{kpis.gesamtfortschritt_pct}}%"></i></div>
+      </div>
+      <div class="kpi">
+        <div class="lbl">Budgetverbrauch</div>
+        <div class="val num"><span class="countup" data-target="{{kpis.budgetverbrauch_pct}}">0</span> %</div>
+        <div class="bar" data-tip="Budgetverbrauch|{{kpis.budgetverbrauch_pct}} %"><i style="--w:{{kpis.budgetverbrauch_pct}}%"></i></div>
+      </div>
+      <div class="kpi">
+        <div class="lbl">CI-Checks</div>
+        <!-- IF ci.degraded -->
+        <div class="val">nicht verfügbar</div>
+        <div class="sub">{{ci.note}}</div>
+        <!-- /IF -->
+        <!-- IF NOT ci.degraded -->
+        <div class="val num">{{ci.checks_passed}}/{{ci.checks_total}}</div>
+        <div class="bar" data-tip="CI-Checks|{{ci.pass_rate_pct}} %"><i style="--w:{{ci.pass_rate_pct}}%"></i></div>
+        <!-- /IF -->
+      </div>
+      <div class="kpi">
+        <div class="lbl">Tage bis Zieltermin</div>
+        <div class="val num">{{kpis.tage_bis_zieltermin}}</div>
+        <div class="sub">Zieltermin {{trajektorie.target_date_de}}</div>
+      </div>
+    </div>
+    </div>
+  </details>
+
+  <!-- ══════════════════════════════════════════════════════════
+       03 · PROGNOSE-AMPEL
+       ══════════════════════════════════════════════════════════ -->
+  <details class="section reveal" open>
+    <summary class="kicker"><span class="section-no">03</span>Prognose-Ampel <span class="en">forecast signal</span><span class="toggle-ind">+</span></summary>
+    <div class="section-body">
+    <table class="ledger">
+      <thead>
+        <tr><th>Bereich</th><th>Verdict</th><th>Begründung</th></tr>
+      </thead>
+      <tbody>
+        <!-- REPEAT prognose.items -->
+        <!-- label: map item.verdict_final token→Grün/Gelb/Rot/Grau/Gelb-Rot; class keeps token -->
+        <tr>
+          <td class="name">{{item.label}}</td>
+          <td><span class="verdict verdict-{{item.verdict_final}}">{{item.verdict_final}}</span></td>
+          <td>{{item.reason_final}}
+            <!-- IF item.divergence -->
+            <span class="divergence">Harness: {{item.verdict}} — {{item.reason}}</span>
+            <!-- /IF -->
+          </td>
+        </tr>
+        <!-- /REPEAT prognose.items -->
+      </tbody>
+    </table>
+    </div>
+  </details>
+
+  <!-- ══════════════════════════════════════════════════════════
+       04 · FORTSCHRITT NACH LIEFERBEREICH
+       ══════════════════════════════════════════════════════════ -->
+  <details class="section reveal" open>
+    <summary class="kicker"><span class="section-no">04</span>Fortschritt nach Lieferbereich <span class="en">progress by delivery area</span><span class="toggle-ind">+</span></summary>
+    <div class="section-body">
+    <table class="ledger">
+      <thead>
+        <tr><th>Bereich</th><th>Name</th><th>Gewicht %</th><th>Fortschritt</th><th>Status</th><th>Beitrag %</th><th>Kommentar</th></tr>
+      </thead>
+      <tbody>
+        <!-- REPEAT areas -->
+        <!-- label: map area.status_final token→Grün/Gelb/Rot/Grau/Gelb-Rot; class keeps token -->
+        <tr>
+          <td class="name">{{area.id}}</td>
+          <td>{{area.name}}</td>
+          <td class="num">{{area.weight}}</td>
+          <td class="progress-cell num"><span class="mini-bar" data-tip="Fortschritt|{{area.progress_final}} %"><i style="width:{{area.progress_final}}%"></i></span><span class="nowrap">{{area.progress_final}} %</span>
+            <!-- IF area.progress_divergence -->
+            <span class="divergence">Modell: {{area.progress_estimate}} % · erfasst: {{area.progress_override}} %</span>
+            <!-- /IF -->
+          </td>
+          <td><span class="verdict verdict-{{area.status_final}}">{{area.status_final}}</span></td>
+          <td class="num">{{area.contribution_pct}}</td>
+          <td>{{area.comment}}</td>
+        </tr>
+        <!-- /REPEAT areas -->
+      </tbody>
+    </table>
+    <p class="table-note"><b>Gewicht</b> = Anteil des Bereichs am Gesamtprojekt. <b>Beitrag</b> = Beitrag zum Gesamtfortschritt (Gewicht x Fortschritt).</p>
+    </div>
+  </details>
+
+  <!-- ══════════════════════════════════════════════════════════
+       05 · STORY-BURNUP
+       ══════════════════════════════════════════════════════════ -->
+  <details class="section reveal">
+    <summary class="kicker"><span class="section-no">05</span>Story-Burnup <span class="en">story burnup</span><span class="toggle-ind">+</span></summary>
+    <div class="section-body">
+    <table class="ledger">
+      <thead>
+        <tr><th>ID</th><th>Thema</th><th>Bereich</th><th>Fortschritt</th><th>Status</th><th>Nächster Nachweis</th></tr>
+      </thead>
+      <tbody>
+        <!-- REPEAT stories -->
+        <!-- label: map story.status token→Grün/Gelb/Rot/Grau/Gelb-Rot; class keeps token -->
+        <tr>
+          <td class="name">{{story.id}}</td>
+          <td>{{story.title}}</td>
+          <td>{{story.area}}</td>
+          <td class="progress-cell num"><span class="mini-bar" data-tip="Fortschritt|{{story.progress}} %"><i style="width:{{story.progress}}%"></i></span><span class="nowrap">{{story.progress}} %</span></td>
+          <td><span class="verdict verdict-{{story.status}}">{{story.status}}</span></td>
+          <td>{{story.next_proof}}</td>
+        </tr>
+        <!-- /REPEAT stories -->
+      </tbody>
+    </table>
+    </div>
+  </details>
+
+  <!-- ══════════════════════════════════════════════════════════
+       06 · BUDGET
+       ══════════════════════════════════════════════════════════ -->
+  <details class="section reveal">
+    <summary class="kicker"><span class="section-no">06</span>Budget <span class="en">budget</span><span class="toggle-ind">+</span></summary>
+    <div class="section-body">
+    <div class="bar-chart-wrap">
+      <div class="chart-head">
+        <span class="caption">Ist-AT pro Woche</span>
+      </div>
+      <!-- COMPUTE: render one <svg width="100%" height="160" viewBox="0 0 1000 160"> per
+           budget.by_week[], one <rect class="bar-el"> per week, x evenly spaced across
+           the 1000-unit width, height proportional to ist_at (max week = full scale),
+           baseline at y=159. Add a data-tip="{{week}}|{{ist_at}} AT" per bar and a
+           <div class="chart-labels"> with one <span> per week label below. -->
+      <svg width="100%" height="160" viewBox="0 0 1000 160" preserveAspectRatio="none">
+        <line class="axis zero" x1="0" y1="159" x2="1000" y2="159"/>
+        <!-- REPEAT budget.by_week -->
+        <rect class="bar-el" data-tip="{{week.week}}|{{week.ist_at}} AT" x="0" y="0" width="0" height="0"></rect>
+        <!-- /REPEAT budget.by_week -->
+      </svg>
+      <div class="chart-labels">
+        <!-- REPEAT budget.by_week -->
+        <span>{{week.week}}</span>
+        <!-- /REPEAT budget.by_week -->
+      </div>
+    </div>
+
+    <div class="kpi" style="padding:0; border-left:0; max-width:340px;">
+      <div class="lbl">Budgetverbrauch</div>
+      <div class="val num">{{budget.budgetverbrauch_pct}} %</div>
+      <div class="bar" data-tip="Budgetverbrauch|{{budget.ist_at}} von {{budget.budget_total_at}} AT"><i style="--w:{{budget.budgetverbrauch_pct}}%"></i></div>
+    </div>
+
+    <div class="budget-figures">
+      <div class="fig"><div class="lbl">Ist-AT</div><div class="val num">{{budget.ist_at}}</div></div>
+      <div class="fig"><div class="lbl">Earned Value AT</div><div class="val num">{{budget.earned_value_at}}</div></div>
+      <div class="fig">
+        <div class="lbl">Wert vs. Ist-Aufwand</div>
+        <div class="val num" data-neg-if-negative>{{budget.variance_at}}</div>
+        <div class="caption" style="max-width:32ch; margin-top:4px;">Earned Value abzüglich verbuchtem Ist-Aufwand — Kosteneffizienz, keine Terminaussage.</div>
+      </div>
+    </div>
+
+    <table class="ledger" style="margin-top:var(--s5);">
+      <thead><tr><th>Person</th><th class="r">Ist-Stunden</th><th class="r">Ist-AT</th></tr></thead>
+      <tbody>
+        <!-- REPEAT budget.by_person -->
+        <tr>
+          <td class="name">{{person.person}}</td>
+          <td class="r num">{{person.ist_stunden}}</td>
+          <td class="r num">{{person.ist_at}}</td>
+        </tr>
+        <!-- /REPEAT budget.by_person -->
+      </tbody>
+    </table>
+    </div>
+  </details>
+
+  <!-- ══════════════════════════════════════════════════════════
+       07 · CI-QUALITAET
+       ══════════════════════════════════════════════════════════ -->
+  <details class="section reveal">
+    <summary class="kicker"><span class="section-no">07</span>CI-Qualität <span class="en">ci quality</span><span class="toggle-ind">+</span></summary>
+    <div class="section-body">
+    <div class="ci-headline">
+      <!-- IF ci.degraded -->
+      <div class="stat-value degraded">nicht verfügbar</div>
+      <div class="caption">{{ci.note}}</div>
+      <!-- /IF -->
+      <!-- IF NOT ci.degraded -->
+      <div class="stat-value num">{{ci.checks_passed}}/{{ci.checks_total}}<span class="unit"> Checks grün</span></div>
+      <div class="caption num">{{ci.pass_rate_pct}} % Erfolgsquote</div>
+      <!-- /IF -->
+    </div>
+    <div class="ci-link" style="margin-top:var(--s3);">GitHub Checks (Jenkins) · Commit {{ci.commit}}</div>
+
+    <!-- IF ci.failing -->
+    <div class="decisions" style="margin-top:var(--s5);">
+      <span class="kicker" style="font-size:0.6rem;">Fehlgeschlagene Checks <span class="en">failing checks</span></span>
+      <ul>
+        <!-- REPEAT ci.failing -->
+        <li><a href="{{fail.url}}">{{fail.name}}</a></li>
+        <!-- /REPEAT ci.failing -->
+      </ul>
+    </div>
+    <!-- /IF -->
+
+    <div class="bar-chart-wrap" style="margin-top:var(--s5);">
+      <div class="chart-head"><span class="caption">Testrate — Verlauf</span></div>
+      <!-- COMPUTE: if ci.trend has 2+ points, render one <svg width="100%" height="90"
+           viewBox="0 0 1000 90"> with a single <path class="proj-line"> polyline through
+           ci.trend[] (x = evenly spaced by date_de order, y mapped so higher
+           pass_rate_pct is higher on the chart, e.g. scale 90-100% pass rate across the
+           chart height), plus a small circle marker on the last (current) point with a
+           data-tip showing "{{trend.date_de}} · {{trend.pass_rate_pct}} %". If ci.trend
+           has fewer than 2 points, omit the <path> (no misleading line) and render only
+           the axis plus a single circle marker for that one point, same data-tip. -->
+      <svg width="100%" height="90" viewBox="0 0 1000 90" preserveAspectRatio="none">
+        <line class="axis zero" x1="0" y1="89" x2="1000" y2="89"/>
+        <path class="proj-line"></path>
+      </svg>
+      <div class="chart-labels">
+        <!-- REPEAT ci.trend -->
+        <span>{{trend.date_de}}</span>
+        <!-- /REPEAT ci.trend -->
+      </div>
+    </div>
+    </div>
+  </details>
+
+  <!-- ══════════════════════════════════════════════════════════
+       08 · OFFENE ENTSCHEIDUNGEN
+       ══════════════════════════════════════════════════════════ -->
+  <details class="section reveal">
+    <summary class="kicker"><span class="section-no">08</span>Offene Entscheidungen <span class="en">open decisions</span><span class="toggle-ind">+</span></summary>
+    <div class="section-body">
+    <!-- IF offene_entscheidungen -->
+    <ul class="dash-list">
+      <!-- REPEAT offene_entscheidungen -->
+      <li>{{entscheidung}}</li>
+      <!-- /REPEAT offene_entscheidungen -->
+    </ul>
+    <!-- /IF -->
+    <!-- IF NOT offene_entscheidungen -->
+    <p class="caption">Keine offenen Entscheidungen.</p>
+    <!-- /IF -->
+    </div>
+  </details>
+
+  <!-- ══════════════════════════════════════════════════════════
+       09 · RISIKEN
+       ══════════════════════════════════════════════════════════ -->
+  <details class="section reveal">
+    <summary class="kicker"><span class="section-no">09</span>Risiken <span class="en">risks</span><span class="toggle-ind">+</span></summary>
+    <div class="section-body">
+    <table class="ledger">
+      <thead>
+        <tr><th>Risiko</th><th>Kategorie</th><th>Auswirkung</th><th>Wahrscheinlichkeit</th><th>Frühwarnsignal</th><th>Nächste Aktion</th><th>Owner</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        <!-- REPEAT risks -->
+        <tr>
+          <td class="name">{{risk.risiko}}</td>
+          <td>{{risk.kategorie}}</td>
+          <td><span class="flag">{{risk.auswirkung}}</span></td>
+          <td>{{risk.wahrscheinlichkeit}}</td>
+          <td>{{risk.fruehwarnsignal}}</td>
+          <td>{{risk.naechste_aktion}}</td>
+          <td>{{risk.owner}}</td>
+          <td><span class="verdict">{{risk.status}}</span></td>
+        </tr>
+        <!-- /REPEAT risks -->
+      </tbody>
+    </table>
+    </div>
+  </details>
+
+  <!-- ══════════════════════════════════════════════════════════
+       10 · TRAJEKTORIE
+       ══════════════════════════════════════════════════════════ -->
+  <details class="section reveal">
+    <summary class="kicker"><span class="section-no">10</span>Fortschritt <span class="en">trajectory</span><span class="toggle-ind">+</span></summary>
+    <div class="section-body">
+    <!-- COMPUTE: build one <svg width="100%" height="230" viewBox="0 0 1000 230"> with TWO
+         lines sharing one coordinate mapping:
+           x-axis: spans [earliest trajektorie.history[].date_de .. the later of
+           trajektorie.target_date_de / trajektorie.stretch_date_de], parsed as dd.mm.yyyy
+           and mapped linearly onto x = 0..1000 (only the _de fields exist — parse those,
+           never expect a raw ISO date alongside them).
+           y-axis: 0% at y=200 (baseline, .axis.zero), 100% at y=20 (inverse-scaled: higher
+           progress = smaller y). Gridlines already placed below at 25/50/75/100%.
+         1) IST (actual): replace the empty <path class="proj-line"> with its "d" attribute
+            drawn through trajektorie.history[] points in order; repeat the <circle
+            class="hist-pt"> template once per history point (loop var point., already
+            wrapped below) with cx/cy computed from point.date_de/point.overall_progress_pct
+            and data-tip="{{point.date_de}} · {{point.overall_progress_pct}} %".
+         2) IDEAL (reference): replace the empty <line class="ideal-line"> with x1/y1/x2/y2
+            from (x(trajektorie.ideal.start_date_de), y=200) to
+            (x(trajektorie.ideal.target_date_de), y=20), and position the "Ideal"
+            <text class="ideal-label"> near its right end.
+         Then place, using the same x mapping:
+           - a <line class="marker-line"> + <text class="marker-label"> "HEUTE" at
+             x(meta.report_date_de)
+           - a <line class="marker-line"> + <text class="marker-label">
+             "ZIELTERMIN {{trajektorie.target_date_de}}" at x(trajektorie.target_date_de)
+           - IF trajektorie.stretch_date_de: a <line class="marker-line stretch"> + <text
+             class="marker-label" style="fill:var(--red)">
+             "STRECKUNGSENDE {{trajektorie.stretch_date_de}}" at x(trajektorie.stretch_date_de)
+         All rendered date labels use the _de (dd.mm.yyyy) fields verbatim — never render a
+         raw ISO date token. -->
+    <svg width="100%" height="230" viewBox="0 0 1000 230" preserveAspectRatio="none">
+      <line class="axis" x1="0" y1="20"  x2="1000" y2="20"/>
+      <text x="994" y="16" text-anchor="end">100 %</text>
+      <line class="axis" x1="0" y1="65"  x2="1000" y2="65"/>
+      <text x="994" y="61" text-anchor="end">75 %</text>
+      <line class="axis" x1="0" y1="110" x2="1000" y2="110"/>
+      <text x="994" y="106" text-anchor="end">50 %</text>
+      <line class="axis" x1="0" y1="155" x2="1000" y2="155"/>
+      <text x="994" y="151" text-anchor="end">25 %</text>
+      <line class="axis zero" x1="0" y1="200" x2="1000" y2="200"/>
+      <text x="994" y="196" text-anchor="end">0 %</text>
+
+      <line class="ideal-line" data-tip="Ideal|{{trajektorie.ideal.start_date_de}} bis {{trajektorie.ideal.target_date_de}}"></line>
+      <text class="ideal-label"></text>
+
+      <path class="proj-line"></path>
+      <!-- REPEAT trajektorie.history -->
+      <circle class="hist-pt" r="4" data-tip="{{point.date_de}} · {{point.overall_progress_pct}} %"></circle>
+      <!-- /REPEAT trajektorie.history -->
+
+      <line class="marker-line" data-tip="Heute|{{meta.report_date_de}}"></line>
+      <text class="marker-label">HEUTE</text>
+
+      <line class="marker-line" data-tip="Zieltermin|{{trajektorie.target_date_de}}"></line>
+      <text class="marker-label">ZIELTERMIN {{trajektorie.target_date_de}}</text>
+
+      <!-- IF trajektorie.stretch_date_de -->
+      <line class="marker-line stretch" data-tip="Streckungsende|{{trajektorie.stretch_date_de}}"></line>
+      <text class="marker-label" style="fill:var(--red)">STRECKUNGSENDE {{trajektorie.stretch_date_de}}</text>
+      <!-- /IF -->
+    </svg>
+    <div class="traj-legend">
+      <span><span class="swatch"></span>Ist <span class="en" style="font-style:italic;">actual</span></span>
+      <span><span class="swatch ideal"></span>Ideal</span>
+    </div>
+    <div class="chart-labels">
+      <!-- REPEAT trajektorie.history -->
+      <span>{{point.date_de}}</span>
+      <!-- /REPEAT trajektorie.history -->
+    </div>
+    </div>
+  </details>
+
+  <hr class="thick-rule">
+  <div class="colophon">
+    <span>ERZEUGT {{meta.generated_at}} · BRANCH {{meta.branch}}</span>
+    <span>{{meta.project_name}} · STAND {{meta.report_date_de}}</span>
+  </div>
+</div>
+
+<script>
+// ── theme toggle ────────────────────────────────────────────────
+const root = document.documentElement;
+document.getElementById('themeToggle').addEventListener('click', () => {
+  root.dataset.theme = root.dataset.theme === 'light' ? 'dark' : 'light';
+});
+
+// ── scroll reveal ───────────────────────────────────────────────
+const io = new IntersectionObserver(es => es.forEach(e => {
+  if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+}), { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+// ── smooth section collapse/expand ────────────────────────────────
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const SECTION_EASE = 'cubic-bezier(0.19, 1, 0.22, 1)';
+document.querySelectorAll('details.section').forEach(det => {
+  const summary = det.querySelector(':scope > summary');
+  const body = det.querySelector(':scope > .section-body');
+  if (!summary || !body || reduceMotion) return;
+  let anim = null;
+  summary.addEventListener('click', e => {
+    e.preventDefault();
+    if (det.open) collapse(); else expand();
+  });
+  function expand() {
+    anim?.cancel();
+    det.open = true;
+    const target = body.scrollHeight;
+    anim = body.animate(
+      { height: ['0px', target + 'px'] },
+      { duration: 260, easing: SECTION_EASE }
+    );
+    anim.onfinish = () => { body.style.height = ''; };
+  }
+  function collapse() {
+    anim?.cancel();
+    const start = body.scrollHeight;
+    anim = body.animate(
+      { height: [start + 'px', '0px'] },
+      { duration: 220, easing: SECTION_EASE }
+    );
+    anim.onfinish = () => { det.open = false; body.style.height = ''; };
+  }
+});
+
+// ── count-up ────────────────────────────────────────────────────
+const fmt = v => {
+  const r = Math.round(v * 10) / 10;
+  return Number.isInteger(r) ? String(r) : r.toFixed(1);
+};
+document.querySelectorAll('.countup').forEach(el => {
+  const target = +el.dataset.target, t0 = performance.now(), dur = 1000;
+  const tick = t => {
+    const p = Math.min((t - t0) / dur, 1), e = 1 - Math.pow(1 - p, 4);
+    el.textContent = fmt(target * e);
+    if (p < 1) requestAnimationFrame(tick);
+  };
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) el.textContent = fmt(target);
+  else requestAnimationFrame(tick);
+});
+
+// ── negative-value styling (budget variance etc.) ────────────────
+document.querySelectorAll('[data-neg-if-negative]').forEach(el => {
+  if (parseFloat(el.textContent) < 0) el.classList.add('neg');
+});
+
+// ── ink-block tooltip ────────────────────────────────────────────
+const tip = document.getElementById('tip');
+const tipL = tip.querySelector('.tt-l'), tipV = tip.querySelector('.tt-v');
+const TIP_DELAY = 550;
+let tipOn = false, tipTimer = null;
+
+function moveTip(e) {
+  const pad = 12, r = tip.getBoundingClientRect();
+  let x = e.clientX + pad, y = e.clientY - r.height - pad;
+  if (x + r.width > innerWidth - 8) x = e.clientX - r.width - pad;
+  if (y < 8) y = e.clientY + pad;
+  tip.style.left = x + 'px';
+  tip.style.top  = y + 'px';
+}
+document.addEventListener('mouseover', e => {
+  const t = e.target.closest?.('[data-tip]');
+  if (!t) return;
+  const [l, v] = t.dataset.tip.split('|');
+  tipL.textContent = l; tipV.textContent = v || '';
+  tipV.style.display = v ? '' : 'none';
+  tipOn = true; moveTip(e);
+  clearTimeout(tipTimer);
+  tipTimer = setTimeout(() => { if (tipOn) tip.classList.add('show'); }, TIP_DELAY);
+});
+document.addEventListener('mouseout', e => {
+  if (e.target.closest?.('[data-tip]')) {
+    tipOn = false; clearTimeout(tipTimer); tip.classList.remove('show');
+  }
+});
+document.addEventListener('mousemove', e => { if (tipOn) moveTip(e); });
+</script>
+</body>
+</html>

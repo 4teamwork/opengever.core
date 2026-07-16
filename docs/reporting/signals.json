@@ -1,0 +1,282 @@
+{
+  "generated_at": "2026-07-09T18:20:00+02:00",
+  "report_date": "2026-07-09",
+  "branch": "ai-playground",
+  "git": {
+    "head_sha": "d96de2bec641c49ba8575167a50522cba2e2e0ff",
+    "origin_head_sha": "d96de2bec641c49ba8575167a50522cba2e2e0ff",
+    "commits_since_first_baseline": 28,
+    "per_area_commit_hint": {
+      "D0": 2,
+      "D1": 14,
+      "D2": 0,
+      "D3": 3,
+      "D4": 3,
+      "D5": 3
+    }
+  },
+  "specs": [
+    {
+      "id": "background-tasks-infrastructure",
+      "title": "Background Tasks Infrastructure",
+      "status": "done",
+      "created": "2026-06-12",
+      "baseline_commit": "f07394dbf3b7914f51f464ae2490fdd3663d57d1",
+      "path": "_bmad-output/implementation-artifacts/spec-background-tasks-infrastructure.md"
+    },
+    {
+      "id": "reindex-object-security-background-task",
+      "title": "Reindex Object Security Background Task",
+      "status": "done",
+      "created": "2026-06-23",
+      "baseline_commit": "9d4d475569d488b807e75f11de8f561c6163b32f",
+      "path": "_bmad-output/implementation-artifacts/spec-reindex-object-security-background-task.md"
+    },
+    {
+      "id": "background-tasks-kill-switch",
+      "title": "Background Tasks Kill Switch",
+      "status": "done",
+      "created": "2026-07-02",
+      "baseline_commit": "d9734e90b235ca0db8e7eebfc96d7d5a17ce7833",
+      "path": "_bmad-output/implementation-artifacts/spec-background-tasks-kill-switch.md"
+    },
+    {
+      "id": "reindex-dossier-title-background-task",
+      "title": "Reindex Dossier Title Background Task",
+      "status": "done",
+      "created": "2026-07-06",
+      "baseline_commit": "d51759a1bd385ed8fadb04d713258861981272fe",
+      "path": "_bmad-output/implementation-artifacts/spec-reindex-dossier-title-background-task.md"
+    },
+    {
+      "id": "update-reference-prefixes-background-task",
+      "title": "Update Reference Prefixes Background Task",
+      "status": "done",
+      "created": "2026-07-06",
+      "baseline_commit": "28a98f61cc857c199b2e37ada7ba243e66652131",
+      "path": "_bmad-output/implementation-artifacts/spec-update-reference-prefixes-background-task.md"
+    },
+    {
+      "id": "move-objects-background-task",
+      "title": "Move Objects Background Task",
+      "status": "done",
+      "created": "2026-07-07",
+      "baseline_commit": "3a6014c91d3aa445d023bada97cf760fc60e5080",
+      "path": "_bmad-output/implementation-artifacts/spec-move-objects-background-task.md"
+    }
+  ],
+  "deferred": {
+    "open_count": 18,
+    "items": [
+      {
+        "source": "background-tasks-infrastructure",
+        "title": "datetime.now() vs UTC across worker"
+      },
+      {
+        "source": "background-tasks-infrastructure",
+        "title": "_task_registry test isolation"
+      },
+      {
+        "source": "background-tasks-infrastructure",
+        "title": "register_task_type silent overwrite"
+      },
+      {
+        "source": "background-tasks-infrastructure",
+        "title": "Unknown task_type error type inconsistency"
+      },
+      {
+        "source": "background-tasks-infrastructure",
+        "title": "Checkpoint commit failure isolation"
+      },
+      {
+        "source": "background-tasks-infrastructure",
+        "title": "Multi-site worker support"
+      },
+      {
+        "source": "reindex-object-security-background-task",
+        "title": "RUNNING task not cancelled during dedup"
+      },
+      {
+        "source": "reindex-object-security-background-task",
+        "title": "Transaction abort silently loses reindex"
+      },
+      {
+        "source": "reindex-object-security-background-task",
+        "title": "No synchronous fallback when queue_task fails"
+      },
+      {
+        "source": "background-tasks-kill-switch",
+        "title": "Scheduling/priority/checkpoint semantics are no-ops when disabled"
+      },
+      {
+        "source": "update-reference-prefixes-background-task",
+        "title": "Stale child brain not guarded in reindex_children_with_new_prefix"
+      },
+      {
+        "source": "update-reference-prefixes-background-task",
+        "title": "results[0] assumes a single catalog match per UID"
+      },
+      {
+        "source": "update-reference-prefixes-background-task",
+        "title": "Fallback triggers only on admin_unit None, not on worker presence"
+      },
+      {
+        "source": "reindex-dossier-title-background-task",
+        "title": "admin_unit fallback runs full synchronous Solr walk with zero logging"
+      },
+      {
+        "source": "reindex-dossier-title-background-task",
+        "title": "No de-duplication of pending reindex-dossier-title tasks per UID"
+      },
+      {
+        "source": "reindex-dossier-title-background-task",
+        "title": "Dossier vs subdossier dispatch decided at execution time"
+      },
+      {
+        "source": "reindex-dossier-title-background-task",
+        "title": "reindex functions not wrapped in task try/except"
+      },
+      {
+        "source": "reindex-dossier-title-background-task",
+        "title": "No test asserts the actual Solr payload / sync_task call"
+      }
+    ]
+  },
+  "ci": {
+    "source": "github-checks",
+    "commit": "d96de2b",
+    "checks_total": 11,
+    "checks_passed": 8,
+    "checks_failed": 3,
+    "pass_rate_pct": 72.7,
+    "failing": [
+      {
+        "name": "test-solr.cfg",
+        "url": "https://jenkins.4teamwork.ch/job/opengever.core-test-solr.cfg/3435/display/redirect"
+      },
+      {
+        "name": "test-i18n-de.cfg",
+        "url": "https://jenkins.4teamwork.ch/job/opengever.core-test-i18n-de.cfg/3464/display/redirect"
+      },
+      {
+        "name": "test-plone-4.3.x.cfg",
+        "url": "https://jenkins.4teamwork.ch/job/opengever.core-test-plone-4.3.x.cfg/3517/display/redirect"
+      }
+    ],
+    "degraded": false,
+    "note": "GitHub Checks (Jenkins) auf origin/ai-playground @ d96de2b; lokaler Branch ist aktuell. 11 Check-Runs abgeschlossen: 8 grün, 3 rot (test-solr.cfg, test-i18n-de.cfg, test-plone-4.3.x.cfg). Die drei zuvor noch laufenden Checks sind seit dem letzten Lauf abgeschlossen -- test-solr und test-plone-4.3.x rot, test-functional-zserver-solr grün -- daher sinkt die Quote von 87.5% (mit ausgeschlossenen Pending) auf 72.7%."
+  },
+  "areas": [
+    {
+      "id": "D0",
+      "progress_estimate": 85,
+      "status_signal": "gruen",
+      "rationale": "Sechs BMAD-Specs sind sauber abgeschlossen (status: done) mit gepflegter Deferred-Work-Liste (18 Punkte); der Scope der drei geplanten Operationen ist durch die Umsetzung geklärt und Sync/Async ist pragmatisch über den Kill-Switch mit synchronem Fallback entschieden. Offen ist höchstens, ob zusätzlich Schwellwerte pro Operation nötig sind."
+    },
+    {
+      "id": "D1",
+      "progress_estimate": 80,
+      "status_signal": "gruen",
+      "rationale": "opengever.bgtasks ist vollständig (Modell, Registry, Worker mit claim/run_forever/Reset unterbrochener Tasks, Runner, Checkpointing, Retries); der Dispatcher existiert als Feature-Flag mit synchronem Fallback, der Kill-Switch inkl. Upgrade-Step ist da, und Operation 1 (reindexObjectSecurity) ist produktiv gepatcht inkl. Dedup — ein echter Enqueue-Worker-Execute-Durchstich. Offen bleiben Objekt-Sperre (nur PENDING-Dedup) und Benutzerbenachrichtigung."
+    },
+    {
+      "id": "D2",
+      "progress_estimate": 5,
+      "status_signal": "gelb-rot",
+      "rationale": "Kein Browser-View, kein Admin-Übersichts-Code unter opengever/ gefunden. Der Kill-Switch ist eine Registry-Einstellung, keine Anwender-/Support-Oberfläche; UI-Indikator, UI-Sperre und Log-Ansicht fehlen vollständig."
+    },
+    {
+      "id": "D3",
+      "progress_estimate": 70,
+      "status_signal": "gruen",
+      "rationale": "Die Ordnungssystem-Operation ist als update-reference-prefixes-Task samt Subscriber-Anbindung (opengever/repository) implementiert und getestet, ergänzt um reindex-dossier-title als weitere Metadaten-Reindex-Operation. Offen sind Ende-zu-Ende-/Konsistenztests der eigentlichen Solr-Mutation unter Last."
+    },
+    {
+      "id": "D4",
+      "progress_estimate": 65,
+      "status_signal": "gruen",
+      "rationale": "Die risikoreichste Operation ist geliefert: MoveObjectsTask (bgtasks/move.py) mit run_as_user-Berechtigungslogik, Clipboard-Paste und gezielter Fehlerbehandlung, angebunden in dossier/move_items.py und mit 208 Zeilen Tests. Vollständige Konsistenz-/Sonderfallabdeckung (gesperrte/ausgecheckte Objekte, fehlende Rechte) steht noch aus."
+    },
+    {
+      "id": "D5",
+      "progress_estimate": 20,
+      "status_signal": "gelb",
+      "rationale": "Kill-Switch/Notbremse als Hardening-Feature und breite Unit-/Integrationstests (test_move, test_worker, test_model, dossier/repository test_tasks) sind vorhanden, inkl. Upgrade-Steps. E2E-Test, Lasttest, Doku und formale Abnahme fehlen jedoch noch."
+    }
+  ],
+  "overall_progress_estimate": 59,
+  "prognose": {
+    "gesamtbeurteilung": {
+      "verdict": "gruen",
+      "reason": "Klar vor Plan; alle 3 Operationen produktiv geliefert. Restarbeit bekannt und unkritisch für den Termin."
+    },
+    "projektfortschritt": {
+      "verdict": "gruen",
+      "reason": "59% Fortschritt bei 34% verstrichener Zeit; mehrere Operationen laufen produktiv end-to-end."
+    },
+    "kosten": {
+      "verdict": "gruen",
+      "reason": "35% Budget verbraucht bei 59% Fortschritt; erarbeiteter Wert übersteigt Ist-Aufwand deutlich."
+    },
+    "personalaufwand": {
+      "verdict": "gruen",
+      "reason": "Budgetverbrauch 35.3% liegt deutlich unter Fortschritt 59% — mehr Wert geliefert als Budget verbraucht."
+    },
+    "projektrisiken": {
+      "verdict": "gelb",
+      "reason": "2 Hoch-Risiken offen (CI rot, keine Benachrichtigung); Scope-Cut-Reserve bleibt komfortabel."
+    }
+  },
+  "hours": {
+    "present": true,
+    "hours_per_at": 8,
+    "ist_stunden": 138.5,
+    "ist_at": 17.31,
+    "by_person": [
+      {
+        "person": "Buchberger Thomas",
+        "ist_stunden": 112.0,
+        "ist_at": 14.0
+      },
+      {
+        "person": "Cassina Manuel",
+        "ist_stunden": 26.5,
+        "ist_at": 3.31
+      }
+    ],
+    "by_week": [
+      {
+        "week": "2026-W23",
+        "ist_stunden": 24.0,
+        "ist_at": 3.0
+      },
+      {
+        "week": "2026-W24",
+        "ist_stunden": 40.0,
+        "ist_at": 5.0
+      },
+      {
+        "week": "2026-W25",
+        "ist_stunden": 11.5,
+        "ist_at": 1.44
+      },
+      {
+        "week": "2026-W26",
+        "ist_stunden": 44.0,
+        "ist_at": 5.5
+      },
+      {
+        "week": "2026-W27",
+        "ist_stunden": 15.5,
+        "ist_at": 1.94
+      },
+      {
+        "week": "2026-W28",
+        "ist_stunden": 3.5,
+        "ist_at": 0.44
+      }
+    ],
+    "rows_parsed": 29,
+    "note": "Person und Datum sind in der zusammengesetzten 'Name'-Spalte codiert ('<Person> vom <YYYY-MM-DD>'); Person = Text vor ' vom ', Datum = ISO-Datum danach. Die separate 'Datum'-Spalte ist unzuverlässig (vertauschte/US-Formate) und wurde ignoriert. Stunden = 'Geleistete Stunden'; 'Verrechnete PT' wurde nicht verwendet (bereits /8, sonst Doppelzählung)."
+  }
+}
