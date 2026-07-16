@@ -2,6 +2,7 @@ from opengever.base.oguid import Oguid
 from opengever.locking.lock import LOCK_TYPE_COPIED_TO_WORKSPACE_LOCK
 from opengever.locking.lock import LOCK_TYPE_MEETING_EXCERPT_LOCK
 from opengever.locking.lock import LOCK_TYPE_MEETING_SUBMITTED_LOCK
+from opengever.locking.lock import LOCK_TYPE_MOVE_LOCK
 from opengever.meeting.model import GeneratedExcerpt
 from opengever.meeting.model import GeneratedProtocol
 from opengever.meeting.model import SubmittedDocument
@@ -23,6 +24,7 @@ class GeverLockInfoViewlet(LockInfoViewlet):
         'templates/copied_to_workspace_lock.pt')
     oc_document_lock_template = ViewPageTemplateFile(
         'templates/oc_document_lock_template.pt')
+    move_lock_template = ViewPageTemplateFile('templates/move_lock_template.pt')
     default_template = ViewPageTemplateFile('templates/info.pt')
 
     # templates seem to be converted to BoundPageTemplate with acquisition
@@ -32,6 +34,7 @@ class GeverLockInfoViewlet(LockInfoViewlet):
         LOCK_TYPE_MEETING_SUBMITTED_LOCK: 'submitted_document_lock_template',
         LOCK_TYPE_MEETING_EXCERPT_LOCK: 'excerpt_document_lock_template',
         LOCK_TYPE_COPIED_TO_WORKSPACE_LOCK: 'copied_to_workspace_lock',
+        LOCK_TYPE_MOVE_LOCK: 'move_lock_template',
         "office_connector_lock": 'oc_document_lock_template',
         'default': 'default_template'
     }
