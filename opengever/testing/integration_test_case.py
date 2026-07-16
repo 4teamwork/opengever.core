@@ -73,6 +73,7 @@ FEATURE_FLAGS = {
     'changed_for_end_date': 'opengever.dossier.interfaces.IDossierResolveProperties.use_changed_for_end_date',
     'automatically_set_end_date': 'opengever.dossier.interfaces.IDossierResolveProperties.automatically_set_end_date',
     'disposition-disregard-retention-period': 'opengever.disposition.interfaces.IDispositionSettings.disregard_retention_period',  # noqa
+    'disposition_sip_archive_delivery_enabled': 'opengever.disposition.interfaces.IDispositionSettings.sip_archive_delivery',  # noqa
     'doc-properties': 'opengever.dossier.interfaces.ITemplateFolderProperties.create_doc_properties',
     'docugate': 'opengever.docugate.interfaces.IDocugateSettings.is_feature_enabled',
     'dossier-checklist': 'opengever.dossier.interfaces.IDossierChecklistSettings.is_feature_enabled',

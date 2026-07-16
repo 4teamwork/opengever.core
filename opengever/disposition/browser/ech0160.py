@@ -1,3 +1,5 @@
+from opengever.base.response import IResponseContainer
+from opengever.base.response import Response
 from opengever.base.stream import TempfileStreamIterator
 from opengever.disposition import _
 from opengever.disposition.ech0160.sippackage import SIPPackage
@@ -9,6 +11,9 @@ from pyxb.utils.domutils import BindingDOMSupport
 from tempfile import TemporaryFile
 from zipfile import ZIP_DEFLATED
 from zipfile import ZipFile
+
+
+SIP_DOWNLOADED_RESPONSE_TYPE = 'sip_downloaded'
 
 
 class ECH0160ExportView(BrowserView):
@@ -67,4 +72,7 @@ class ECH0160DownloadView(BrowserView):
         sip_package = self.context.get_sip_package()
         filename = self.context.get_sip_filename()
         set_headers(sip_package, self.request.response, filename)
+
+        IResponseContainer(self.context).add(Response(SIP_DOWNLOADED_RESPONSE_TYPE))
+
         return stream_data(sip_package)

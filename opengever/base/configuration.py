@@ -14,6 +14,7 @@ from opengever.base.interfaces import IHubSpotSettings
 from opengever.base.interfaces import IRecentlyTouchedSettings
 from opengever.base.interfaces import ISearchSettings
 from opengever.bumblebee.interfaces import IGeverBumblebeeSettings
+from opengever.disposition import is_sip_archive_delivery_enabled
 from opengever.disposition.interfaces import IDispositionSettings
 from opengever.disposition.interfaces import IFilesystemTransportSettings
 from opengever.disposition.interfaces import IFTPSTransportSettings
@@ -147,6 +148,7 @@ class GeverSettingsAdpaterV1(object):
         features['classic_ui_enabled'] = api.portal.get_registry_record('is_classic_ui_enabled', interface=IGeverUI)
         features['contacts'] = self._get_contact_type()
         features['disposition_disregard_retention_period'] = api.portal.get_registry_record('disregard_retention_period', interface=IDispositionSettings)  # noqa
+        features['disposition_sip_archive_delivery_enabled'] = is_sip_archive_delivery_enabled()
         features['disposition_transport_filesystem'] = api.portal.get_registry_record('enabled', interface=IFilesystemTransportSettings)  # noqa
         features['disposition_transport_ftps'] = api.portal.get_registry_record('enabled', interface=IFTPSTransportSettings)  # noqa
         features['doc_properties'] = api.portal.get_registry_record('create_doc_properties', interface=ITemplateFolderProperties)  # noqa

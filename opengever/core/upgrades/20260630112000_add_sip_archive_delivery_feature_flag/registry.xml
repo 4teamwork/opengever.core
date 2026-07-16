@@ -1,0 +1,4 @@
+<registry>
+  <record interface="opengever.disposition.interfaces.IDispositionSettings"
+          field="sip_archive_delivery" />
+</registry>

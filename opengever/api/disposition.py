@@ -1,17 +1,24 @@
 from opengever.api import _
 from opengever.api.deserializer import GeverDeserializeFromJson
 from opengever.api.not_reported_exceptions import BadRequest as NotReportedBadRequest
+from opengever.api.not_reported_exceptions import Forbidden as NotReportedForbidden
 from opengever.api.relationfield import relationfield_value_to_object
 from opengever.api.response import SerializeResponseToJson
 from opengever.api.serializer import GeverSerializeFolderToJson
 from opengever.base.behaviors.lifecycle import ILifeCycle
+from opengever.base.response import IResponseContainer
+from opengever.base.response import Response
 from opengever.base.utils import unrestrictedUuidToObject
+from opengever.disposition import is_sip_archive_delivery_enabled
+from opengever.disposition.archive_clients import get_archive_client
 from opengever.disposition.disposition import IDispositionSchema
 from opengever.disposition.interfaces import IAppraisal
 from opengever.disposition.interfaces import IDisposition
 from opengever.disposition.response import IDispositionResponse
 from opengever.disposition.validators import OfferedDossiersValidator
 from opengever.repository.interfaces import IRepositoryFolder
+from persistent.dict import PersistentDict
+from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.deserializer import json_body
 from plone.restapi.interfaces import IDeserializeFromJson
 from plone.restapi.interfaces import IFieldSerializer
@@ -25,9 +32,13 @@ from zope.component import adapter
 from zope.component import getMultiAdapter
 from zope.component import queryMultiAdapter
 from zope.globalrequest import getRequest
+from zope.interface import alsoProvides
 from zope.interface import implementer
 from zope.interface import Interface
 from zope.interface import Invalid
+
+
+SIP_DELIVERED_TO_ARCHIVE_RESPONSE_TYPE = 'sip_delivered_to_archive'
 
 
 @implementer(IDeserializeFromJson)
@@ -161,3 +172,32 @@ class SerializeDispositionResponseToJson(SerializeResponseToJson):
 
         result['dossiers'] = json_compatible(self.context.dossiers)
         return result
+
+
+class DeliverSIPToArchivePost(Service):
+
+    def reply(self):
+        if not is_sip_archive_delivery_enabled():
+            raise NotReportedForbidden()
+
+        if not self.context.has_sip_package():
+            raise BadRequest(u'No SIP package available for delivery.')
+
+        sip_package = self.context.get_sip_package()
+        filename = self.context.get_sip_filename()
+
+        alsoProvides(self.request, IDisableCSRFProtection)
+        client = get_archive_client()
+        response, submission_id = client.deliver(sip_package, filename)
+
+        self.create_response(submission_id)
+
+        return self.reply_no_content()
+
+    def create_response(self, submission_id):
+        response = Response(SIP_DELIVERED_TO_ARCHIVE_RESPONSE_TYPE)
+        response.additional_data = PersistentDict({
+            'submission_id': submission_id
+        })
+        IResponseContainer(self.context).add(response)
+        return response

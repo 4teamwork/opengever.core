@@ -73,6 +73,12 @@ class IDispositionSettings(Interface):
         'attached in the SIP package.',
         default=False)
 
+    sip_archive_delivery = schema.Bool(
+        title=u'Direct SIP delivery to archive system endpoint',
+        description=u'Enables a feature to directly transmit the generated '
+        u'SIP package to a configured archive system.',
+        default=False)
+
 
 class IFilesystemTransportSettings(Interface):
 

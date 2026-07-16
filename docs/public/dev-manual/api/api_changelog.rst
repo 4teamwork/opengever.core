@@ -12,7 +12,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
-
+- ``@deliver-sip-to-archive``: New endpoint to send sip packages directly to an archive
 
 2026.3.0 (2026-05-28)
 ----------------------

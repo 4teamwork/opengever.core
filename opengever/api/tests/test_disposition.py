@@ -1,8 +1,8 @@
 from datetime import datetime
-from ftw.builder.builder import Builder
-from ftw.builder.builder import create
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
+from opengever.api.disposition import SIP_DELIVERED_TO_ARCHIVE_RESPONSE_TYPE
+from opengever.base.response import IResponseContainer
 from opengever.disposition.delivery import DeliveryScheduler
 from opengever.disposition.interfaces import IAppraisal
 from opengever.disposition.interfaces import IDisposition
@@ -575,3 +575,44 @@ class TestTransferNumberPatch(SolrIntegrationTestCase):
             browser.open(u'{}/@transfer-number'.format(self.disposition.absolute_url()),
                          method='PATCH', headers=self.api_headers,
                          data=json.dumps(data))
+
+
+class TestDeliverSIPToArchive(SolrIntegrationTestCase):
+
+    @browsing
+    def test_raises_403_when_feature_is_disabled(self, browser):
+        self.login(self.records_manager, browser)
+
+        with browser.expect_http_error(code=403, reason='Forbidden'):
+            browser.open(
+                u'{}/@deliver-sip-to-archive'.format(
+                    self.disposition_with_sip.absolute_url()),
+                method='POST', headers=self.api_headers)
+
+    @browsing
+    def test_raises_400_when_no_sip_package(self, browser):
+        self.login(self.manager, browser)
+        self.activate_feature('disposition_sip_archive_delivery_enabled')
+
+        with browser.expect_http_error(code=400, reason='Bad Request'):
+            browser.open(
+                u'{}/@deliver-sip-to-archive'.format(
+                    self.disposition.absolute_url()),
+                method='POST', headers=self.api_headers)
+
+    @browsing
+    def test_delivers_sip_using_archive_client(self, browser):
+        self.login(self.records_manager, browser)
+        self.activate_feature('disposition_sip_archive_delivery_enabled')
+
+        with self.env(DISPOSITION_SIP_TO_ARCHIVE_PROVIDER='null_client'):
+            browser.open(
+                u'{}/@deliver-sip-to-archive'.format(
+                    self.disposition_with_sip.absolute_url()),
+                method='POST', headers=self.api_headers)
+
+        self.assertEqual(204, browser.status_code)
+
+        last_response = IResponseContainer(self.disposition_with_sip).list().pop()
+        self.assertEqual(SIP_DELIVERED_TO_ARCHIVE_RESPONSE_TYPE, last_response.response_type)
+        self.assertEqual({'submission_id': '0'}, last_response.additional_data)

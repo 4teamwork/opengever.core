@@ -1771,6 +1771,14 @@
       />
 
   <plone:service
+      method="POST"
+      name="@deliver-sip-to-archive"
+      for="opengever.disposition.disposition.IDispositionSchema"
+      factory=".disposition.DeliverSIPToArchivePost"
+      permission="opengever.disposition.DownloadSIPPackage"
+      />
+
+  <plone:service
       method="GET"
       name="@out-of-office"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
