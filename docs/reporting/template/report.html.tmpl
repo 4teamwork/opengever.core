@@ -46,7 +46,7 @@
    /home/mca/Downloads/mockup-swiss.html. Content = project report.
    ══════════════════════════════════════════════════════════════════ */
 :root {
-  --red:    #e30613;             /* the one accent */
+  --accent: #266afe;             /* Fabasoft-Blau -- Marken-Akzent (CI/CD-Farbwelt) */
   --ease:   cubic-bezier(0.19, 1, 0.22, 1);
   --sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
   --mono: ui-monospace, "SF Mono", Menlo, monospace;
@@ -56,38 +56,38 @@
 }
 
 :root[data-theme="light"] {
-  --paper:    #f7f5f0;
-  --ink:      #111111;
-  --ink-2:    #555550;
-  --ink-3:    #98948c;
-  --hairline: #d8d4cc;
-  --rule:     #111111;
-  --fill:     #eceae4;
-  --pos:      #111111;
-  --neg:      var(--red);
-  --tl-gruen:   #1f7a1f;
-  --tl-gelb:    #b3860a;
-  --tl-gelbrot: #c9560f;
-  --tl-rot:     var(--red);
-  --tl-grau:    #8a867e;
-  --seg-sep:    #b5ac9c;
+  --paper:    #f2f1ed;
+  --ink:      #333332;
+  --ink-2:    #666664;
+  --ink-3:    #999896;
+  --hairline: #cccbc8;
+  --rule:     #333332;
+  --fill:     #e5ddc3;
+  --pos:      #333332;
+  --neg:      #b3261e;
+  --tl-gruen:   #397365;
+  --tl-gelb:    #8a6a1f;
+  --tl-gelbrot: #a6531f;
+  --tl-rot:     #b3261e;
+  --tl-grau:    #807f7d;
+  --seg-sep:    #b2b2af;
 }
 :root[data-theme="dark"] {
-  --paper:    #161513;
-  --ink:      #ece9e2;
-  --ink-2:    #a5a19a;
-  --ink-3:    #6e6a63;
-  --hairline: #33312d;
-  --rule:     #ece9e2;
-  --fill:     #201f1c;
-  --pos:      #ece9e2;
-  --neg:      #ff4d57;
-  --tl-gruen:   #4caf50;
-  --tl-gelb:    #e0a800;
-  --tl-gelbrot: #ff8a3d;
-  --tl-rot:     #ff4d57;
-  --tl-grau:    #8a867e;
-  --seg-sep:    #6b6560;
+  --paper:    #1c1b19;
+  --ink:      #f2f1ed;
+  --ink-2:    #cccbc8;
+  --ink-3:    #999896;
+  --hairline: #3d3b38;
+  --rule:     #f2f1ed;
+  --fill:     #2a2824;
+  --pos:      #f2f1ed;
+  --neg:      #ff6f61;
+  --tl-gruen:   #559384;
+  --tl-gelb:    #fff266;
+  --tl-gelbrot: #ddb64d;
+  --tl-rot:     #ff6f61;
+  --tl-grau:    #999896;
+  --seg-sep:    #595957;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -142,7 +142,7 @@ body::after {
   letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-2);
 }
 .kicker .en { color: var(--ink-3); text-transform: none; letter-spacing: 0.06em; margin-left: 10px; font-style: italic; }
-.section-no { color: var(--red); font-weight: 700; margin-right: 10px; }
+.section-no { color: var(--accent); font-weight: 700; margin-right: 10px; }
 
 .caption { font-size: 0.72rem; color: var(--ink-2); }
 .footnote { font-size: 0.78rem; color: var(--ink-2); max-width: 62ch; }
@@ -159,7 +159,7 @@ body::after {
   margin-left: auto; font-family: var(--mono); font-size: 0.85rem; font-weight: 700;
   color: var(--ink-3); transition: transform .25s var(--ease), color .2s;
 }
-.section > summary.kicker:hover .toggle-ind { color: var(--red); }
+.section > summary.kicker:hover .toggle-ind { color: var(--accent); }
 .section[open] > summary.kicker .toggle-ind { transform: rotate(45deg); }
 .section:not([open]) { padding-bottom: var(--s5); }
 .section:not([open]) > summary.kicker { margin-bottom: 0; }
@@ -179,7 +179,7 @@ body::after {
 .summary-prose ul, .dash-list { list-style: none; }
 .summary-prose li, .dash-list li { position: relative; padding: 5px 0 5px 18px; border-bottom: 1px solid var(--hairline); }
 .summary-prose li:last-child, .dash-list li:last-child { border-bottom: 0; }
-.summary-prose li::before, .dash-list li::before { content: "\2013"; position: absolute; left: 0; color: var(--red); font-weight: 700; }
+.summary-prose li::before, .dash-list li::before { content: "\2013"; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
 .summary-prose strong { font-weight: 700; }
 .dash-list { font-size: 0.85rem; }
 .ampel-tl { display: flex; flex-direction: column; gap: 10px; align-items: flex-start; flex-shrink: 0; padding-top: 2px; }
@@ -213,7 +213,7 @@ body::after {
 .kpi .val.neg { color: var(--neg); }
 .kpi .sub { font-size: 0.72rem; color: var(--ink-2); margin-top: var(--s2); }
 .kpi .bar { height: 3px; background: var(--fill); margin-top: var(--s3); position: relative; }
-.kpi .bar i { position: absolute; inset: 0; right: auto; background: var(--red); width: 0; transition: width .9s var(--ease) .2s; }
+.kpi .bar i { position: absolute; inset: 0; right: auto; background: var(--accent); width: 0; transition: width .9s var(--ease) .2s; }
 .in .kpi .bar i { width: var(--w); }
 
 /* ── allocation — weight bar with progress fill + ledger table ── */
@@ -240,7 +240,7 @@ table.ledger tr:hover td { background: var(--fill); }
 table.ledger .name { font-weight: 500; }
 table.ledger .idx { font-family: var(--mono); font-size: 0.68rem; color: var(--ink-3); padding-right: 12px; }
 .check { color: var(--ink); font-weight: 700; }
-.flag  { color: var(--red); font-weight: 700; }
+.flag  { color: var(--accent); font-weight: 700; }
 .nowrap { white-space: nowrap; }
 
 /* full-width table caption — not the width-capped .footnote */
@@ -300,7 +300,7 @@ svg text { font-family: var(--mono); fill: var(--ink-3); font-size: 9.5px; lette
 .decisions li:last-child { border-bottom: 0; }
 .decisions a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--ink-3); text-underline-offset: 2px; transition: color .2s; }
 .decisions a:visited { color: var(--ink-2); }
-.decisions a:hover { color: var(--red); }
+.decisions a:hover { color: var(--accent); }
 
 /* ── Trajectory / projection ─────────────────────────────────────*/
 .proj-line { fill: none; stroke: var(--ink); stroke-width: 2; stroke-dasharray: 1400; stroke-dashoffset: 1400; }
@@ -310,7 +310,7 @@ svg text { font-family: var(--mono); fill: var(--ink-3); font-size: 9.5px; lette
 .ideal-label { font-style: italic; }
 .hist-pt { fill: var(--ink); stroke: var(--paper); stroke-width: 1.5; }
 .marker-line { stroke: var(--ink-2); stroke-width: 1; stroke-dasharray: 3 4; }
-.marker-line.stretch { stroke: var(--red); }
+.marker-line.stretch { stroke: var(--tl-gelbrot); }
 .marker-label { font-size: 9px; }
 .traj-legend { display: flex; gap: var(--s5); margin-top: var(--s3); font-family: var(--mono); font-size: 0.62rem; color: var(--ink-2); align-items: center; }
 .traj-legend .swatch { display: inline-block; width: 18px; height: 0; border-top: 2px solid var(--ink); margin-right: 6px; vertical-align: middle; }
@@ -699,7 +699,7 @@ svg text { font-family: var(--mono); fill: var(--ink-3); font-size: 9.5px; lette
            - a <line class="marker-line"> + <text class="marker-label">
              "ZIELTERMIN {{trajektorie.target_date_de}}" at x(trajektorie.target_date_de)
            - IF trajektorie.stretch_date_de: a <line class="marker-line stretch"> + <text
-             class="marker-label" style="fill:var(--red)">
+             class="marker-label" style="fill:var(--tl-gelbrot)">
              "STRECKUNGSENDE {{trajektorie.stretch_date_de}}" at x(trajektorie.stretch_date_de)
          All rendered date labels use the _de (dd.mm.yyyy) fields verbatim — never render a
          raw ISO date token. -->
@@ -731,7 +731,7 @@ svg text { font-family: var(--mono); fill: var(--ink-3); font-size: 9.5px; lette
 
       <!-- IF trajektorie.stretch_date_de -->
       <line class="marker-line stretch" data-tip="Streckungsende|{{trajektorie.stretch_date_de}}"></line>
-      <text class="marker-label" style="fill:var(--red)">STRECKUNGSENDE {{trajektorie.stretch_date_de}}</text>
+      <text class="marker-label" style="fill:var(--tl-gelbrot)">STRECKUNGSENDE {{trajektorie.stretch_date_de}}</text>
       <!-- /IF -->
     </svg>
     <div class="traj-legend">

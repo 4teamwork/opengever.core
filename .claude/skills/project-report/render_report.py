@@ -236,7 +236,7 @@ def trajectory_svg(data):
             '\n\n      <line class="marker-line stretch" x1="%.1f" y1="20" x2="%.1f" y2="200" '
             'data-tip="Streckungsende|%s"></line>\n'
             '      <text class="marker-label" x="%.1f" y="228" text-anchor="end" '
-            'style="fill:var(--red)">STRECKUNGSENDE %s</text>'
+            'style="fill:var(--tl-gelbrot)">STRECKUNGSENDE %s</text>'
             % (st_x, st_x, traj["stretch_date_de"], min(st_x, 998), traj["stretch_date_de"]))
 
     return ('''<svg width="100%" height="230" viewBox="0 0 1000 230" preserveAspectRatio="none">
