@@ -58,6 +58,10 @@ from the (subjective, weighted) progress metric.
 - **Report language: German, Swiss convention — echte Umlaute ä/ö/ü verwenden, aber KEIN
   ß — immer "ss".** Labels and narrative in German. (This skill file and CONTRACT.md are
   English engineering docs; the rendered report is German.)
+  **Never substitute ASCII digraphs ("ae"/"oe"/"ue") for umlauts** — this has slipped
+  through more than once. Write the real character (ä/ö/ü), not the transliteration,
+  in every German string you author: `status.md`, `summary_de`, area/risk comments,
+  and any German prose inside the template or this skill's own output.
 - **Dates: Swiss `dd.mm.yyyy` everywhere displayed.** Every date the report SHOWS is
   formatted `dd.mm.yyyy`. The harness computes `_de` variants for every date field
   (`meta.report_date_de`, `trajektorie.target_date_de`, `trajektorie.stretch_date_de`,
