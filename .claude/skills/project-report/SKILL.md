@@ -66,10 +66,16 @@ from the (subjective, weighted) progress metric.
   nothing ISO is rendered.
 - **Design: Swiss International Typographic Style**, reusing the token/type/ledger/chart
   system from the reference mockup at `/home/mca/Downloads/mockup-swiss.html`
-  (single red accent `#e30613`, light/dark "Invert" theme, numbered sections, data-ink
+  (single brand accent, light/dark "Invert" theme, numbered sections, data-ink
   SVG charts, mono kicker). Bilingual kicker pattern **flipped**: German primary, mono
   English kicker as secondary. The template must be **self-contained** — all CSS/JS
   inline, no external requests.
+- **Brand palette (Fabasoft CI/CD-Farbwelt)**: accent `--accent: #266afe`; status
+  colours (`--tl-gruen`/`--tl-gelb`/`--tl-gelbrot`/`--tl-rot`/`--tl-grau`) derived from
+  the brand palette (dark green, gold, gold/red blend, grey) except `--tl-rot`/`--neg`,
+  which stay an unbranded functional red (`#b3261e` light / `#ff6f61` dark) — the
+  brand palette has no red, and "rot" needs to read as critical regardless of brand.
+  See `docs/reporting/template/report.html.tmpl` `:root`/theme blocks for exact values.
 - **Writing style: write for a manager, not an engineer.** Every prose field that ends up
   in the report — `summary_de`, per-area `comment`, Prognose-Ampel `reason` — is read by
   someone who wants the pace and state of the project in seconds, not a technical
