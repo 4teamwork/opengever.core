@@ -2,9 +2,9 @@
 
 This file is the **single source of truth** for the shape of the three JSON/Markdown
 payloads the harness moves between layers. The `/report` skill
-(`.claude/skills/project-report/SKILL.md`), the downstream **template** task
-(`docs/reporting/template/`), and the **generation** task all conform to what is
-written here. If a field changes, change it here first.
+(`.claude/skills/project-report/SKILL.md`), the downstream **template**
+(`.claude/skills/project-report/report.html.tmpl`), and the **generation** task all
+conform to what is written here. If a field changes, change it here first.
 
 ## The invariant — separation by writer
 
