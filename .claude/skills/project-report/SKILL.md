@@ -51,6 +51,7 @@ from the (subjective, weighted) progress metric.
 | HTML template | `.claude/skills/project-report/report.html.tmpl` |
 | Renderer (Step 6) | `.claude/skills/project-report/render_report.py` (report-data.json + template → report.html) |
 | Data contract / schemas | `.claude/skills/project-report/CONTRACT.md` |
+| Bootstrap skeleton | `.claude/skills/project-report/status.md.skeleton` (copy → `docs/reporting/status.md` on a new project, see Step 0) |
 | Auto sources | `_bmad-output/**` (specs + `deferred-work.md`), `git`, `gh` |
 
 ## Output language & design
@@ -99,13 +100,41 @@ Run these steps in order. Degrade gracefully at every external boundary (gh, xls
 never abort the whole run because one source is missing — record the gap in a `note`/
 `degraded` field and continue.
 
+### Step 0 — Bootstrap a new project (only if `docs/reporting/status.md` is absent)
+
+This step only runs once per project, the first time the skill is invoked and no
+`docs/reporting/status.md` exists yet. If it already exists, skip straight to Step 1.
+
+1. Create `docs/reporting/` and `docs/reporting/archive/` if missing.
+2. Copy `.claude/skills/project-report/status.md.skeleton` to `docs/reporting/status.md`.
+3. Interview the user for the front-matter fields the skeleton can't guess:
+   `project_name`, `branch` (default to the current git branch), `target_date`,
+   `stretch_date` (optional), `budget_total_at`, `hours_per_at` (default 8), `ci_source`
+   (default `auto` if `gh` is available and authenticated against the repo, else
+   `manual`). Fill these into the copied `status.md` directly — do not ask the user to
+   edit YAML by hand.
+4. Ask for at least the first Lieferbereich (delivery area) — name, weight (must sum to
+   100 across all areas the user gives you), and a short comment — and replace the
+   skeleton's placeholder row(s). More areas and stories can be added later by the
+   operator; one seeded row is enough to pass the Step 1 non-empty check below.
+5. Leave the Risiken/Scope-Cuts/Offene Entscheidungen/Verlauf/Management Summary
+   sections as placeholder rows if the user has nothing yet — Step 1 only requires
+   Lieferbereiche to be non-empty, everything else degrades gracefully.
+6. If the user has an hours export ready, ask where it lives and set `hours_file`
+   (glob) or place it at `docs/reporting/hours.xlsx`; otherwise leave `hours_file`
+   unset — `hours.present = false` and the report shows budget only, no Ist, until one
+   is added.
+7. Tell the user `status.md` is seeded and continue straight into Step 1 of the same
+   run — no need to stop and re-invoke the skill.
+
 ### Step 1 — Load the operator layer
 
 1. Read `docs/reporting/status.md`. Parse the YAML front matter and every body table
    (Lieferbereiche, Stories, Risiken, Scope-Cuts, Offene Entscheidungen, Management
    Summary). Schema below.
-2. If `status.md` is missing or still the empty skeleton (no seeded areas), tell the user
-   to seed it first and stop.
+2. If `status.md` is still missing at this point (Step 0 was skipped or declined), or
+   the Lieferbereiche table has no real rows, tell the user to seed it first (Step 0)
+   and stop.
 3. Treat everything from status.md as operator-owned and immutable in this run.
 
 ### Step 2 — Gather machine signals (→ signals.json)

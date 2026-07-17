@@ -1,0 +1,154 @@
+---
+# ═══════════════════════════════════════════════════════════════════════════
+# OPERATOR-EBENE — Diese Datei bearbeitet NUR der Mensch (Projektleitung).
+# Die Harness (Skill /report) LIEST diese Datei und schreibt hier NIE hinein.
+# Maschinelle Signale stehen getrennt in signals.json (die bearbeitet der Mensch NIE).
+# Jedes Feld hat genau EINEN Schreiber. Trennung nach Schreiber ist das ganze Prinzip.
+# Sprache: Deutsch, Schweizer Konvention — echte Umlaute ä/ö/ü verwenden, aber KEIN ß —
+# immer "ss".
+# Schema-Referenz: .claude/skills/project-report/CONTRACT.md §1
+#
+# SETUP: Diese Datei ist ein Skelett. Kopiere sie nach docs/reporting/status.md und
+# fülle alle <PLATZHALTER> aus. Die Lieferbereiche-Tabelle braucht mindestens eine
+# Zeile mit echten Werten, sonst bricht der Skill mit "seed status.md first" ab.
+# ═══════════════════════════════════════════════════════════════════════════
+
+project_name: "<Projektname>"      # Titel im Masthead
+branch: "<branch-name>"            # Der Branch, dessen Fortschritt beobachtet wird
+
+# — Termine (YYYY-MM-DD) —
+target_date: "<YYYY-MM-DD>"        # Zieltermin (fix). Scope-Cuts sind das Hauptsteuerungsmittel.
+stretch_date: ""                   # Streckungsende (1-2 Wochen Reserve). Leer = keine Streckung.
+
+# — Budget —
+budget_total_at: 0                 # Gesamtbudget in Arbeitstagen (AT). Vorgabe Projektleitung.
+hours_per_at: 8                    # Stunden pro Arbeitstag (Default 8).
+
+# — Management-Ampel (Operator-Entscheid) —
+# Bewusste Management-Einschätzung: gruen | gelb | rot | gelb-rot | "" (leer = nur Harness-Signal).
+# Der Report zeigt DANEBEN immer die 3-Signal-Prognose der Harness. Beide bleiben getrennt.
+ampel: ""
+
+# — CI-Checks (die eine objektive Qualitätskennzahl) —
+# ci_source: auto   -> Harness liest die GitHub-Check-Runs auf dem origin-Head-Commit von
+#                       {branch} ab (checks_passed/checks_total). Braucht `gh` mit Zugriff
+#                       auf das Repo.
+# ci_source: manual -> Harness nutzt die zwei Felder unten (Fallback bei gh nicht verfügbar).
+# Ohne verfügbare Checks bleibt die CI-Kennzahl "nicht verfügbar" (kein erfundener Wert).
+ci_source: "auto"
+# ci_tests_total: 0                # nur bei ci_source: manual
+# ci_tests_passed: 0               # nur bei ci_source: manual
+
+# — hours.xlsx Spalten-Mapping (optional) —
+# Nur setzen, wenn die Kopfzeilen des Zeit-Exports von Mitarbeiter/Woche/Stunden abweichen.
+# Logische Spalten: person, week (oder date), hours (+ optional activity).
+# hours_columns: { person: "Mitarbeiter", week: "Woche", hours: "Stunden", activity: "Tätigkeit" }
+
+# — hours-Datei (Glob, neueste Datei gewinnt) —
+# Falls der Zeit-Export datiert ist (z.B. projekt-stunden-260716.xlsx), hier den Glob
+# setzen; die Harness sucht in docs/reporting/ danach und nimmt die NEUESTE Fundstelle.
+# Nicht gesetzt = Fallback auf docs/reporting/hours.xlsx. Solange keine Stunden-Datei
+# existiert, bleibt hours.present = false und das Budget zeigt nur die Vorgabe, kein Ist.
+# hours_file: "projekt-stunden-*.xlsx"
+---
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     Operator-eigene Inhalte. Kurzer Freitext-Kommentar zum aktuellen Stand
+     (z.B. "Stand nach Durchsicht Branch-Code, HEAD <sha>, <Datum>: ...").
+     ═══════════════════════════════════════════════════════════════════════ -->
+
+## Lieferbereiche
+
+<!-- Gewichte sind operator-eigen (Summe = 100). Die Override-Spalten sind standardmässig LEER:
+     dann gewinnt die Harness-Schätzung (progress_estimate / status_signal) aus signals.json.
+     Nur ausfüllen, um die Harness bewusst zu überstimmen. Divergenz zeigt der Report doppelt.
+     Spalten: id | Name | Gewicht % | Fortschritt-Override % | Status-Override | Kommentar -->
+
+| Bereich | Name | Gewicht % | Fortschritt-Override % | Status-Override | Kommentar |
+|---|---|---:|---:|---|---|
+| D0 | <Bereichsname> | 100 |  |  | <Kurzkommentar> |
+
+## Stories
+
+<!-- Operative Wochensicht. Fortschritt bewusst grob in 0/25/50/75/100, damit die Pflege klein bleibt.
+     "spec" verlinkt optional auf ein BMAD-Spec-File in _bmad-output/ (die Harness löst den Status auf).
+     Spalten: id | Thema | Bereich | Fortschritt % | Status | Nächster Nachweis | spec -->
+
+| ID | Thema | Bereich | Fortschritt % | Status | Nächster Nachweis | Spec |
+|---|---|---|---:|---|---|---|
+| S01 | <Story-Titel> | D0 | 0 | grau | <Was als Nächstes belegt werden muss> | |
+
+## Prognose-Ampel-Override
+
+<!-- Die Harness generiert Verdict + Begründung für jede Zeile der Prognose-Ampel (fünf
+     Bereiche, siehe unten) und schreibt sie nach signals.json. Die Override-Spalten hier
+     sind standardmässig LEER: dann gewinnt die Harness. Nur ausfüllen, um bewusst zu
+     überstimmen; der Report zeigt dann beides (Zeile + "Harness: …"-Fussnote).
+     Bereich ist ein fester Schlüssel (nicht umbenennen): gesamtbeurteilung |
+     projektfortschritt | kosten | personalaufwand | projektrisiken.
+     Spalten: Bereich | Verdict-Override | Begründung-Override -->
+
+| Bereich | Verdict-Override | Begründung-Override |
+|---|---|---|
+| gesamtbeurteilung |  |  |
+| projektfortschritt |  |  |
+| kosten |  |  |
+| personalaufwand |  |  |
+| projektrisiken |  |  |
+
+## Risiken
+
+<!-- Jede Woche 10 Minuten: neue Unsicherheiten sichtbar machen, bevor sie Termin/Budget treffen.
+     Spalten: Risiko | Kategorie | Auswirkung | Wahrscheinlichkeit | Frühwarnsignal | Nächste Aktion | Owner | Status -->
+
+| Risiko / Unsicherheit | Kategorie | Auswirkung | Wahrscheinlichkeit | Frühwarnsignal | Nächste Aktion | Owner | Status |
+|---|---|---|---|---|---|---|---|
+| <Risikobeschreibung> | <Kategorie> | <Auswirkung> | <Tief/Mittel/Hoch> | <Frühwarnsignal> | <Nächste Aktion> | <Owner> | Offen |
+
+## Scope-Cuts
+
+<!-- Operator-eigene Arbeitsnotizen zu möglichen Streckungs-/Kürzungskandidaten, falls Termin/
+     Budget unter Druck geraten. WIRD NICHT in report-data.json übernommen und erscheint nicht
+     im Report (siehe CONTRACT.md §1) — rein internes Steuerungsinstrument der Projektleitung.
+     "priorität" darf auch "—" sein für eine "Nicht schneiden"-Zeile.
+     Spalten: Priorität | Massnahme | Begründung -->
+
+| Priorität | Massnahme | Begründung |
+|---|---|---|
+| 1 | <Kürzungskandidat> | <Warum das zuerst fällt> |
+| — | <Kernfunktion> | Nicht schneiden — <Warum unverzichtbar> |
+
+## Offene Entscheidungen
+
+<!-- Freie Liste offener Entscheide, die Fortschritt oder Scope blockieren. -->
+
+- <Offene Entscheidung 1>
+
+## Verlauf
+
+<!-- Operator-bekannte Fortschritts-Meilensteine (Projektstart, frühere Dashboard-Stände etc.).
+     Die Harness MERGT diese Checkpoints mit archivierten report-data.json-Trajektorie-Ständen
+     und dem aktuellen Lauf, dedupliziert nach Datum, aufsteigend sortiert. Der Punkt des
+     aktuellen Laufs wird von der Harness ergänzt, nicht hier eingetragen.
+     Spalten: Datum (YYYY-MM-DD) | Fortschritt % -->
+
+| Datum (YYYY-MM-DD) | Fortschritt % |
+|---|---:|
+| <YYYY-MM-DD> | 0 |
+
+## Management Summary
+
+<!-- Operator-Prosa (summary_de) für einen Manager, der den Stand in 15 Sekunden erfassen
+     muss: Fortschritt, Termin, Budget, Risiko, Ampel-Empfehlung. Kurze Bullet-Punkte statt
+     Fliesstext, fett nur das Stichwort/die Zahl, kein Fülltext. Normale Markdown-Liste
+     ("- " + **fett**) — der Renderer (render_report.py) wandelt das beim Bauen von
+     report.html in HTML um; hier bleibt es reines Markdown (siehe CONTRACT.md §1).
+     Dies ist der EINZIGE Ort für die narrative Einschätzung. Die Harness schreibt hier nichts. -->
+
+- **Fortschritt:** <Kurzfassung>
+- **Kernnutzen geliefert:** <Kurzfassung>
+- **Qualität:** <Kurzfassung>
+- **Budget:** <Kurzfassung>
+- **Offen:** <Kurzfassung>
+- **Ampel-Empfehlung:** <Kurzfassung>
+</content>
