@@ -1011,7 +1011,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
         browser.open(self.leaf_repofolder, view=view, headers=self.api_headers)
         items = browser.json['items']
 
-        self.assertEqual(10, len(items))
+        self.assertEqual(11, len(items))
         self.assertTrue([dossier["responsible"] == self.dossier_responsible for dossier in items])
 
     @browsing

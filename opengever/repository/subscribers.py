@@ -1,8 +1,8 @@
-from opengever.base.security import elevated_privileges
-from opengever.document.behaviors import IBaseDocument
+from opengever.bgtasks.task import queue_task
+from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.repository.interfaces import IDuringRepositoryDeletion
-from opengever.repository.interfaces import IRepositoryFolder
-from plone import api
+from opengever.repository.tasks import reindex_children_with_new_prefix
+from opengever.repository.tasks import TASK_TYPE
 from plone.app.workflow.interfaces import ILocalrolesModifiedEvent
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from zExceptions import Forbidden
@@ -23,34 +23,22 @@ def is_reference_number_prefix_changed(descriptions):
 
 
 def update_reference_prefixes(obj, event):
-    """A eventhandler which reindex all contained objects, if the
-    reference prefix has been changed.
+    """A eventhandler which queues a background task to reindex all
+    contained objects, if the reference prefix has been changed.
     """
     if ILocalrolesModifiedEvent.providedBy(event) or \
        IContainerModifiedEvent.providedBy(event):
         return
 
     if is_reference_number_prefix_changed(event.descriptions):
-        catalog = api.portal.get_tool('portal_catalog')
-        children = catalog.unrestrictedSearchResults(
-            path='/'.join(obj.getPhysicalPath()))
-        with elevated_privileges():
-            for child in children:
-                obj = child.getObject()
-                idxs = ['reference', 'sortable_reference']
-                if IBaseDocument.providedBy(obj):
-                    idxs.append('metadata')
-                else:
-                    idxs.append('SearchableText')
+        admin_unit = get_current_admin_unit()
+        if admin_unit is None:
+            # OGDS not ready yet (e.g. setup/test contexts) - run inline.
+            reindex_children_with_new_prefix(obj)
+            return
 
-                if IRepositoryFolder.providedBy(obj):
-                    idxs += ['Title',
-                             'sortable_title',
-                             'title_de',
-                             'title_fr',
-                             'title_en']
-
-                obj.reindexObject(idxs=idxs)
+        queue_task(TASK_TYPE, admin_unit.unit_id,
+                   arguments={u'uid': obj.UID()})
 
 
 def check_delete_preconditions(repository, event):
