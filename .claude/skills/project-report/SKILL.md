@@ -26,8 +26,8 @@ and the model.
 
 When an operator override and a harness estimate disagree, the report **shows both** —
 the harness never writes into an operator field and vice versa. The authoritative field
-map and JSON schemas live in **`docs/reporting/CONTRACT.md`**; read it alongside this
-skill.
+map and JSON schemas live in **`.claude/skills/project-report/CONTRACT.md`**; read it
+alongside this skill.
 
 ## Critical project constraint
 
@@ -48,9 +48,9 @@ from the (subjective, weighted) progress metric.
 | Merged render dataset | `docs/reporting/report-data.json` |
 | Rendered report | `docs/reporting/report.html` |
 | Archive snapshots | `docs/reporting/archive/report-YYYY-MM-DD.html`, `report-data-YYYY-MM-DD.json` |
-| HTML template | `docs/reporting/template/report.html.tmpl` (built by the template task) |
+| HTML template | `.claude/skills/project-report/report.html.tmpl` |
 | Renderer (Step 6) | `.claude/skills/project-report/render_report.py` (report-data.json + template → report.html) |
-| Data contract / schemas | `docs/reporting/CONTRACT.md` |
+| Data contract / schemas | `.claude/skills/project-report/CONTRACT.md` |
 | Auto sources | `_bmad-output/**` (specs + `deferred-work.md`), `git`, `gh` |
 
 ## Output language & design
@@ -79,7 +79,8 @@ from the (subjective, weighted) progress metric.
   the brand palette (dark green, gold, gold/red blend, grey) except `--tl-rot`/`--neg`,
   which stay an unbranded functional red (`#b3261e` light / `#ff6f61` dark) — the
   brand palette has no red, and "rot" needs to read as critical regardless of brand.
-  See `docs/reporting/template/report.html.tmpl` `:root`/theme blocks for exact values.
+  See `.claude/skills/project-report/report.html.tmpl` `:root`/theme blocks for exact
+  values.
 - **Writing style: write for a manager, not an engineer.** Every prose field that ends up
   in the report — `summary_de`, per-area `comment`, Prognose-Ampel `reason` — is read by
   someone who wants the pace and state of the project in seconds, not a technical
@@ -215,7 +216,8 @@ tokens and risks miscomputed SVG geometry / dropped Umlaute):
 python3 .claude/skills/project-report/render_report.py    # optional arg: reporting dir (default docs/reporting)
 ```
 
-It reads `docs/reporting/report-data.json` + `template/report.html.tmpl`, writes a
+It reads `docs/reporting/report-data.json` + `report.html.tmpl` (next to the script),
+writes a
 self-contained `docs/reporting/report.html`, and **raises** if any `{{token}}` or
 `<!-- REPEAT/IF/COMPUTE -->` marker is left unrendered (so a template change can't
 silently produce a broken report). The renderer is stdlib-only Python 3, no deps.
@@ -226,8 +228,8 @@ renamed loop arrays, changed SVG viewBoxes — update `render_report.py` to matc
 (`LOOP_SINGULAR`, the `replace_between` anchors, the geometry helpers). The section
 list & placeholders below document the contract the renderer implements.
 
-If the template does not exist yet, tell the user the template task must run first;
-still write `signals.json` and `report-data.json`.
+The template ships with the skill (`.claude/skills/project-report/report.html.tmpl`) —
+no separate per-project template step is needed.
 
 ### Step 7 — Write outputs + archive
 
@@ -258,7 +260,8 @@ operator), **Management Summary** (`summary_de` prose). Full column list in
 
 ## signals.json & report-data.json schemas
 
-Defined in **`docs/reporting/CONTRACT.md` §2 and §3**. Do not diverge from them.
+Defined in **`.claude/skills/project-report/CONTRACT.md` §2 and §3**. Do not diverge
+from them.
 
 ## Merge / override rules
 

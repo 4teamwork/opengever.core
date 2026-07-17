@@ -7,7 +7,7 @@ self-contained ``report.html``. This is the MECHANICAL half of the pipeline
 (SKILL.md Step 6) — the judgment-heavy steps (operator layer, signal gathering,
 per-area assessment, merge) stay in the LLM/skill and produce report-data.json.
 
-Template mini-language (see docs/reporting/template/report.html.tmpl header):
+Template mini-language (see report.html.tmpl header, alongside this script):
   {{path.to.field}}                     scalar substitution (dotted path)
   <!-- REPEAT arr --> … <!-- /REPEAT arr -->   repeat once per array item
   <!-- IF cond --> … <!-- /IF -->       keep block if cond is truthy
@@ -30,8 +30,9 @@ from datetime import date
 
 # ── paths ───────────────────────────────────────────────────────────────────
 REPORTING_DIR = sys.argv[1] if len(sys.argv) > 1 else "docs/reporting"
+SKILL_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_PATH = os.path.join(REPORTING_DIR, "report-data.json")
-TMPL_PATH = os.path.join(REPORTING_DIR, "template", "report.html.tmpl")
+TMPL_PATH = os.path.join(SKILL_DIR, "report.html.tmpl")
 OUT_PATH = os.path.join(REPORTING_DIR, "report.html")
 
 TOKEN = re.compile(r"\{\{([a-zA-Z0-9_.]+)\}\}")
