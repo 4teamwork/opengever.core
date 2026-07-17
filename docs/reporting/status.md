@@ -179,7 +179,7 @@ hours_file: "hintergrund-tasks-stunden-*.xlsx"
 - **Fortschritt:** 63% gewichtet — weiterhin deutlich vor Plan (43% der Zeit verstrichen).
 - **Kernnutzen geliefert:** Alle drei Operationen umgesetzt; zusätzlich Objekt-Sperre während Warteschlange für Verschieben (MOVE_LOCK) — schliesst das grösste Sonderfall-Risiko in D4.
 - **Qualität:** Alle 11 CI-Checks grün (vorher 3 rot) — Qualitätsrisiko behoben.
-- **Budget:** 38.1% verbraucht (18.7 von 49 AT); erarbeiteter Wert übersteigt Ist-Aufwand deutlich — kosteneffizient.
+- **Budget:** 50% verbraucht (25 von 49 AT); erarbeiteter Wert übersteigt Ist-Aufwand deutlich — kosteneffizient.
 - **Offen:** Benutzerbenachrichtigung, Objekt-Sperre für weitere Task-Typen, Admin-Übersicht (D2), Abnahme/Hardening (D5).
 - **Ampel-Empfehlung:** Grün — Fortschritt, Qualität und Kosteneffizienz verbessert, Restarbeit bekannt und begrenzt.
 </content>
