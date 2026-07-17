@@ -358,7 +358,7 @@ svg text { font-family: var(--mono); fill: var(--ink-3); font-size: 9.5px; lette
     <summary class="kicker"><span class="section-no">01</span>Management Summary <span class="en">management summary</span><span class="toggle-ind">+</span></summary>
     <div class="section-body">
     <div class="summary-grid">
-      <div class="summary-prose"><ul><li><strong>Fortschritt:</strong> 63% gewichtet — weiterhin deutlich vor Plan (43% der Zeit verstrichen).</li><li><strong>Kernnutzen geliefert:</strong> Alle drei Operationen umgesetzt; zusätzlich Objekt-Sperre während Warteschlange für Verschieben (MOVE_LOCK) — schliesst das grösste Sonderfall-Risiko in D4.</li><li><strong>Qualität:</strong> Alle 11 CI-Checks grün (vorher 3 rot) — Qualitätsrisiko behoben.</li><li><strong>Budget:</strong> 50% verbraucht (25 von 49 AT); erarbeiteter Wert übersteigt Ist-Aufwand deutlich — kosteneffizient.</li><li><strong>Offen:</strong> Benutzerbenachrichtigung, Objekt-Sperre für weitere Task-Typen, Admin-Übersicht (D2), Abnahme/Hardening (D5).</li><li><strong>Ampel-Empfehlung:</strong> Grün — Fortschritt, Qualität und Kosteneffizienz verbessert, Restarbeit bekannt und begrenzt.</li></ul></div>
+      <div class="summary-prose"><ul><li><strong>Fortschritt:</strong> 63% gewichtet — weiterhin deutlich vor Plan (43% der Zeit verstrichen).</li><li><strong>Kernnutzen geliefert:</strong> Alle drei Operationen umgesetzt; zusätzlich Objekt-Sperre während Warteschlange für Verschieben (MOVE_LOCK) — schliesst das grösste Sonderfall-Risiko in D4.</li><li><strong>Qualität:</strong> Alle 11 CI-Checks grün (vorher 3 rot) — Qualitätsrisiko behoben.</li><li><strong>Budget:</strong> 38.1% verbraucht (18.7 von 49 AT); erarbeiteter Wert übersteigt Ist-Aufwand deutlich — kosteneffizient.</li><li><strong>Offen:</strong> Benutzerbenachrichtigung, Objekt-Sperre für weitere Task-Typen, Admin-Übersicht (D2), Abnahme/Hardening (D5).</li><li><strong>Ampel-Empfehlung:</strong> Grün — Fortschritt, Qualität und Kosteneffizienz verbessert, Restarbeit bekannt und begrenzt.</li></ul></div>
       <div class="ampel-tl state-gruen" data-tip="Ampel|gruen">
         <div class="lamp-item lamp-item-gruen"><span class="lamp"></span><span class="lamp-label">gruen</span></div>
         <div class="lamp-item lamp-item-gelb"><span class="lamp"></span><span class="lamp-label">gelb</span></div>
@@ -418,28 +418,28 @@ svg text { font-family: var(--mono); fill: var(--ink-3); font-size: 9.5px; lette
           <td>Weiterhin klar vor Plan; zusaetzlich zur Operation-Lieferung ist nun auch das groesste Sonderfall-Risiko (paralleles Bearbeiten waehrend Verschieben) geschlossen und alle CI-Checks sind gruen.
           </td>
         </tr>
-
+        
         <tr>
           <td class="name">Projektfortschritt</td>
           <td><span class="verdict verdict-gruen">gruen</span></td>
           <td>63% Fortschritt bei 45% verstrichener Zeit; D4 (hoechstes Risiko) durch Objekt-Sperre gehaertet.
           </td>
         </tr>
-
+        
         <tr>
           <td class="name">Kosten</td>
           <td><span class="verdict verdict-gruen">gruen</span></td>
           <td>50.39% Budget verbraucht (24.69 von 49 AT) bei 63% Fortschritt; erarbeiteter Wert uebersteigt Ist-Aufwand deutlich.
           </td>
         </tr>
-
+        
         <tr>
           <td class="name">Personalaufwand</td>
           <td><span class="verdict verdict-gruen">gruen</span></td>
           <td>Budgetverbrauch 50.39% liegt deutlich unter Fortschritt 63% -- mehr Wert geliefert als Budget verbraucht.
           </td>
         </tr>
-
+        
         <tr>
           <td class="name">Projektrisiken</td>
           <td><span class="verdict verdict-gruen">gruen</span></td>
@@ -473,7 +473,7 @@ svg text { font-family: var(--mono); fill: var(--ink-3); font-size: 9.5px; lette
           <td class="num">8.5</td>
           <td>6 Specs abgeschlossen; Scope geklärt; Sync/Async über Kill-Switch gelöst</td>
         </tr>
-
+        
         <tr>
           <td class="name">D1</td>
           <td>Framework + Operation 1 "Berechtigungen setzen"</td>
@@ -484,7 +484,7 @@ svg text { font-family: var(--mono); fill: var(--ink-3); font-size: 9.5px; lette
           <td class="num">25.5</td>
           <td>Framework + Operation 1 umgesetzt und getestet. Objekt-Sperre für Verschieben gelöst (MOVE_LOCK), für andere Task-Typen offen. Benachrichtigung weiterhin offen</td>
         </tr>
-
+        
         <tr>
           <td class="name">D2</td>
           <td>UI-Transparenz & Admin-Übersicht</td>
@@ -495,7 +495,7 @@ svg text { font-family: var(--mono); fill: var(--ink-3); font-size: 9.5px; lette
           <td class="num">0.75</td>
           <td>Nicht gestartet; kein Code</td>
         </tr>
-
+        
         <tr>
           <td class="name">D3</td>
           <td>Operation "Metadaten Ordnungssystem anpassen"</td>
@@ -506,7 +506,7 @@ svg text { font-family: var(--mono); fill: var(--ink-3); font-size: 9.5px; lette
           <td class="num">10.5</td>
           <td>Beide Operationen implementiert & getestet; Abnahmetests offen</td>
         </tr>
-
+        
         <tr>
           <td class="name">D4</td>
           <td>Operation "Dossiers innerhalb Mandant verschieben"</td>
@@ -517,7 +517,7 @@ svg text { font-family: var(--mono); fill: var(--ink-3); font-size: 9.5px; lette
           <td class="num">16</td>
           <td>Geliefert; Objekt-Sperre während Warteschlange schliesst grössten Sonderfall (MOVE_LOCK); übrige Sonderfälle (gesperrte/ausgecheckte Objekte, fehlende Rechte) weiter auszubauen</td>
         </tr>
-
+        
         <tr>
           <td class="name">D5</td>
           <td>Hardening, Performance & Abnahme</td>
@@ -554,7 +554,7 @@ svg text { font-family: var(--mono); fill: var(--ink-3); font-size: 9.5px; lette
           <td><span class="verdict verdict-gruen">gruen</span></td>
           <td>Abgeschlossen</td>
         </tr>
-
+        
         <tr>
           <td class="name">S02</td>
           <td>Sync/Async-Verhalten definieren</td>
@@ -563,7 +563,7 @@ svg text { font-family: var(--mono); fill: var(--ink-3); font-size: 9.5px; lette
           <td><span class="verdict verdict-gruen">gruen</span></td>
           <td>Entschieden: globaler Kill-Switch + synchroner Fallback; Schwellwerte pro Operation bei Bedarf nachziehen</td>
         </tr>
-
+        
         <tr>
           <td class="name">S03</td>
           <td>Scope-Schärfung der Operationen</td>
@@ -572,7 +572,7 @@ svg text { font-family: var(--mono); fill: var(--ink-3); font-size: 9.5px; lette
           <td><span class="verdict verdict-gruen">gruen</span></td>
           <td>Alle drei Operationen als Spec + Code umgesetzt</td>
         </tr>
-
+        
         <tr>
           <td class="name">S04</td>
           <td>Spec- & Akzeptanz-Template + priorisiertes Backlog</td>
@@ -581,7 +581,7 @@ svg text { font-family: var(--mono); fill: var(--ink-3); font-size: 9.5px; lette
           <td><span class="verdict verdict-gruen">gruen</span></td>
           <td>Sechs Specs nach Template erstellt</td>
         </tr>
-
+        
         <tr>
           <td class="name">S05</td>
           <td>Persistente Task-Warteschlange & Datenmodell</td>
@@ -590,7 +590,7 @@ svg text { font-family: var(--mono); fill: var(--ink-3); font-size: 9.5px; lette
           <td><span class="verdict verdict-gruen">gruen</span></td>
           <td>Modell + Upgrade-Step für Tabelle vorhanden</td>
         </tr>
-
+        
         <tr>
           <td class="name">S06</td>
           <td>Task-Lebenszyklus & Statusmaschine</td>
@@ -599,7 +599,7 @@ svg text { font-family: var(--mono); fill: var(--ink-3); font-size: 9.5px; lette
           <td><span class="verdict verdict-gruen">gruen</span></td>
           <td>pending/running/succeeded/failed + Reset unterbrochener Tasks getestet</td>
         </tr>
-
+        
         <tr>
           <td class="name">S07</td>
           <td>Sequenzieller Worker</td>
@@ -608,7 +608,7 @@ svg text { font-family: var(--mono); fill: var(--ink-3); font-size: 9.5px; lette
           <td><span class="verdict verdict-gruen">gruen</span></td>
           <td>run_forever/claim_next_task + Worker-Tests vorhanden</td>
         </tr>
-
+        
         <tr>
           <td class="name">S08</td>
           <td>Single-Flight / Run-Lock</td>
@@ -617,7 +617,7 @@ svg text { font-family: var(--mono); fill: var(--ink-3); font-size: 9.5px; lette
           <td><span class="verdict verdict-gelb">gelb</span></td>
           <td>Ein Worker pro Admin-Unit angenommen; expliziter Lock gegen Mehrfach-Worker offen</td>
         </tr>
-
+        
         <tr>
           <td class="name">S09</td>
           <td>Konfliktrobuste, wiederaufnehmbare Verarbeitung</td>
@@ -626,7 +626,7 @@ svg text { font-family: var(--mono); fill: var(--ink-3); font-size: 9.5px; lette
           <td><span class="verdict verdict-gruen">gruen</span></td>
           <td>Checkpointing/Retries/Reset vorhanden; unter Last an echter Operation nachweisen</td>
         </tr>
-
+        
         <tr>
           <td class="name">S10</td>
           <td>Objekt-Sperre während aktivem Task</td>
@@ -635,7 +635,7 @@ svg text { font-family: var(--mono); fill: var(--ink-3); font-size: 9.5px; lette
           <td><span class="verdict verdict-gelb">gelb</span></td>
           <td>MOVE_LOCK für Verschieben-Operation umgesetzt & getestet (Lock vor Queue, Unlock im finally); für Reindex-/Referenz-Präfix-Tasks weiterhin offen. Bekannte Lücke: stealable Lock schliesst Race bei doppelten Verschiebe-Anfragen nicht vollständig</td>
         </tr>
-
+        
         <tr>
           <td class="name">S11</td>
           <td>Dispatcher sync/async</td>
@@ -644,7 +644,7 @@ svg text { font-family: var(--mono); fill: var(--ink-3); font-size: 9.5px; lette
           <td><span class="verdict verdict-gruen">gruen</span></td>
           <td>queue_task + synchroner Fallback bei deaktiviertem Feature</td>
         </tr>
-
+        
         <tr>
           <td class="name">S12</td>
           <td>Benachrichtigung bei Abschluss/Fehler</td>
@@ -653,7 +653,7 @@ svg text { font-family: var(--mono); fill: var(--ink-3); font-size: 9.5px; lette
           <td><span class="verdict verdict-rot">rot</span></td>
           <td>Nur Sentry/Logging; Anbindung ans Activity-/Benachrichtigungssystem fehlt</td>
         </tr>
-
+        
         <tr>
           <td class="name">S13</td>
           <td>Operation 1 "Berechtigungen setzen"</td>
@@ -662,7 +662,7 @@ svg text { font-family: var(--mono); fill: var(--ink-3); font-size: 9.5px; lette
           <td><span class="verdict verdict-gruen">gruen</span></td>
           <td>reindexObjectSecurity gepatcht, Enqueue-Worker-Execute + Dedup belegt</td>
         </tr>
-
+        
         <tr>
           <td class="name">S14</td>
           <td>Kill-Switch / Notbremse (Registry + Upgrade)</td>
@@ -671,7 +671,7 @@ svg text { font-family: var(--mono); fill: var(--ink-3); font-size: 9.5px; lette
           <td><span class="verdict verdict-gruen">gruen</span></td>
           <td>Feature-Flag mit Fail-Safe (deaktiviert = synchron) + Upgrade-Step</td>
         </tr>
-
+        
         <tr>
           <td class="name">S15-S18</td>
           <td>UI-Indikator, UI-Sperre, Admin-Übersicht, Logs</td>
@@ -680,7 +680,7 @@ svg text { font-family: var(--mono); fill: var(--ink-3); font-size: 9.5px; lette
           <td><span class="verdict verdict-grau">grau</span></td>
           <td>Start nach Stabilisierung; kein Code vorhanden</td>
         </tr>
-
+        
         <tr>
           <td class="name">S19</td>
           <td>Operation "Referenz-Präfixe aktualisieren" (Ordnungssystem)</td>
@@ -689,7 +689,7 @@ svg text { font-family: var(--mono); fill: var(--ink-3); font-size: 9.5px; lette
           <td><span class="verdict verdict-gruen">gruen</span></td>
           <td>update-reference-prefixes-Task + Subscriber angebunden, getestet</td>
         </tr>
-
+        
         <tr>
           <td class="name">S20</td>
           <td>Operation "Dossier-Titel reindexieren"</td>
@@ -698,7 +698,7 @@ svg text { font-family: var(--mono); fill: var(--ink-3); font-size: 9.5px; lette
           <td><span class="verdict verdict-gruen">gruen</span></td>
           <td>reindex-dossier-title-Task + Handler getestet</td>
         </tr>
-
+        
         <tr>
           <td class="name">S21</td>
           <td>Konsistenz-/Abnahmetests Ordnungssystem-Operation</td>
@@ -707,7 +707,7 @@ svg text { font-family: var(--mono); fill: var(--ink-3); font-size: 9.5px; lette
           <td><span class="verdict verdict-gelb">gelb</span></td>
           <td>Ende-zu-Ende-Nachweis der Solr-Mutation unter Last</td>
         </tr>
-
+        
         <tr>
           <td class="name">S22</td>
           <td>Operation "Dossiers/Objekte verschieben"</td>
@@ -716,7 +716,7 @@ svg text { font-family: var(--mono); fill: var(--ink-3); font-size: 9.5px; lette
           <td><span class="verdict verdict-gruen">gruen</span></td>
           <td>move-objects-Task + Anbindung in move_items; 208-Zeilen-Testsuite</td>
         </tr>
-
+        
         <tr>
           <td class="name">S23</td>
           <td>Konsistenztests Verschieben (Berechtigungen, Sperren, Sonderfälle)</td>
@@ -725,7 +725,7 @@ svg text { font-family: var(--mono); fill: var(--ink-3); font-size: 9.5px; lette
           <td><span class="verdict verdict-gelb">gelb</span></td>
           <td>Objekt-Sperre während Warteschlange umgesetzt & getestet (MOVE_LOCK); verbleibende Sonderfälle (fehlende Rechte, weitere Race-Fälle) auszubauen</td>
         </tr>
-
+        
         <tr>
           <td class="name">S24-S26</td>
           <td>E2E, Lasttest, Doku, Release-Vorbereitung</td>
@@ -762,17 +762,17 @@ svg text { font-family: var(--mono); fill: var(--ink-3); font-size: 9.5px; lette
       <div class="chart-labels">
 
         <span>2026-W23</span>
-
+        
         <span>2026-W24</span>
-
+        
         <span>2026-W25</span>
-
+        
         <span>2026-W26</span>
-
+        
         <span>2026-W27</span>
-
+        
         <span>2026-W28</span>
-
+        
         <span>2026-W29</span>
               </div>
     </div>
@@ -802,7 +802,7 @@ svg text { font-family: var(--mono); fill: var(--ink-3); font-size: 9.5px; lette
           <td class="r num">160</td>
           <td class="r num">20</td>
         </tr>
-
+        
         <tr>
           <td class="name">Cassina Manuel</td>
           <td class="r num">37.5</td>
@@ -837,9 +837,9 @@ svg text { font-family: var(--mono); fill: var(--ink-3); font-size: 9.5px; lette
       <div class="chart-labels">
 
         <span>09.07.2026</span>
-
+        
         <span>16.07.2026</span>
-
+        
         <span>17.07.2026</span>
               </div>
     </div>
@@ -856,15 +856,15 @@ svg text { font-family: var(--mono); fill: var(--ink-3); font-size: 9.5px; lette
     <ul class="dash-list">
 
       <li>Objekt-Sperre: Für Verschieben-Operation umgesetzt (MOVE_LOCK) — Entscheid offen, ob auf Reindex-/Referenz-Präfix-Tasks ausgeweitet wird</li>
-
+      
       <li>Umgang mit stealable-Lock-Race: zweite gleichzeitige Verschiebe-Anfrage stiehlt den Lock aktuell stillschweigend statt abgewiesen zu werden — bewusst akzeptieren oder schliessen?</li>
-
+      
       <li>Benutzerbenachrichtigung: Umfang (nur Fehler vs. Abschluss+Fehler) und Anbindung ans Activity-System</li>
-
+      
       <li>Minimalumfang der Admin-Übersicht (D2) festlegen</li>
-
+      
       <li>Ob Sync/Async-Schwellwerte pro Operation zusätzlich zum globalen Kill-Switch nötig sind</li>
-
+      
       <li>Umgang mit stillem Verlust bei abgebrochener Transaktion / fehlendem Worker (After-Commit-Hook?)</li>
           </ul>
         </div>
@@ -892,7 +892,7 @@ svg text { font-family: var(--mono); fill: var(--ink-3); font-size: 9.5px; lette
           <td>Entwickler</td>
           <td><span class="verdict">Erledigt</span></td>
         </tr>
-
+        
         <tr>
           <td class="name">Benutzerbenachrichtigung fehlt</td>
           <td>Funktion</td>
@@ -903,7 +903,7 @@ svg text { font-family: var(--mono); fill: var(--ink-3); font-size: 9.5px; lette
           <td>Entwickler</td>
           <td><span class="verdict">Offen</span></td>
         </tr>
-
+        
         <tr>
           <td class="name">Objekt-Sperre während aktivem Task offen</td>
           <td>Technik</td>
@@ -914,7 +914,7 @@ svg text { font-family: var(--mono); fill: var(--ink-3); font-size: 9.5px; lette
           <td>Entwickler</td>
           <td><span class="verdict">Beobachten</span></td>
         </tr>
-
+        
         <tr>
           <td class="name">Silent-Fail bei fehlendem Worker / abgebrochener Transaktion</td>
           <td>Technik</td>
@@ -925,7 +925,7 @@ svg text { font-family: var(--mono); fill: var(--ink-3); font-size: 9.5px; lette
           <td>Entwickler</td>
           <td><span class="verdict">Beobachten</span></td>
         </tr>
-
+        
         <tr>
           <td class="name">UI-Transparenz (D2) noch nicht gestartet</td>
           <td>Termin/Scope</td>
@@ -936,7 +936,7 @@ svg text { font-family: var(--mono); fill: var(--ink-3); font-size: 9.5px; lette
           <td>PL</td>
           <td><span class="verdict">Offen</span></td>
         </tr>
-
+        
         <tr>
           <td class="name">Abnahme/Hardening (D5) offen</td>
           <td>Termin</td>
@@ -947,7 +947,7 @@ svg text { font-family: var(--mono); fill: var(--ink-3); font-size: 9.5px; lette
           <td>PL</td>
           <td><span class="verdict">Beobachten</span></td>
         </tr>
-
+        
         <tr>
           <td class="name">Ferien / Verfügbarkeit</td>
           <td>Organisation</td>
@@ -1010,19 +1010,19 @@ svg text { font-family: var(--mono); fill: var(--ink-3); font-size: 9.5px; lette
     <div class="chart-labels">
 
       <span>12.06.2026</span>
-
+      
       <span>19.06.2026</span>
-
+      
       <span>23.06.2026</span>
-
+      
       <span>26.06.2026</span>
-
+      
       <span>03.07.2026</span>
-
+      
       <span>09.07.2026</span>
-
+      
       <span>16.07.2026</span>
-
+      
       <span>17.07.2026</span>
           </div>
     </div>

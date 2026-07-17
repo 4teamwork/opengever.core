@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-07-16T16:10:00+02:00",
-  "report_date": "2026-07-16",
+  "generated_at": "2026-07-17T00:00:00+02:00",
+  "report_date": "2026-07-17",
   "branch": "ai-playground",
   "git": {
-    "head_sha": "7a8ba90b799039b9ee2f4b0081da0efdc432e707",
+    "head_sha": "aee65cc3c161e1ff23316168150247d202d28940",
     "origin_head_sha": "b5531790c54a9f443bafe7ab0b67e3953abe1772",
     "commits_since_first_baseline": 40,
     "per_area_commit_hint": {
@@ -86,14 +86,14 @@
     "pass_rate_pct": 100.0,
     "failing": [],
     "degraded": false,
-    "note": "GitHub Checks (Jenkins) auf origin/ai-playground @ b553179 (lokaler Branch 7a8ba90b7 einen Commit voraus, noch nicht gepusht). Alle 11 Check-Runs erfolgreich -- die drei zuvor roten Checks (test-solr, test-i18n-de, test-plone-4.3.x) sind seit dem letzten Lauf (09.07., 72.7%) gruen geworden."
+    "note": "GitHub Checks (Jenkins) auf origin/ai-playground @ b553179 (lokaler Branch aee65cc3c mehrere Commits voraus, noch nicht gepusht). Alle 11 Check-Runs weiterhin erfolgreich, unveraendert seit 16.07."
   },
   "areas": [
     {
       "id": "D0",
       "progress_estimate": 85,
       "status_signal": "gruen",
-      "rationale": "Unveraendert seit 09.07. -- keine neuen Commits in diesem Bereich."
+      "rationale": "Unveraendert seit 16.07. -- keine neuen Commits in diesem Bereich."
     },
     {
       "id": "D1",
@@ -105,25 +105,25 @@
       "id": "D2",
       "progress_estimate": 5,
       "status_signal": "gelb-rot",
-      "rationale": "Unveraendert seit 09.07. -- kein Code."
+      "rationale": "Unveraendert seit 16.07. -- kein Code."
     },
     {
       "id": "D3",
       "progress_estimate": 70,
       "status_signal": "gruen",
-      "rationale": "Unveraendert seit 09.07. -- keine neuen Commits in diesem Bereich."
+      "rationale": "Unveraendert seit 16.07. -- keine neuen Commits in diesem Bereich."
     },
     {
       "id": "D4",
       "progress_estimate": 80,
       "status_signal": "gruen",
-      "rationale": "11 neue Commits seit 09.07. in opengever/bgtasks/move.py, opengever/dossier/move_items.py, opengever/api/move.py und Tests: Objekt-Sperre waehrend Warteschlange (MOVE_LOCK, Spec lock-objects-during-move, done), plus mehrere Haertungs-Fixes. Schliesst den zuvor als groesstes Risiko benannten Sonderfall (paralleles Bearbeiten waehrend Move). Bekannte Restluecke: stealable Lock schuetzt nicht vor zwei gleichzeitigen Verschiebe-Anfragen."
+      "rationale": "11 neue Commits seit 16.07. in opengever/bgtasks/move.py, opengever/dossier/move_items.py, opengever/api/move.py und Tests: Objekt-Sperre waehrend Warteschlange (MOVE_LOCK, Spec lock-objects-during-move, done), plus mehrere Haertungs-Fixes. Schliesst den zuvor als groesstes Risiko benannten Sonderfall (paralleles Bearbeiten waehrend Move). Bekannte Restluecke: stealable Lock schuetzt nicht vor zwei gleichzeitigen Verschiebe-Anfragen."
     },
     {
       "id": "D5",
       "progress_estimate": 20,
       "status_signal": "gelb",
-      "rationale": "Unveraendert seit 09.07. -- keine neuen Commits in diesem Bereich."
+      "rationale": "Unveraendert seit 16.07. -- keine neuen Commits in diesem Bereich."
     }
   ],
   "overall_progress_estimate": 63,
@@ -134,15 +134,15 @@
     },
     "projektfortschritt": {
       "verdict": "gruen",
-      "reason": "63% Fortschritt bei 43% verstrichener Zeit; D4 (hoechstes Risiko) durch Objekt-Sperre gehaertet."
+      "reason": "63% Fortschritt bei 45% verstrichener Zeit; D4 (hoechstes Risiko) durch Objekt-Sperre gehaertet."
     },
     "kosten": {
       "verdict": "gruen",
-      "reason": "38.1% Budget verbraucht (18.69 von 49 AT) bei 63% Fortschritt; erarbeiteter Wert uebersteigt Ist-Aufwand deutlich."
+      "reason": "50.39% Budget verbraucht (24.69 von 49 AT) bei 63% Fortschritt; erarbeiteter Wert uebersteigt Ist-Aufwand deutlich."
     },
     "personalaufwand": {
       "verdict": "gruen",
-      "reason": "Budgetverbrauch 38.1% liegt deutlich unter Fortschritt 63% -- mehr Wert geliefert als Budget verbraucht."
+      "reason": "Budgetverbrauch 50.39% liegt deutlich unter Fortschritt 63% -- mehr Wert geliefert als Budget verbraucht."
     },
     "projektrisiken": {
       "verdict": "gruen",
@@ -152,13 +152,13 @@
   "hours": {
     "present": true,
     "hours_per_at": 8,
-    "ist_stunden": 149.5,
-    "ist_at": 18.69,
+    "ist_stunden": 197.5,
+    "ist_at": 24.69,
     "by_person": [
       {
         "person": "Buchberger Thomas",
-        "ist_stunden": 112.0,
-        "ist_at": 14.0
+        "ist_stunden": 160.0,
+        "ist_at": 20.0
       },
       {
         "person": "Cassina Manuel",
@@ -194,16 +194,16 @@
       },
       {
         "week": "2026-W28",
-        "ist_stunden": 7.5,
-        "ist_at": 0.94
+        "ist_stunden": 23.5,
+        "ist_at": 2.94
       },
       {
         "week": "2026-W29",
-        "ist_stunden": 7.0,
-        "ist_at": 0.88
+        "ist_stunden": 39.0,
+        "ist_at": 4.88
       }
     ],
-    "rows_parsed": 33,
-    "note": "Neuer Export hintergrund-tasks-stunden-260716.xlsx (neueste Datei laut hours_file-Glob) eingelesen. Person und Datum sind in der zusammengesetzten 'Name'-Spalte codiert ('<Person> vom <YYYY-MM-DD>'); Person = Text vor ' vom ', Datum = ISO-Datum danach. Die separate 'Datum'-Spalte ist unzuverlaessig (vertauschte/US-Formate) und wurde ignoriert. Stunden = 'Geleistete Stunden'; 'Verrechnete PT' wurde nicht verwendet (bereits /8, sonst Doppelzaehlung)."
+    "rows_parsed": 39,
+    "note": "Neuer Export hintergrund-tasks-stunden-260717.xlsx (neueste Datei laut hours_file-Glob) eingelesen. Person und Datum sind in der zusammengesetzten 'Name'-Spalte codiert ('<Person> vom <YYYY-MM-DD>'); Person = Text vor ' vom ', Datum = ISO-Datum danach. Die separate 'Datum'-Spalte ist unzuverlaessig (vertauschte/US-Formate) und wurde ignoriert. Stunden = 'Geleistete Stunden'; 'Verrechnete PT' wurde nicht verwendet (bereits /8, sonst Doppelzaehlung)."
   }
 }
