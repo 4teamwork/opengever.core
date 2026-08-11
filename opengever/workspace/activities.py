@@ -1,13 +1,21 @@
 from Acquisition import aq_chain
+from datetime import date
+from datetime import timedelta
+from ftw.solr.query import make_filters
 from opengever.activity import base_notification_center
 from opengever.activity import notification_center
 from opengever.activity.base import BaseActivity
+from opengever.activity.model import Notification
 from opengever.activity.roles import TODO_RESPONSIBLE_ROLE
 from opengever.activity.roles import WORKSPACE_MEMBER_ROLE
 from opengever.base.exceptions import InvalidOguidIntIdPart
+from opengever.base.security import elevated_privileges
+from opengever.base.solr import batched_solr_results
+from opengever.base.solr import OGSolrDocument
 from opengever.ogds.base.actor import Actor
 from opengever.workspace import _
 from opengever.workspace.participation.browser.manage_participants import ManageParticipants
+from opengever.workspace.todo import ACTIVE_TODO_STATE
 from plone import api
 from zope.globalrequest import getRequest
 
@@ -200,3 +208,46 @@ class WorkspaceParticipationAddedActivity(BaseActivity):
                            Actor.lookup(self.participation_id).representatives()]
         return super(WorkspaceParticipationAddedActivity, self).add_activity(
             notification_recipients=representatives)
+
+
+class ToDoOverdueActivity(BaseActivity):
+    """Activity representation for an overdue todo"""
+
+    kind = 'todo-overdue'
+    system_activity = True
+
+    @property
+    def label(self):
+        return self.translate_to_all_languages(
+            _('label_todo_overdue_activity', u'Overdue to-do'))
+
+    @property
+    def summary(self):
+        msg = _('summary_todo_overdue_activity',
+                u'The to-do is still open after exceeding its deadline.')
+        return self.translate_to_all_languages(msg)
+
+    @property
+    def description(self):
+        return {}
+
+
+class ToDoOverdueActivityGenerator(object):
+
+    def __call__(self):
+        return self.generate_overdue_activities()
+
+    def generate_overdue_activities(self):
+        filters = make_filters(
+            review_state=ACTIVE_TODO_STATE,
+            deadline={'query': date.today() - timedelta(days=1), 'range': 'max'})
+
+        num_notifications_before_update = Notification.query.count()
+
+        with elevated_privileges():
+            for batch in batched_solr_results(filters=filters, fl=['UID', 'path']):
+                for doc in batch:
+                    obj = OGSolrDocument(doc).getObject()
+                    ToDoOverdueActivity(obj, getRequest()).record()
+
+        return Notification.query.count() - num_notifications_before_update

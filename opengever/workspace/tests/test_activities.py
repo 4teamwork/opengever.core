@@ -1,3 +1,5 @@
+from datetime import date
+from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -8,7 +10,11 @@ from opengever.activity.roles import TODO_RESPONSIBLE_ROLE
 from opengever.activity.roles import WORKSPACE_MEMBER_ROLE
 from opengever.base.oguid import Oguid
 from opengever.ogds.base.actor import ActorLookup
+from opengever.ogds.base.actor import SYSTEM_ACTOR_ID
 from opengever.testing import IntegrationTestCase
+from opengever.testing import SolrIntegrationTestCase
+from opengever.workspace.activities import ToDoOverdueActivity
+from opengever.workspace.activities import ToDoOverdueActivityGenerator
 from opengever.workspace.participation.browser.manage_participants import ManageParticipants
 from opengever.workspace.participation.storage import IInvitationStorage
 from plone.protect import createToken
@@ -317,3 +323,96 @@ class TestToDoActivities(IntegrationTestCase):
         self.assertEquals(
             u'Commented by {}'.format(user.get_label(with_principal=False)),
             activity.summary)
+
+
+class TestToDoOverdueActivity(SolrIntegrationTestCase):
+
+    features = ('activity', )
+
+    def test_todo_overdue_activity_is_from_system_user(self):
+        self.login(self.workspace_owner)
+        todo = create(Builder('todo').within(self.workspace))
+
+        ToDoOverdueActivity(todo, self.request).record()
+        activity = Activity.query.filter(
+            Activity.kind == ToDoOverdueActivity.kind).one()
+
+        self.assertEqual(SYSTEM_ACTOR_ID, activity.actor_id)
+
+    def test_responsible_is_notified_on_activity_creation(self):
+        self.login(self.workspace_owner)
+        todo = create(
+            Builder('todo')
+            .having(responsible=self.workspace_member.getId())
+            .within(self.workspace))
+
+        ToDoOverdueActivity(todo, self.request).record()
+
+        notifications = Activity.query.filter(
+            Activity.kind == ToDoOverdueActivity.kind).first().notifications
+
+        self.assertEqual(
+            [self.workspace_member.getId()],
+            [notification.userid for notification in notifications if notification.is_badge])
+
+
+class TestToDoOverdueActivityGenerator(SolrIntegrationTestCase):
+
+    features = ('activity', )
+
+    def _get_activity_for(self, todo):
+        oguid = Oguid.for_object(todo)
+        activities = Activity.query.filter(
+            Activity.kind == ToDoOverdueActivity.kind).all()
+        return next((a for a in activities if a.resource.oguid == oguid), None)
+
+    def test_generates_an_activity_and_notification_for_overdue_active_todo(self):
+        self.login(self.manager)
+
+        self.assigned_todo.deadline = None
+        self.assigned_todo.reindexObject(idxs=['deadline'])
+
+        # Overdue
+        self.todo.deadline = date.today() - timedelta(days=1)
+        self.todo.responsible = self.workspace_member.getId()
+        self.todo.reindexObject(idxs=['deadline', 'responsible'])
+
+        # Overdue but completed
+        self.completed_todo.deadline = date.today() - timedelta(days=1)
+        self.completed_todo.responsible = self.workspace_member.getId()
+        self.completed_todo.reindexObject(idxs=['deadline', 'responsible'])
+
+        # Future deadline
+        self.assigned_todo.deadline = None
+        self.assigned_todo.responsible = self.workspace_member.getId()
+        self.assigned_todo.reindexObject(idxs=['deadline', 'respponsible'])
+
+        self.commit_solr()
+
+        ToDoOverdueActivityGenerator()()
+
+        self.assertEqual(1, Activity.query.count())
+
+    def test_does_not_generate_an_activity_for_todo_due_today(self):
+        self.login(self.manager)
+
+        self.assigned_todo.deadline = None
+        self.assigned_todo.reindexObject(idxs=['deadline'])
+
+        self.todo.deadline = date.today()
+        self.todo.responsible = self.workspace_member.getId()
+        self.todo.reindexObject(idxs=['deadline', 'responsible'])
+
+        self.commit_solr()
+
+        ToDoOverdueActivityGenerator()()
+        self.assertEqual(0, Activity.query.count())
+
+        self.todo.deadline = date.today() - timedelta(days=1)
+        self.todo.responsible = self.workspace_member.getId()
+        self.todo.reindexObject(idxs=['deadline'])
+
+        self.commit_solr()
+
+        ToDoOverdueActivityGenerator()()
+        self.assertEqual(1, Activity.query.count())

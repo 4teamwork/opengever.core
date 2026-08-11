@@ -89,7 +89,8 @@ NOTIFICATION_SETTING_TABS = [
      'roles': [TODO_RESPONSIBLE_ROLE, WORKSPACE_MEMBER_ROLE],
      'settings': [
          'todo-assigned',
-         'todo-modified'
+         'todo-modified',
+         'todo-overdue',
      ]},
     {'id': 'workspaces',
      'roles': [ALWAYS],

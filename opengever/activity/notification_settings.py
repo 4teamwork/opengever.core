@@ -228,6 +228,14 @@ NOTIFICATION_CONFIGURATION = [
         }
     },
     {
+        'id': 'todo-overdue',
+        'title': _('todo-overdue', default=u'Overdue to-do'),
+        'activities': ['todo-overdue'],
+        'default_settings': {
+            'badge_notification_roles': [TODO_RESPONSIBLE_ROLE],
+        }
+    },
+    {
         'id': 'todo-assigned',
         'title': _('todo-assigned', default=u'ToDo assigned'),
         'activities': ['todo-assigned'],
