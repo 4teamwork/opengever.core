@@ -6,7 +6,7 @@ import logging
 import transaction
 
 
-logger = logging.getLogger('opengever.dossier.cronjobs')
+logger = logging.getLogger('opengever.core.cronjobs')
 
 
 def generate_overdue_notifications_zopectl_handler(app, args):

@@ -199,7 +199,7 @@ setup(name='opengever.core',
       [zopectl.command]
       create_service_user = opengever.setup.serviceuser:create_service_user_zopectl_handler
       dump_schemas = opengever.base.schemadump:dump_schemas_zopectl_handler
-      generate_overdue_notifications = opengever.dossier.cronjobs:generate_overdue_notifications_zopectl_handler
+      generate_overdue_notifications = opengever.core.cronjobs:generate_overdue_notifications_zopectl_handler
       generate_remind_notifications = opengever.task.reminder.cronjobs:generate_remind_notifications_zopectl_handler
       import = opengever.bundle.console:import_oggbundle
       run_nightly_jobs = opengever.nightlyjobs.cronjobs:run_nightly_jobs_handler
