@@ -1,5 +1,7 @@
 from Acquisition import aq_parent
 from collections import namedtuple
+from datetime import date
+from datetime import datetime
 from opengever.ogds.models.service import ogds_service
 from time import time
 from zope.component.hooks import setSite
@@ -33,6 +35,9 @@ def userid_to_email(userid):
                 userid_email_mapping[user.userid] = user.email
                 if user.userid != user.username:
                     userid_email_mapping[user.username] = user.email
+        groups = ogds_service().all_groups(active_only=False)
+        for group in groups:
+            userid_email_mapping[group.groupid] = group.groupname
         CACHE['userid_email_mapping'] = userid_email_mapping
     return userid_email_mapping.get(userid, userid)
 
@@ -66,3 +71,18 @@ def garbage_collect(site):
     setSite(site)
     site._p_jar.cacheGC()
     gc.collect()
+
+
+def json_serializable(value):
+    if value is None or isinstance(value, (str, int, float, bool)):
+        return value
+    if isinstance(value, (datetime, date)):
+        return value.isoformat()
+    if isinstance(value, (list, tuple, set, frozenset)):
+        return [json_serializable(item) for item in value]
+    if isinstance(value, dict):
+        return {
+            str(json_serializable(key)): json_serializable(item)
+            for key, item in value.items()
+        }
+    return str(value)
