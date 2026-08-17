@@ -11,10 +11,12 @@ from opengever.exportng.journal import get_journal_entries_from_dossier
 from opengever.exportng.journal import JOURNAL_TABLE
 from opengever.exportng.utils import Attribute
 from opengever.exportng.utils import document_parent
-from opengever.exportng.utils import userid_to_email
 from opengever.exportng.utils import garbage_collect
+from opengever.exportng.utils import json_serializable
 from opengever.exportng.utils import timer
+from opengever.exportng.utils import userid_to_email
 from opengever.meeting.model import AgendaItem
+from opengever.propertysheets.utils import get_custom_properties
 from plone import api
 from plone.dexterity.utils import iterSchemata
 from Products.CMFEditions.utilities import dereference
@@ -423,7 +425,7 @@ class DossierSerializer(CatalogItemSerializer):
         return None
 
     def customfields(self):
-        return None
+        return json_serializable(get_custom_properties(self.obj)) or None
 
     def sort_order(self):
         return '.'.join([str(n).zfill(4) for n in IReferenceNumber(
@@ -491,6 +493,7 @@ class DocumentSerializer(CatalogItemSerializer):
         Attribute('attributedefinitiontarget', 'attributedefinitiontarget', 'varchar'),
         Attribute('preserved_as_paper', 'gcpreservedaspaper', 'boolean'),
         # Attribute('document_type', 'XXX', 'date'),
+        Attribute('customfields', 'customfieldsjson', 'jsonb'),
     ]
     versions_mapping = [
         Attribute('UID', 'objexternalkey', 'varchar'),
@@ -524,6 +527,9 @@ class DocumentSerializer(CatalogItemSerializer):
 
     def reference_number(self):
         return int(IReferenceNumber(self.obj).get_local_number())
+
+    def customfields(self):
+        return get_custom_properties(self.obj) or None
 
     # proposals:
     # - pproposaldocument
