@@ -24,7 +24,7 @@ hours_per_at: 8                    # Stunden pro Arbeitstag (Default 8).
 # — Management-Ampel (Operator-Entscheid) —
 # Bewusste Management-Einschätzung: gruen | gelb | rot | gelb-rot | "" (leer = nur Harness-Signal).
 # Der Report zeigt DANEBEN immer die 3-Signal-Prognose der Harness. Beide bleiben getrennt.
-ampel: "gruen"
+ampel: "gelb-rot"
 
 # — CI-Checks (die eine objektive Qualitätskennzahl) —
 # ci_source: auto   -> Harness liest die GitHub-Check-Runs (von Jenkins gepostet) auf dem
@@ -54,11 +54,13 @@ hours_file: "hintergrund-tasks-stunden-*.xlsx"
 
 <!-- ═══════════════════════════════════════════════════════════════════════
      Operator-eigene Inhalte. Stand nach Durchsicht des Branch-Codes (ai-playground,
-     HEAD 7a8ba90b7, 16.07.2026): Seit dem letzten Stand (d96de2b, 09.07.) ist die
-     Objekt-Sperre während der Warteschlange für die Verschieben-Operation umgesetzt
-     (MOVE_LOCK, Spec "lock-objects-during-move") — schliesst das grösste
-     Sonderfall-Risiko in D4. Alle 11 CI-Checks sind neu grün (vorher 3 rot). Aktueller
-     Stunden-Export (260716) eingelesen: 38.1% Budget verbraucht.
+     HEAD f612eeb6f, 18.08.2026): Seit dem letzten Stand (17.07.) ist kein neuer Code
+     entstanden — die Entwicklung stand einen Monat ferienbedingt still. Inhaltlich
+     unverändert bei 63% Fortschritt. Neu: zwei CI-Checks wieder rot (test-qa.cfg,
+     test-xml-convention.cfg). Entscheidend ist jetzt die Restzeit: bis zum Zieltermin
+     31.08. bleiben 9 Arbeitstage für 37% Restarbeit, davon D2 (nicht gestartet) und D5
+     (Abnahme/Hardening). Zieltermin bleibt gesetzt — Steuerung erfolgt über Scope-Cuts.
+     Aktueller Stunden-Export (260818) eingelesen: 52.8% Budget verbraucht.
      ═══════════════════════════════════════════════════════════════════════ -->
 
 ## Lieferbereiche
@@ -71,11 +73,11 @@ hours_file: "hintergrund-tasks-stunden-*.xlsx"
 | Bereich | Name | Gewicht % | Fortschritt-Override % | Status-Override | Kommentar |
 |---|---|---:|---:|---|---|
 | D0 | Solution Design & Spec-Backlog | 10 |  |  | 6 Specs abgeschlossen; Scope geklärt; Sync/Async über Kill-Switch gelöst |
-| D1 | Framework + Operation 1 "Berechtigungen setzen" | 30 |  |  | Framework + Operation 1 umgesetzt und getestet. Objekt-Sperre für Verschieben gelöst (MOVE_LOCK), für andere Task-Typen offen. Benachrichtigung weiterhin offen |
-| D2 | UI-Transparenz & Admin-Übersicht | 15 |  |  | Nicht gestartet; kein Code |
-| D3 | Operation "Metadaten Ordnungssystem anpassen" | 15 |  |  | Beide Operationen implementiert & getestet; Abnahmetests offen |
+| D1 | Framework + Operation 1 "Berechtigungen setzen" | 30 |  |  | Framework + Operation 1 umgesetzt und getestet. Objekt-Sperre für Verschieben gelöst (MOVE_LOCK), für andere Task-Typen offen. Benachrichtigung weiterhin offen — bei 9 Resttagen der kritischste Restposten |
+| D2 | UI-Transparenz & Admin-Übersicht | 15 |  |  | Nicht gestartet; kein Code. Hauptkandidat für Scope-Cut — Entscheid diese Woche nötig |
+| D3 | Operation "Metadaten Ordnungssystem anpassen" | 15 |  |  | Beide Operationen implementiert & getestet; Abnahmetests weiterhin offen |
 | D4 | Operation "Dossiers innerhalb Mandant verschieben" | 20 |  |  | Geliefert; Objekt-Sperre während Warteschlange schliesst grössten Sonderfall (MOVE_LOCK); übrige Sonderfälle (gesperrte/ausgecheckte Objekte, fehlende Rechte) weiter auszubauen |
-| D5 | Hardening, Performance & Abnahme | 10 |  |  | Kill-Switch + Tests vorhanden; E2E, Lasttest, Doku, Abnahme offen |
+| D5 | Hardening, Performance & Abnahme | 10 |  |  | Kill-Switch + Tests vorhanden; E2E, Lasttest, Doku, Abnahme nicht gestartet — gesamte Endphase liegt in den letzten 9 Arbeitstagen |
 
 ## Stories
 
@@ -132,19 +134,20 @@ hours_file: "hintergrund-tasks-stunden-*.xlsx"
 
 | Risiko / Unsicherheit | Kategorie | Auswirkung | Wahrscheinlichkeit | Frühwarnsignal | Nächste Aktion | Owner | Status |
 |---|---|---|---|---|---|---|---|
-| Drei CI-Checks rot (test-solr, test-i18n-de, test-plone-4.3.x) | Qualität | Regressionen bleiben unentdeckt, Abnahme verzögert | Tief | Rote Checks auf origin-Head | Alle 11 Checks seit 16.07. grün — beobachten, ob es so bleibt | Entwickler | Erledigt |
-| Benutzerbenachrichtigung fehlt | Funktion | Anwender erfährt Abschluss/Fehler eines Tasks nicht | Hoch | Task schlägt still fehl, nur im Log sichtbar | Anbindung ans Activity-System umsetzen | Entwickler | Offen |
+| Zwei CI-Checks rot (test-qa.cfg, test-xml-convention.cfg) | Qualität | Konventions-/Lint-Verstösse blockieren die Abnahme am Schluss | Tief | Rote Checks auf origin-Head (Lauf vom 17.07.) | Beim nächsten Commit mitbeheben — kein eigener Aufwandsposten | Entwickler | Offen |
+| Benutzerbenachrichtigung fehlt | Funktion | Anwender erfährt Abschluss/Fehler eines Tasks nicht | Hoch | Task schlägt still fehl, nur im Log sichtbar | Anbindung ans Activity-System umsetzen — vor D2 einplanen | Entwickler | Offen |
 | Objekt-Sperre während aktivem Task offen | Technik | Inkonsistente Daten bei parallelen Änderungen (für Verschieben gelöst, für Reindex-/Referenz-Präfix-Tasks weiterhin offen) | Mittel | Doppelte/kollidierende Tasks auf demselben Objekt; stealable Lock kann bei zwei gleichzeitigen Verschiebe-Anfragen gestohlen werden | Bedarf für weitere Task-Typen prüfen; Umgang mit stealable-Lock-Race bei doppelten Verschiebe-Anfragen entscheiden | Entwickler | Beobachten |
 | Silent-Fail bei fehlendem Worker / abgebrochener Transaktion | Technik | Reindex/Verschiebung geht ohne Fehler verloren | Mittel | Deferred-Work-Punkte (Transaction abort, kein Worker) | After-Commit-Hook / Fallback-Logging prüfen | Entwickler | Beobachten |
-| UI-Transparenz (D2) noch nicht gestartet | Termin/Scope | Kein Einblick in Task-Status für Anwender/Support | Mittel | D2 startet erst spät | Minimal-Admin-Übersicht früh einplanen | PL | Offen |
-| Abnahme/Hardening (D5) offen | Termin | E2E-, Last- und Abnahmenachweis fehlt am Ende | Mittel | Kein E2E-/Lasttest bis KW32 | D5-Scope früh festlegen | PL | Beobachten |
-| Ferien / Verfügbarkeit | Organisation | Review- und Entscheidungsverzug | Mittel | Antwortzeiten > 2 Arbeitstage | Abwesenheiten im Dashboard ergänzen | PL | Offen |
+| UI-Transparenz (D2) noch nicht gestartet | Termin/Scope | Kein Einblick in Task-Status für Anwender/Support | Hoch | 9 Arbeitstage bis Zieltermin, weiterhin kein Code | Entscheid: Minimalumfang liefern oder bewusst auf Folgerelease schneiden | PL | Kritisch |
+| Abnahme/Hardening (D5) offen | Termin | E2E-, Last- und Abnahmenachweis fehlt am Ende | Hoch | KW34 erreicht, kein E2E-/Lasttest gestartet | D5-Mindestumfang für die Abnahme jetzt festlegen und Termin dafür reservieren | PL | Kritisch |
+| Ferien / Verfügbarkeit | Organisation | Entwicklungsstillstand 17.07.–18.08. eingetreten; Restarbeit auf 9 Arbeitstage komprimiert | Hoch | Ein Monat ohne Commit auf dem Branch | Verfügbarkeit bis 31.08. verbindlich klären, sonst Scope reduzieren | PL | Eingetreten |
 
 
 ## Offene Entscheidungen
 
 <!-- Freie Liste offener Entscheide, die Fortschritt oder Scope blockieren. -->
 
+- 37% Restarbeit auf 9 Arbeitstagen — Wie gehen wir damit um?
 - Objekt-Sperre: Für Verschieben-Operation umgesetzt (MOVE_LOCK) — Entscheid offen, ob auf Reindex-/Referenz-Präfix-Tasks ausgeweitet wird
 - Umgang mit stealable-Lock-Race: zweite gleichzeitige Verschiebe-Anfrage stiehlt den Lock aktuell stillschweigend statt abgewiesen zu werden — bewusst akzeptieren oder schliessen?
 - Benutzerbenachrichtigung: Umfang (nur Fehler vs. Abschluss+Fehler) und Anbindung ans Activity-System
@@ -176,10 +179,9 @@ hours_file: "hintergrund-tasks-stunden-*.xlsx"
      report.html in HTML um; hier bleibt es reines Markdown (siehe CONTRACT.md §1).
      Dies ist der EINZIGE Ort für die narrative Einschätzung. Die Harness schreibt hier nichts. -->
 
-- **Fortschritt:** 63% gewichtet — weiterhin deutlich vor Plan (43% der Zeit verstrichen).
-- **Kernnutzen geliefert:** Alle drei Operationen umgesetzt; zusätzlich Objekt-Sperre während Warteschlange für Verschieben (MOVE_LOCK) — schliesst das grösste Sonderfall-Risiko in D4.
-- **Qualität:** Alle 11 CI-Checks grün (vorher 3 rot) — Qualitätsrisiko behoben.
-- **Budget:** 50% verbraucht (25 von 49 AT); erarbeiteter Wert übersteigt Ist-Aufwand deutlich — kosteneffizient.
-- **Offen:** Benutzerbenachrichtigung, Objekt-Sperre für weitere Task-Typen, Admin-Übersicht (D2), Abnahme/Hardening (D5).
-- **Ampel-Empfehlung:** Grün — Fortschritt, Qualität und Kosteneffizienz verbessert, Restarbeit bekannt und begrenzt.
-</content>
+- **Fortschritt:** 63% gewichtet — unverändert seit 17.07. aufgrund Ferienabwesenheit.
+- **Restzeit:** Nur noch **9 Arbeitstage** bis zum Zieltermin 31.08. für 37% Restarbeit.
+- **Kernnutzen geliefert:** Alle drei Operationen laufen inklusive Objekt-Sperre beim Verschieben; das Produkt ist im Kern funktionsfähig.
+- **Budget:** 53% verbraucht (26 von 49 AT) — weiterhin **kosteneffizient**, mehr Wert geliefert als Aufwand verbucht.
+- **Offen:** Benutzerbenachrichtigung, Admin-Übersicht (D2, nicht gestartet), Abnahme/Hardening (D5, nicht gestartet), zwei rote CI-Checks (Lint/Konvention).
+- **Ampel-Empfehlung:** **Gelb-Rot** — Termin 31.08. gefährdet.
