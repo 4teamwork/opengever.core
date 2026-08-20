@@ -10,6 +10,25 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2026.4.0 (2026-08-20)
+---------------------
+
+New features:
+
+
+- Added support for sending SIPs directly to a docteam archive server. [elioschmutz] [TI-3710]
+
+
+Bug fixes:
+
+
+- OGDS Authentication Plugin returns only non-local groups  [ran] [TI-3358]
+- Fix searching with phrase queries containing tokens that are split by the word delimiter filter. [buchi] [TI-3679]
+- Allow ActorLookup with username in addition to userid  [ran] [TI-3700]
+- Expose period field in solr  [ran] [TI-3837]
+- Fix group white-/black-list prefix filter in sharing view to match on the group name instead of the group id  [elioschmutz] [TI-3930]
+
+
 2026.3.0 (2026-05-28)
 ---------------------
 
