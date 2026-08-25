@@ -14,8 +14,10 @@ branch: "ai-playground"            # Explorativer Langzeit-Branch. Wird NICHT ge
                                    # -> gemergte PRs sind KEIN Fortschrittssignal.
 
 # — Termine (YYYY-MM-DD) —
-target_date: "2026-08-31"          # Zieltermin (fix). Scope-Cuts sind das Hauptsteuerungsmittel.
-stretch_date: "2026-09-14"         # Streckungsende (1-2 Wochen Reserve). Leer = keine Streckung.
+target_date: "2026-09-14"          # Zieltermin. Am 25.08.2026 vom 31.08. auf das vormalige
+                                   # Streckungsende verlegt. Scope-Cuts bleiben das Hauptsteuerungsmittel.
+stretch_date: ""                   # Streckungsende (1-2 Wochen Reserve). Leer = keine Streckung.
+                                   # Reserve ist mit der Verlegung aufgebraucht.
 
 # — Budget —
 budget_total_at: 49                # Gesamtbudget in Arbeitstagen (AT). Vorgabe Projektleitung.
@@ -54,13 +56,14 @@ hours_file: "hintergrund-tasks-stunden-*.xlsx"
 
 <!-- ═══════════════════════════════════════════════════════════════════════
      Operator-eigene Inhalte. Stand nach Durchsicht des Branch-Codes (ai-playground,
-     HEAD f612eeb6f, 18.08.2026): Seit dem letzten Stand (17.07.) ist kein neuer Code
-     entstanden — die Entwicklung stand einen Monat ferienbedingt still. Inhaltlich
-     unverändert bei 63% Fortschritt. Neu: zwei CI-Checks wieder rot (test-qa.cfg,
-     test-xml-convention.cfg). Entscheidend ist jetzt die Restzeit: bis zum Zieltermin
-     31.08. bleiben 9 Arbeitstage für 37% Restarbeit, davon D2 (nicht gestartet) und D5
-     (Abnahme/Hardening). Zieltermin bleibt gesetzt — Steuerung erfolgt über Scope-Cuts.
-     Aktueller Stunden-Export (260818) eingelesen: 52.8% Budget verbraucht.
+     HEAD unverändert f612eeb6f, 25.08.2026): Seit dem 17.07. ist kein neuer Code
+     entstanden — inzwischen fünf Wochen Stillstand. Inhaltlich unverändert bei 63%
+     Fortschritt; zwei CI-Checks weiterhin rot (test-qa.cfg, test-xml-convention.cfg,
+     Lauf vom 17.07.). Zur Restzeit: Der Zieltermin wurde vom 31.08. auf den 14.09.
+     verlegt — damit bleiben 14 Arbeitstage für 37% Restarbeit, davon D2 (nicht
+     gestartet) und D5 (Abnahme/Hardening). Das ist machbar, aber ohne Reserve: die
+     Streckung ist mit der Verlegung aufgebraucht, weitere Steuerung geht nur noch
+     über Scope-Cuts. Stunden-Export unverändert (260818): 52.8% Budget verbraucht.
      ═══════════════════════════════════════════════════════════════════════ -->
 
 ## Lieferbereiche
@@ -73,11 +76,11 @@ hours_file: "hintergrund-tasks-stunden-*.xlsx"
 | Bereich | Name | Gewicht % | Fortschritt-Override % | Status-Override | Kommentar |
 |---|---|---:|---:|---|---|
 | D0 | Solution Design & Spec-Backlog | 10 |  |  | 6 Specs abgeschlossen; Scope geklärt; Sync/Async über Kill-Switch gelöst |
-| D1 | Framework + Operation 1 "Berechtigungen setzen" | 30 |  |  | Framework + Operation 1 umgesetzt und getestet. Objekt-Sperre für Verschieben gelöst (MOVE_LOCK), für andere Task-Typen offen. Benachrichtigung weiterhin offen — bei 9 Resttagen der kritischste Restposten |
-| D2 | UI-Transparenz & Admin-Übersicht | 15 |  |  | Nicht gestartet; kein Code. Hauptkandidat für Scope-Cut — Entscheid diese Woche nötig |
+| D1 | Framework + Operation 1 "Berechtigungen setzen" | 30 |  |  | Framework + Operation 1 umgesetzt und getestet. Objekt-Sperre für Verschieben gelöst (MOVE_LOCK), für andere Task-Typen offen. Benachrichtigung weiterhin offen — bei 14 Resttagen der kritischste Restposten, jetzt einplanen |
+| D2 | UI-Transparenz & Admin-Übersicht | 15 |  |  | Nicht gestartet; kein Code. Hauptkandidat für Scope-Cut — mit 14 Resttagen ist ein Minimalumfang wieder machbar, Entscheid diese Woche nötig |
 | D3 | Operation "Metadaten Ordnungssystem anpassen" | 15 |  |  | Beide Operationen implementiert & getestet; Abnahmetests weiterhin offen |
 | D4 | Operation "Dossiers innerhalb Mandant verschieben" | 20 |  |  | Geliefert; Objekt-Sperre während Warteschlange schliesst grössten Sonderfall (MOVE_LOCK); übrige Sonderfälle (gesperrte/ausgecheckte Objekte, fehlende Rechte) weiter auszubauen |
-| D5 | Hardening, Performance & Abnahme | 10 |  |  | Kill-Switch + Tests vorhanden; E2E, Lasttest, Doku, Abnahme nicht gestartet — gesamte Endphase liegt in den letzten 9 Arbeitstagen |
+| D5 | Hardening, Performance & Abnahme | 10 |  |  | Kill-Switch + Tests vorhanden; E2E, Lasttest, Doku, Abnahme nicht gestartet — gesamte Endphase liegt in den letzten 14 Arbeitstagen |
 
 ## Stories
 
@@ -138,16 +141,16 @@ hours_file: "hintergrund-tasks-stunden-*.xlsx"
 | Benutzerbenachrichtigung fehlt | Funktion | Anwender erfährt Abschluss/Fehler eines Tasks nicht | Hoch | Task schlägt still fehl, nur im Log sichtbar | Anbindung ans Activity-System umsetzen — vor D2 einplanen | Entwickler | Offen |
 | Objekt-Sperre während aktivem Task offen | Technik | Inkonsistente Daten bei parallelen Änderungen (für Verschieben gelöst, für Reindex-/Referenz-Präfix-Tasks weiterhin offen) | Mittel | Doppelte/kollidierende Tasks auf demselben Objekt; stealable Lock kann bei zwei gleichzeitigen Verschiebe-Anfragen gestohlen werden | Bedarf für weitere Task-Typen prüfen; Umgang mit stealable-Lock-Race bei doppelten Verschiebe-Anfragen entscheiden | Entwickler | Beobachten |
 | Silent-Fail bei fehlendem Worker / abgebrochener Transaktion | Technik | Reindex/Verschiebung geht ohne Fehler verloren | Mittel | Deferred-Work-Punkte (Transaction abort, kein Worker) | After-Commit-Hook / Fallback-Logging prüfen | Entwickler | Beobachten |
-| UI-Transparenz (D2) noch nicht gestartet | Termin/Scope | Kein Einblick in Task-Status für Anwender/Support | Hoch | 9 Arbeitstage bis Zieltermin, weiterhin kein Code | Entscheid: Minimalumfang liefern oder bewusst auf Folgerelease schneiden | PL | Kritisch |
-| Abnahme/Hardening (D5) offen | Termin | E2E-, Last- und Abnahmenachweis fehlt am Ende | Hoch | KW34 erreicht, kein E2E-/Lasttest gestartet | D5-Mindestumfang für die Abnahme jetzt festlegen und Termin dafür reservieren | PL | Kritisch |
-| Ferien / Verfügbarkeit | Organisation | Entwicklungsstillstand 17.07.–18.08. eingetreten; Restarbeit auf 9 Arbeitstage komprimiert | Hoch | Ein Monat ohne Commit auf dem Branch | Verfügbarkeit bis 31.08. verbindlich klären, sonst Scope reduzieren | PL | Eingetreten |
+| UI-Transparenz (D2) noch nicht gestartet | Termin/Scope | Kein Einblick in Task-Status für Anwender/Support | Hoch | 14 Arbeitstage bis Zieltermin 14.09., weiterhin kein Code | Entscheid: Minimalumfang liefern oder bewusst auf Folgerelease schneiden | PL | Kritisch |
+| Abnahme/Hardening (D5) offen | Termin | E2E-, Last- und Abnahmenachweis fehlt am Ende | Hoch | KW35 erreicht, kein E2E-/Lasttest gestartet | D5-Mindestumfang für die Abnahme jetzt festlegen und Termin dafür reservieren | PL | Kritisch |
+| Ferien / Verfügbarkeit | Organisation | Entwicklungsstillstand 17.07.–25.08. eingetreten (fünf Wochen); Restarbeit auf 14 Arbeitstage komprimiert | Hoch | Fünf Wochen ohne Commit auf dem Branch | Verfügbarkeit bis 14.09. verbindlich klären, sonst Scope reduzieren | PL | Eingetreten |
 
 
 ## Offene Entscheidungen
 
 <!-- Freie Liste offener Entscheide, die Fortschritt oder Scope blockieren. -->
 
-- 37% Restarbeit auf 9 Arbeitstagen — Wie gehen wir damit um?
+- 37% Restarbeit auf 14 Arbeitstagen — Zieltermin auf 14.09. verlegt, Reserve damit aufgebraucht. Offen: welcher Scope bis dahin verbindlich zugesagt wird
 - Objekt-Sperre: Für Verschieben-Operation umgesetzt (MOVE_LOCK) — Entscheid offen, ob auf Reindex-/Referenz-Präfix-Tasks ausgeweitet wird
 - Umgang mit stealable-Lock-Race: zweite gleichzeitige Verschiebe-Anfrage stiehlt den Lock aktuell stillschweigend statt abgewiesen zu werden — bewusst akzeptieren oder schliessen?
 - Benutzerbenachrichtigung: Umfang (nur Fehler vs. Abschluss+Fehler) und Anbindung ans Activity-System
@@ -179,9 +182,9 @@ hours_file: "hintergrund-tasks-stunden-*.xlsx"
      report.html in HTML um; hier bleibt es reines Markdown (siehe CONTRACT.md §1).
      Dies ist der EINZIGE Ort für die narrative Einschätzung. Die Harness schreibt hier nichts. -->
 
-- **Fortschritt:** 63% gewichtet — unverändert seit 17.07. aufgrund Ferienabwesenheit.
-- **Restzeit:** Nur noch **9 Arbeitstage** bis zum Zieltermin 31.08. für 37% Restarbeit.
+- **Fortschritt:** 63% gewichtet — unverändert seit 17.07., seither **fünf Wochen ohne Commit**.
+- **Restzeit:** **14 Arbeitstage** bis zum neuen Zieltermin **14.09.** (verlegt vom 31.08.) für 37% Restarbeit — machbar, aber ohne Reserve.
 - **Kernnutzen geliefert:** Alle drei Operationen laufen inklusive Objekt-Sperre beim Verschieben; das Produkt ist im Kern funktionsfähig.
 - **Budget:** 53% verbraucht (26 von 49 AT) — weiterhin **kosteneffizient**, mehr Wert geliefert als Aufwand verbucht.
 - **Offen:** Benutzerbenachrichtigung, Admin-Übersicht (D2, nicht gestartet), Abnahme/Hardening (D5, nicht gestartet), zwei rote CI-Checks (Lint/Konvention).
-- **Ampel-Empfehlung:** **Gelb-Rot** — Termin 31.08. gefährdet.
+- **Ampel-Empfehlung:** **Gelb-Rot** — Termin 14.09. haltbar, sofern D2 auf Minimalumfang begrenzt und die Verfügbarkeit gesichert ist.
