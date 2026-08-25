@@ -1,0 +1,164 @@
+<html
+    xmlns:tal="http://xml.zope.org/namespaces/tal"
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    i18n:domain="opengever.task"
+    tal:define="toLocalizedTime nocall: context/@@plone/toLocalizedTime">
+<head>
+<meta charset="utf-8">
+<meta name="generator" tal:attributes="content options/generator">
+<title tal:content="context/title">Title</title>
+
+<style>
+body {
+  font-family: Helvetica, Arial, Sans-serif;
+  font-size: 10pt;
+  line-height: 120%;
+}
+h1 {
+  font-size: 14pt;
+  line-height: 100%;
+}
+h1 .overline {
+  font-size: 10pt;
+  font-weight: normal;
+  margin-bottom: 2pt;
+}
+h2 {
+  margin-top: 20pt;
+  font-size: 10pt;
+}
+h3 {
+  font-size: 10pt;
+  margin: 0;
+}
+h1, h2, h3, h4, h5 {
+  page-break-after: avoid;
+}
+p {
+  margin: 0.5em 0;
+}
+ol, ul {
+  padding-left: 22pt;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+li > p {
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+}
+table {
+  margin-top: 10pt;
+  margin-bottom: 15pt;
+  border-collapse: collapse;
+  page-break-inside: auto;
+}
+th {
+  text-align: left;
+  font-weight: normal;
+}
+td, th {
+  padding-left: 10pt;
+  padding-right: 10pt;
+  padding-top: 2pt;
+  padding-bottom: 2pt;
+  border: 1px solid black;
+  vertical-align: top;
+}
+td:first-child, th:first-child {
+  padding-left: 0;
+}
+table.borderless td, table.borderless th {
+  border: none;
+}
+a {
+  text-decoration: none;
+  color: black;
+}
+.hidden-list-style ul {
+  padding-left: 0;
+  list-style-type: none;
+}
+@page {
+  size: A4;
+  margin-left: 2.5cm;
+  margin-right: 2.5cm;
+  font-family: Helvetica, Arial, Sans-serif;
+  font-size: 10pt;
+}
+.response {
+  margin-top: 1em;
+}
+.response-date {
+  white-space: nowrap;
+}
+.response-meta:not(:first-child) td {
+  padding-top: 10pt;
+}
+.response-action a {
+  font-style: italic;
+}
+
+</style>
+</head>
+
+<body>
+
+  <h1>
+    <div class="overline">Aufgabe / <span i18n:translate="label_dossier">Dossier</span>: <span tal:content="context/get_containing_dossier_title"></span></div>
+    <div tal:content="context/Title">Title</div>
+  </h1>
+
+  <table class="borderless">
+    <tr>
+      <th><span i18n:translate="label_location">Status</span>:</th>
+      <td i18n:domain="plone" i18n:translate="" tal:content="context/get_review_state"></td>
+    </tr>
+    <tr tal:condition="context/responsible">
+      <th><span i18n:translate="label_issuer">Issuer</span>:</th>
+      <td tal:content="python: context.get_issuer_actor().get_label()"></td>
+    </tr>
+    <tr tal:condition="context/responsible">
+      <th><span i18n:translate="label_responsible">Responsible</span>:</th>
+      <td tal:content="python: context.get_responsible_actor().get_label()"></td>
+    </tr>
+    <tr>
+      <th><span i18n:domain="opengever.base" i18n:translate="label_created">Created</span>:</th>
+      <td tal:content="python: toLocalizedTime(context.created(), long_format=True)"></td>
+    </tr>
+    <tr>
+      <th><span i18n:translate="label_deadline">Deadline</span>:</th>
+      <td tal:content="python: context.deadline.strftime('%d.%m.%Y')"></td>
+    </tr>
+    <tr>
+      <th><span i18n:translate="label_date_of_completion">Completed</span>:</th>
+      <td tal:condition="context/date_of_completion" tal:content="python: context.date_of_completion.strftime('%d.%m.%Y')"></td>
+    </tr>
+    <tr>
+      <th><span i18n:translate="label_location">Auftragstyp</span>:</th>
+      <td tal:content="context/get_task_type_label"></td>
+    </tr>
+  </table>
+
+  <div tal:condition="context/text">
+    <h2>Beschreibung</h2>
+    <div tal:replace="structure python: context.text.output"></div>
+  </div>
+
+  <div class="responses" tal:condition="responses" tal:define="responses view/responses">
+    <h2>Verlauf</h2>
+
+    <table class="borderless">
+      <tal:block repeat="response responses">
+      <tr class="response-meta">
+        <td class="response-date" tal:content="python: toLocalizedTime(response['response'].created, long_format=True)"></td>
+        <td class="response-action" tal:content="structure python: response['description']"></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td class="response-text" tal:content="structure python: response['text']"></td>
+      </tr>
+    </tal:block>
+    </table>
+  </div>
+</body>
+</html>
