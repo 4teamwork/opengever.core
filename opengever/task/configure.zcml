@@ -346,4 +346,11 @@
       name="task-transition-tested-and-closed-in-progress"
       />
 
+  <browser:page
+      name="task-pdf"
+      for="opengever.task.task.ITask"
+      permission="zope2.View"
+      class="opengever.exportng.task_pdf.TaskPDFView"
+      />
+
 </configure>
