@@ -4,6 +4,9 @@ from opengever.exportng.catalog import DocumentSyncer
 from opengever.exportng.catalog import DossierSyncer
 from opengever.exportng.catalog import FileplanEntrySyncer
 from opengever.exportng.catalog import SubdossierSyncer
+from opengever.exportng.catalog import TaskSyncer
+from opengever.exportng.catalog import VERSIONS_MAPPING
+from opengever.exportng.catalog import VERSIONS_TABLE
 from opengever.exportng.db import create_table
 from opengever.exportng.db import engine
 from opengever.exportng.db import metadata
@@ -41,8 +44,9 @@ class Syncer(object):
         create_table(FileplanEntrySyncer.table, FileplanEntrySyncer.serializer.mapping)
         create_table(DossierSyncer.table, DossierSyncer.serializer.mapping)
         create_table(SubdossierSyncer.table, SubdossierSyncer.serializer.mapping)
+        create_table(TaskSyncer.table, TaskSyncer.serializer.mapping)
         create_table(DocumentSyncer.table, DocumentSyncer.serializer.mapping)
-        create_table(DocumentSyncer.versions_table, DocumentSyncer.serializer.versions_mapping)
+        create_table(VERSIONS_TABLE, VERSIONS_MAPPING)
         create_table(CommitteeSyncer.table, CommitteeSyncer.serializer.mapping)
         create_table(CommitteeMemberSyncer.table, CommitteeMemberSyncer.serializer.mapping)
         create_table(MeetingSyncer.table, MeetingSyncer.serializer.mapping)
@@ -65,6 +69,7 @@ class Syncer(object):
         FileplanEntrySyncer(self.query).sync()
         DossierSyncer(self.query).sync()
         SubdossierSyncer(self.query).sync()
+        TaskSyncer(self.query).sync()
         DocumentSyncer(self.query).sync()
         CommitteePeriodSyncer(self.query).sync()
         CommitteeSyncer(engine, metadata).sync()

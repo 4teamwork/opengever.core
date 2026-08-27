@@ -144,7 +144,14 @@ a {
     <div tal:replace="structure python: context.text.output"></div>
   </div>
 
-  <div class="responses" tal:condition="responses" tal:define="responses view/responses">
+  <div tal:condition="view/subtasks">
+    <h2>Unteraufgaben</h2>
+    <ul class="tasktree">
+      <li tal:replace="structure view/create_tasktree">Task Tree</li>
+    </ul>
+  </div>
+
+  <div class="responses" tal:condition="responses" tal:define="responses python:view.responses(context)">
     <h2>Verlauf</h2>
 
     <table class="borderless">
@@ -160,5 +167,66 @@ a {
     </tal:block>
     </table>
   </div>
+
+  <tal:block repeat="subtask view/subtask_objects">
+    <h1>
+      <div class="overline">Unteraufgabe</div>
+      <div tal:content="subtask/Title"></div>
+    </h1>
+
+    <table class="borderless">
+      <tr>
+        <th><span i18n:translate="label_location">Status</span>:</th>
+        <td i18n:domain="plone" i18n:translate="" tal:content="subtask/get_review_state"></td>
+      </tr>
+      <tr tal:condition="subtask/responsible">
+        <th><span i18n:translate="label_issuer">Issuer</span>:</th>
+        <td tal:content="python: subtask.get_issuer_actor().get_label()"></td>
+      </tr>
+      <tr tal:condition="subtask/responsible">
+        <th><span i18n:translate="label_responsible">Responsible</span>:</th>
+        <td tal:content="python: subtask.get_responsible_actor().get_label()"></td>
+      </tr>
+      <tr>
+        <th><span i18n:domain="opengever.base" i18n:translate="label_created">Created</span>:</th>
+        <td tal:content="python: toLocalizedTime(subtask.created(), long_format=True)"></td>
+      </tr>
+      <tr>
+        <th><span i18n:translate="label_deadline">Deadline</span>:</th>
+        <td tal:content="python: subtask.deadline.strftime('%d.%m.%Y')"></td>
+      </tr>
+      <tr>
+        <th><span i18n:translate="label_date_of_completion">Completed</span>:</th>
+        <td tal:condition="subtask/date_of_completion" tal:content="python: subtask.date_of_completion.strftime('%d.%m.%Y')"></td>
+      </tr>
+      <tr>
+        <th><span i18n:translate="label_location">Auftragstyp</span>:</th>
+        <td tal:content="subtask/get_task_type_label"></td>
+      </tr>
+    </table>
+
+    <div tal:condition="subtask/text">
+      <h2>Beschreibung</h2>
+      <div tal:replace="structure python: subtask.text.output"></div>
+    </div>
+
+    <div class="responses" tal:condition="responses" tal:define="responses python:view.responses(subtask)">
+      <h2>Verlauf</h2>
+
+      <table class="borderless">
+        <tal:block repeat="response responses">
+        <tr class="response-meta">
+          <td class="response-date" tal:content="python: toLocalizedTime(response['response'].created, long_format=True)"></td>
+          <td class="response-action" tal:content="structure python: response['description']"></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td class="response-text" tal:content="structure python: response['text']"></td>
+        </tr>
+      </tal:block>
+      </table>
+    </div>
+  </tal:block>
+
 </body>
 </html>
