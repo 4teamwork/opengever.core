@@ -1,4 +1,5 @@
 from Acquisition import aq_parent
+from App.config import getConfiguration
 from collections import namedtuple
 from datetime import date
 from datetime import datetime
@@ -6,6 +7,7 @@ from opengever.ogds.models.service import ogds_service
 from time import time
 from zope.component.hooks import setSite
 import gc
+import os
 
 CACHE = {}
 
@@ -86,3 +88,13 @@ def json_serializable(value):
             for key, item in value.items()
         }
     return str(value)
+
+
+def get_data_dir(name):
+    storage = getConfiguration().dbtab.getDatabaseFactory(name='main').config.storage
+    if hasattr(storage, 'config'):
+        storage = storage.config
+    data_dir = os.path.join(os.path.dirname(storage.blob_dir), 'exportng', name)
+    if not os.path.exists(data_dir):
+        os.makedirs(data_dir)
+    return data_dir

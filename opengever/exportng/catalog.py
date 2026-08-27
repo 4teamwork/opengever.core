@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import opengever.ogds.base  # isort:skip # noqa fix cyclic import
 from Acquisition import aq_parent
 from datetime import date
@@ -8,10 +9,11 @@ from opengever.exportng.db import engine
 from opengever.exportng.db import metadata
 from opengever.exportng.journal import get_journal_entries_from_document
 from opengever.exportng.journal import get_journal_entries_from_dossier
-from opengever.exportng.journal import JOURNAL_TABLE
+from opengever.exportng.task_pdf import TaskPDFView
 from opengever.exportng.utils import Attribute
 from opengever.exportng.utils import document_parent
 from opengever.exportng.utils import garbage_collect
+from opengever.exportng.utils import get_data_dir
 from opengever.exportng.utils import json_serializable
 from opengever.exportng.utils import timer
 from opengever.exportng.utils import userid_to_email
@@ -31,6 +33,17 @@ import os.path
 BLOB_VERSION_KEY = 'CloneNamedFileBlobs/opengever.document.document.IDocumentSchema.file'
 CACHE = {}
 SQL_CHUNK_SIZE = 5000
+VERSIONS_TABLE = 'document_versions'
+VERSIONS_MAPPING = [
+    Attribute('UID', 'objexternalkey', 'varchar'),
+    Attribute('version', 'version', 'integer'),
+    Attribute('filepath', 'filepath', 'varchar'),
+    Attribute('filname', 'filename', 'varchar'),
+    Attribute('filesize', 'filesize', 'bigint'),
+    Attribute('principal', 'versby', 'varchar'),
+    Attribute('timestamp', 'verschangedat', 'datetime'),
+    Attribute('comment', 'versdesc', 'varchar'),
+]
 
 logger = logging.getLogger('opengever.exportng')
 
@@ -48,10 +61,15 @@ def rename_dict_key(dict_, old_key, new_key):
 
 class CatalogItemSerializer(object):
 
+    has_many = False
+
     def __init__(self, item):
         self.item = item
         self.obj = item._unrestrictedGetObject()
         self.parent = self.get_parent()
+
+    def ignore(self):
+        return False
 
     def get_parent(self):
         return aq_parent(self.obj)
@@ -169,6 +187,7 @@ class CatalogSyncer(object):
 
     catalog_key = 'UID'
     sql_key = 'objexternalkey'
+    additional_tables = []
 
     def __init__(self, query=None):
         self.base_query = query or {}
@@ -225,16 +244,23 @@ class CatalogSyncer(object):
         counter = 0
 
         inserts = []
-        version_inserts = []
-        journal_inserts = []
+        additional_inserts = {}
+        for tablename in self.additional_tables:
+            additional_inserts[tablename] = []
         added_len = len(added)
         logger.info('Adding %s %s...', added_len, self.table)
         for key in added:
             item = self.catalog_items[key]
             serializer = self.serializer(item)
-            inserts.append(serializer.data())
-            version_inserts.extend(serializer.versions())
-            journal_inserts.extend(serializer.journal_entries())
+            if serializer.ignore():
+                continue
+            if serializer.has_many:
+                inserts.extend(serializer.data())
+            else:
+                inserts.append(serializer.data())
+            for table in self.additional_tables:
+                getter = getattr(serializer, '{}_data'.format(table))
+                additional_inserts.setdefault(table, []).extend(getter())
             counter += 1
             if counter % 100 == 0:
                 logger.info(
@@ -251,19 +277,12 @@ class CatalogSyncer(object):
                     conn.execute(table.insert(), chunk)
         logger.info('Added %s: %s', self.table, len(added))
 
-        if version_inserts:
-            table = metadata.tables[self.versions_table]
+        for tablename in self.additional_tables:
+            table = metadata.tables[tablename]
             with engine.connect() as conn:
-                for chunk in chunks(version_inserts, SQL_CHUNK_SIZE):
+                for chunk in chunks(additional_inserts[tablename], SQL_CHUNK_SIZE):
                     conn.execute(table.insert(), chunk)
-            logger.info('Added %s: %s', table, len(version_inserts))
-
-        if journal_inserts:
-            table = metadata.tables[JOURNAL_TABLE]
-            with engine.connect() as conn:
-                for chunk in chunks(journal_inserts, SQL_CHUNK_SIZE):
-                    conn.execute(table.insert(), chunk)
-            logger.info('Added %s: %s', table, len(journal_inserts))
+            logger.info('Added %s: %s', table, len(additional_inserts[tablename]))
 
     def update_objects(self, modified):
         total_time = timer()
@@ -425,16 +444,23 @@ class DossierSerializer(CatalogItemSerializer):
         return None
 
     def customfields(self):
+        return None
+        if not self.dexterity_field_value('dossier_type'):
+            return None
         return json_serializable(get_custom_properties(self.obj)) or None
 
     def sort_order(self):
         return '.'.join([str(n).zfill(4) for n in IReferenceNumber(
             self.obj).get_numbers()['dossier']])
 
+    def journal_entries_data(self):
+        return get_journal_entries_from_dossier(self.obj)
+
 
 class DossierSyncer(CatalogSyncer):
 
     table = 'dossiers'
+    additional_tables = ['journal_entries']
     query = {
         'portal_type': [
             'opengever.dossier.businesscasedossier',
@@ -448,9 +474,6 @@ class DossierSyncer(CatalogSyncer):
         ],
     }
     serializer = DossierSerializer
-
-    def get_journal_entries(self, obj):
-        return get_journal_entries_from_dossier(obj)
 
 
 class SubdossierSyncer(DossierSyncer):
@@ -492,18 +515,8 @@ class DocumentSerializer(CatalogItemSerializer):
         Attribute('file_extension', 'extension', 'varchar'),
         Attribute('attributedefinitiontarget', 'attributedefinitiontarget', 'varchar'),
         Attribute('preserved_as_paper', 'gcpreservedaspaper', 'boolean'),
-        # Attribute('document_type', 'XXX', 'date'),
+        Attribute('document_type', 'objcategory', 'varchar'),
         Attribute('customfields', 'customfieldsjson', 'jsonb'),
-    ]
-    versions_mapping = [
-        Attribute('UID', 'objexternalkey', 'varchar'),
-        Attribute('version', 'version', 'integer'),
-        Attribute('filepath', 'filepath', 'varchar'),
-        Attribute('filname', 'filename', 'varchar'),
-        Attribute('filesize', 'filesize', 'bigint'),
-        Attribute('principal', 'versby', 'varchar'),
-        Attribute('timestamp', 'verschangedat', 'datetime'),
-        Attribute('comment', 'versdesc', 'varchar'),
     ]
 
     def file_extension(self):
@@ -528,7 +541,13 @@ class DocumentSerializer(CatalogItemSerializer):
     def reference_number(self):
         return int(IReferenceNumber(self.obj).get_local_number())
 
+    def document_type(self):
+        return None
+
     def customfields(self):
+        return None
+        if not self.dexterity_field_value('document_type'):
+            return None
         return get_custom_properties(self.obj) or None
 
     # proposals:
@@ -557,7 +576,7 @@ class DocumentSerializer(CatalogItemSerializer):
         logger.warning('Could not determine attributedefinitiontarget for %s', self.obj)
         return 'gbodocuments'
 
-    def versions(self):
+    def document_versions_data(self):
         versions = []
         uid = self.obj.UID()
         rtool = api.portal.get_tool('portal_repository')
@@ -611,14 +630,14 @@ class DocumentSerializer(CatalogItemSerializer):
             }
         return None
 
-    def journal_entries(self):
+    def journal_entries_data(self):
         return get_journal_entries_from_document(self.obj)
 
 
 class DocumentSyncer(CatalogSyncer):
 
     table = 'documents'
-    versions_table = 'document_versions'
+    additional_tables = ['document_versions', 'journal_entries']
     query = {
         'portal_type': ['opengever.document.document', 'ftw.mail.mail'],
         'trashed': False,
@@ -638,10 +657,195 @@ class CommitteePeriodSerializer(CatalogItemSerializer):
     ]
 
 
-class CommitteePeriodSyncer(DossierSyncer):
+class CommitteePeriodSyncer(CatalogSyncer):
 
     table = 'committee_periods'
     query = {
         'portal_type': 'opengever.meeting.period',
     }
     serializer = CommitteePeriodSerializer
+
+
+tasks_by_dossier = {}
+
+
+class TaskSerializer(CatalogItemSerializer):
+    has_many = True
+    mapping = [
+        Attribute('UID', 'objexternalkey', 'varchar'),
+        Attribute('objectid', 'objectid', 'varchar'),
+        Attribute('title', 'objname', 'varchar'),
+        Attribute('created', 'objcreatedat', 'datetime'),
+        Attribute('creator', 'objcreatedby', 'varchar'),
+        Attribute('activities', 'procinstactivities', 'jsonb'),
+    ]
+
+    taks_type_mapping = {
+        'information': 'COO.111.100.1.2148921',  # Zur Kenntnisnahme
+        'direct-execution': 'COO.111.100.1.2148922',  # Zur direkten Erledigung
+        'comment': 'COO.111.100.1.2148927',  # Zur Stellungnahme
+        'approval': 'COO.111.100.1.2148923',  # Zur Genehmigung
+        'correction': 'COO.111.100.1.2148924',  # Zur Prüfung / Korrektur
+        'report': 'COO.111.100.1.2148925',  # Zum Bericht / Antrag
+    }
+
+    state_mapping = {
+        'task-state-cancelled': 'NOTEXECUTED',
+        'task-state-planned': 'WAITING',
+        'task-state-in-progress': 'STARTABLE',
+        'task-state-open': 'STARTABLE',
+        'task-state-rejected': 'NOTEXECUTED ',
+        'task-state-resolved': 'COMPLETED',
+        'task-state-tested-and-closed': 'COMPLETED',
+    }
+
+    def ignore(self):
+        if self.obj.get_is_subtask():
+            return True
+        self.uid = self.obj.UID()
+        self.pdf_filename = '{}.pdf'.format(self.uid)
+        self.pdf_path = os.path.join(self.base_path, self.pdf_filename)
+        self.create_task_pdf()
+        self.dossier = self.obj.get_main_dossier()
+        self.dossier_uid = self.dossier.UID()
+        self.create_subdossier = False
+        if self.dossier_uid not in tasks_by_dossier:
+            self.create_subdossier = True
+            tasks_by_dossier[self.dossier_uid] = []
+        tasks_by_dossier[self.dossier_uid].append(self.uid)
+        self.created_at = datetime.now()
+        return False
+
+    def create_task_pdf(self):
+        view = TaskPDFView(self.obj, self.obj.REQUEST)
+        pdf_content = view()
+        pdf_filename = '{}.pdf'.format(self.uid)
+        pdf_path = os.path.join(self.base_path, pdf_filename)
+        with open(pdf_path, 'wb') as pdf_file:
+            pdf_file.write(pdf_content)
+
+    def objectid(self):
+        return self.get_parent().UID()
+
+    def activities(self):
+        catalog = api.portal.get_tool('portal_catalog')
+        subtasks = catalog.unrestrictedSearchResults(
+            portal_type='opengever.task.task',
+            path={'query': '/'.join(self.obj.getPhysicalPath()), 'depth': 1},
+            sort_on='getObjPositionInParent',
+        )
+        activity = {
+            'objexternalkey': self.uid,
+            'objname': self.obj.Title(),
+            'actinstdefinition': self.taks_type_mapping[self.obj.task_type],
+            'objcreatedby': self.creator(),
+            'objcreatedat': self.created(),
+            'actinstparticipant': userid_to_email(self.dexterity_field_value('responsible')),
+            'actinststate': self.state_mapping[self.obj.get_review_state()],
+            'actinstenddeadline': datetime.combine(self.obj.deadline, datetime.max.time()),
+        }
+        if activity['actinststate'] == 'COMPLETED':
+            activity['actinststartedat'] = activity['objcreatedat']
+            activity['actinstcompletedat'] = self.as_datetime(self.obj.modified())
+
+        if not subtasks:
+            return json_serializable([activity])
+
+        activities = []
+
+        is_sequential = self.obj.is_sequential_main_task()
+        prev_activity = None
+        for subtask in subtasks:
+            obj = subtask._unrestrictedGetObject()
+            activity = {
+                'objexternalkey': obj.UID(),
+                'objname': obj.Title(),
+                'actinstdefinition': self.taks_type_mapping[obj.task_type],
+                'objcreatedby': userid_to_email(obj.Creator()),
+                'objcreatedat': self.as_datetime(obj.created()),
+                'actinstparticipant': userid_to_email(subtask.responsible),
+                'actinststate': self.state_mapping[obj.get_review_state()],
+                'actinstenddeadline': datetime.combine(obj.deadline, datetime.max.time()),
+            }
+            if prev_activity:
+                activity['actinstprev'] = [prev_activity]
+            if activity['actinststate'] == 'COMPLETED':
+                activity['actinststartedat'] = activity['objcreatedat']
+                activity['actinstcompletedat'] = self.as_datetime(obj.modified())
+
+            activities.append(activity)
+            if is_sequential:
+                prev_activity = obj.UID()
+
+        next_activity = None
+        if is_sequential:
+            for activity in reversed(activities):
+                if next_activity:
+                    activity['actinstnext'] = [next_activity]
+                next_activity = activity['objexternalkey']
+
+        return json_serializable(activities)
+
+    def data(self):
+        data = super(TaskSerializer, self).data()
+        # We have to export a task (workflow) for each document
+        docs = self.obj.task_documents()
+        del data['objectid']
+        objectids = [doc.UID() for doc in docs]
+        objectids.append('{}-doc'.format(self.obj.UID()))
+        return [dict(objectid=objectid, **data) for objectid in objectids]
+
+    def documents_data(self):
+        return [{
+            'objexternalkey': '{}-doc'.format(self.obj.UID()),
+            'objprimaryrelated': '{}-tasks'.format(self.dossier.UID()),
+            'attributedefinitiontarget': 'gbodocuments',
+            'objname': self.obj.Title(),
+            'objcreatedat': self.created_at.isoformat(),
+            'objmodifiedat': self.created_at.isoformat(),
+            'objterms': [],
+        }]
+
+    def document_versions_data(self):
+        return [{
+            'objexternalkey': '{}-doc'.format(self.obj.UID()),
+            'version': 0,
+            'filepath': self.pdf_path,
+            'filename': self.pdf_filename,
+            'filesize': os.stat(self.pdf_path).st_size,
+            'versby': 'zopemaster',
+            'verschangedat': self.created_at.isoformat(),
+            'versdesc': None,
+        }]
+
+    def subdossiers_data(self):
+        if self.create_subdossier:
+            return [{
+                'objexternalkey': '{}-tasks'.format(self.dossier.UID()),
+                'objprimaryrelated': self.dossier.UID(),
+                'botitle': 'Aufgaben',
+                'gboresponsible': 'zopemaster',
+                'objcreatedat': self.created_at.isoformat(),
+                'bonumberhistory': [],
+                'objterms': [],
+                'gborelateddossiers': [],
+                'fadmins': [],
+                'objsecchange': [],
+                'objsecread': [],
+            }]
+        else:
+            return []
+
+
+class TaskSyncer(CatalogSyncer):
+
+    table = 'workflows'
+    additional_tables = ['subdossiers', 'documents', 'document_versions']
+    query = {
+        'portal_type': 'opengever.task.task',
+    }
+    serializer = TaskSerializer
+
+    def add_objects(self, added):
+        self.serializer.base_path = get_data_dir('tasks')
+        super(TaskSyncer, self).add_objects(added)
