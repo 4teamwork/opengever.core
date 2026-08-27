@@ -141,7 +141,7 @@ a {
 
   <div tal:condition="context/text">
     <h2>Beschreibung</h2>
-    <div tal:replace="structure python: context.text.output"></div>
+    <div tal:replace="structure python: view.text_output(context)"></div>
   </div>
 
   <div tal:condition="view/subtasks">
@@ -207,7 +207,7 @@ a {
 
     <div tal:condition="subtask/text">
       <h2>Beschreibung</h2>
-      <div tal:replace="structure python: subtask.text.output"></div>
+      <div tal:replace="structure python: view.text_output(subtask)"></div>
     </div>
 
     <div class="responses" tal:condition="responses" tal:define="responses python:view.responses(subtask)">

@@ -3,6 +3,7 @@ from opengever.base.response import IResponseContainer
 from opengever.ogds.base.actor import Actor
 from opengever.task.response_description import ResponseDescription
 from plone import api
+from plone.app.textfield import IRichTextValue
 from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.i18n import translate
@@ -80,3 +81,8 @@ class TaskPDFView(BrowserView):
         ]
         tree = make_tree_by_url(nodes, url_key='path', children_key='children')
         return self.tasktree(children=tree, level=1)
+
+    def text_output(self, obj):
+        if IRichTextValue.providedBy(obj.text):
+            return obj.text.output
+        return obj.text
