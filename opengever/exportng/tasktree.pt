@@ -1,0 +1,19 @@
+<tal:master define="level options/level|python:0;
+                    children options/children | nothing;"
+            i18n:domain="plone">
+
+<metal:main define-macro="nav_main">
+<tal:navitem repeat="node children">
+<li tal:define="children node/children;">
+  <span tal:content="node/title">Title</span>
+  &rArr;&nbsp;<span tal:content="node/responsible">Responsible</span>
+  <tal:children condition="python: len(children) > 0">
+  <ul tal:attributes="class python:'navTree navTreeLevel'+str(level)"
+      tal:condition="python: len(children) > 0">
+    <span tal:replace="structure python:view.tasktree(children=children, level=level+1)" />
+  </ul>
+  </tal:children>
+</li>
+</tal:navitem>
+</metal:main>
+</tal:master>
