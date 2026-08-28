@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-12-04 14:34+0000\n"
+"POT-Creation-Date: 2026-08-17 08:02+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -337,6 +337,11 @@ msgstr ""
 msgid "label_todo_commented_activity"
 msgstr ""
 
+#. Default: "Overdue to-do"
+#: ./opengever/workspace/activities.py
+msgid "label_todo_overdue_activity"
+msgstr ""
+
 #. Default: "ToDo reopened"
 #: ./opengever/workspace/activities.py
 msgid "label_todo_reopened_activity"
@@ -420,6 +425,11 @@ msgstr ""
 #. Default: "Assigned to ${responsible} by ${user}"
 #: ./opengever/workspace/activities.py
 msgid "summary_todo_assigned_activity"
+msgstr ""
+
+#. Default: "The to-do is still open after exceeding its deadline."
+#: ./opengever/workspace/activities.py
+msgid "summary_todo_overdue_activity"
 msgstr ""
 
 #. Default: "Added to the workspace by ${user}"

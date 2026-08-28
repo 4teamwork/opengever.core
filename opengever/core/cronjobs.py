@@ -1,12 +1,15 @@
 from opengever.core.debughelpers import all_plone_sites
 from opengever.core.debughelpers import setup_plone
 from opengever.dossier.activities import DossierOverdueActivityGenerator
+from opengever.workspace import is_todo_feature_enabled
+from opengever.workspace import is_workspace_feature_enabled
+from opengever.workspace.activities import ToDoOverdueActivityGenerator
 from plone import api
 import logging
 import transaction
 
 
-logger = logging.getLogger('opengever.dossier.cronjobs')
+logger = logging.getLogger('opengever.core.cronjobs')
 
 
 def generate_overdue_notifications_zopectl_handler(app, args):
@@ -28,7 +31,14 @@ def generate_overdue_notifications_zopectl_handler(app, args):
         plone.REQUEST.environ['HTTP_ACCEPT_LANGUAGE'] = lang
         plone.REQUEST.setupLocale()
 
-        created = DossierOverdueActivityGenerator()()
-        logger.info('Successfully created {} notifications'.format(created))
+        if is_workspace_feature_enabled():
+            if is_todo_feature_enabled():
+                created = ToDoOverdueActivityGenerator()()
+                logger.info('Successfully created {} todo notifications'.format(created))
+            else:
+                logger.info('Todo feature is not enabled. No notifications created')
+        else:
+            created = DossierOverdueActivityGenerator()()
+            logger.info('Successfully created {} dossier notifications'.format(created))
 
         transaction.commit()
