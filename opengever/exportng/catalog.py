@@ -400,7 +400,7 @@ class DossierSerializer(CatalogItemSerializer):
         Attribute('former_reference_number', 'bonumberhistory', 'jsonb'),
         Attribute('reference_number', 'bosequencenumber', 'integer'),
         Attribute('dossier_type', 'objcategory', 'varchar'),
-        Attribute('customfields', 'customfieldsjson', 'jsonb'),
+        Attribute('custom_properties', 'customfieldsjson', 'jsonb'),
         Attribute('classification', 'classification', 'varchar'),
         Attribute('privacy_layer', 'privacyprotection', 'boolean'),
         Attribute('public_trial', 'disclosurestatus', 'varchar'),
@@ -441,12 +441,15 @@ class DossierSerializer(CatalogItemSerializer):
         return self.dexterity_field_value('classification').upper()
 
     def dossier_type(self):
-        return None
+        field = self.dexterity_field('custom_properties')
+        active_slot = field.get_active_assignment_slot(self.obj)
+        if active_slot is None:
+            if get_custom_properties(self.obj):
+                return field.default_slot
+        else:
+            return active_slot
 
-    def customfields(self):
-        return None
-        if not self.dexterity_field_value('dossier_type'):
-            return None
+    def custom_properties(self):
         return json_serializable(get_custom_properties(self.obj)) or None
 
     def sort_order(self):
@@ -516,7 +519,7 @@ class DocumentSerializer(CatalogItemSerializer):
         Attribute('attributedefinitiontarget', 'attributedefinitiontarget', 'varchar'),
         Attribute('preserved_as_paper', 'gcpreservedaspaper', 'boolean'),
         Attribute('document_type', 'objcategory', 'varchar'),
-        Attribute('customfields', 'customfieldsjson', 'jsonb'),
+        Attribute('custom_properties', 'customfieldsjson', 'jsonb'),
     ]
 
     def file_extension(self):
@@ -542,13 +545,16 @@ class DocumentSerializer(CatalogItemSerializer):
         return int(IReferenceNumber(self.obj).get_local_number())
 
     def document_type(self):
-        return None
+        field = self.dexterity_field('custom_properties')
+        active_slot = field.get_active_assignment_slot(self.obj)
+        if active_slot is None:
+            if get_custom_properties(self.obj):
+                return field.default_slot
+        else:
+            return active_slot
 
-    def customfields(self):
-        return None
-        if not self.dexterity_field_value('document_type'):
-            return None
-        return get_custom_properties(self.obj) or None
+    def custom_properties(self):
+        return json_serializable(get_custom_properties(self.obj)) or None
 
     # proposals:
     # - pproposaldocument
