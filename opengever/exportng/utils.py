@@ -76,7 +76,7 @@ def garbage_collect(site):
 
 
 def json_serializable(value):
-    if value is None or isinstance(value, (str, int, float, bool)):
+    if value is None or isinstance(value, (unicode, str, int, float, bool)):
         return value
     if isinstance(value, (datetime, date)):
         return value.isoformat()
