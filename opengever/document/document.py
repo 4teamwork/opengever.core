@@ -28,6 +28,7 @@ from opengever.officeconnector.mimetypes import get_editable_types
 from opengever.oneoffixx import is_oneoffixx_feature_enabled
 from opengever.sign.utils import is_sign_feature_enabled
 from opengever.task.task import ITask
+from opengever.trash.trash import ITrasher
 from opengever.virusscan.validator import validateUploadForFieldIfNecessary
 from opengever.virusscan.validator import Z3CFormClamavValidator
 from opengever.wopi.discovery import editable_extensions
@@ -427,7 +428,8 @@ class Document(Item, BaseDocumentMixin):
                 self, transition='document-transition-initialize')
 
     def is_finalize_allowed(self):
-        return not self.is_checked_out() and \
+        return not ITrasher(self).is_trashed() and \
+            not self.is_checked_out() and \
             not self.is_referenced_by_pending_approval_task()
 
     def is_sign_feature_enabled(self):

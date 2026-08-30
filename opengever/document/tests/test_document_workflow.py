@@ -90,6 +90,17 @@ class TestDocumentWorkflow(IntegrationTestCase):
         self.assertEquals(Document.active_state,
                           api.content.get_state(obj=self.document))
 
+    def test_document_cannot_be_finalized_if_trashed(self):
+        self.login(self.administrator)
+        self.trash_documents(self.document)
+
+        with self.assertRaises(InvalidParameterError):
+            api.content.transition(
+                obj=self.document, transition=Document.finalize_transition)
+
+        self.assertEquals(Document.active_state,
+                          api.content.get_state(obj=self.document))
+
     def test_document_cannot_be_finalized_if_is_referenced_by_pending_approval_task(self):
         self.login(self.administrator)
         self.task_in_protected_dossier.task_type = 'approval'
