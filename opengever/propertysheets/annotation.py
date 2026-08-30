@@ -3,10 +3,20 @@ from opengever.base.utils import make_persistent
 from opengever.propertysheets.exceptions import BadCustomPropertiesFactoryConfiguration
 from opengever.propertysheets.field import IPropertySheetField
 from persistent.dict import PersistentDict
+from persistent.mapping import PersistentMapping
 from plone.behavior.annotation import AnnotationsFactoryImpl
 from plone.behavior.annotation import AnnotationStorage
 from plone.behavior.interfaces import ISchemaAwareFactory
 from zope.interface import alsoProvides
+
+
+def deep_update(dict_, otherdict):
+    for k, v in otherdict.iteritems():
+        if isinstance(v, (dict, PersistentMapping)):
+            dict_[k] = deep_update(dict_.get(k, {}), v)
+        else:
+            dict_[k] = v
+    return dict_
 
 
 class CustomPropertiesStorageImpl(AnnotationsFactoryImpl):
@@ -74,7 +84,8 @@ class CustomPropertiesStorageImpl(AnnotationsFactoryImpl):
             # we could have an initial stored value of `None`
             if value_to_update is None:
                 value_to_update = PersistentDict()
-            value_to_update.update(new_value)
+
+            deep_update(value_to_update, new_value)
 
             self.__dict__['annotations'][prefixed_name] = value_to_update
 
