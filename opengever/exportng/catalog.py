@@ -413,6 +413,7 @@ class DossierSerializer(CatalogItemSerializer):
         Attribute('readers', 'objsecread', 'jsonb'),
         Attribute('editors', 'objsecchange', 'jsonb'),
         Attribute('managers', 'fadmins', 'jsonb'),
+        Attribute('protected', 'gboprotected', 'boolean'),
         Attribute('sort_order', '_sort_key', 'varchar'),
     ]
 
@@ -458,6 +459,9 @@ class DossierSerializer(CatalogItemSerializer):
 
     def journal_entries_data(self):
         return get_journal_entries_from_dossier(self.obj)
+
+    def protected(self):
+        return getattr(self.obj, '__ac_local_roles_block__', False)
 
 
 class DossierSyncer(CatalogSyncer):
