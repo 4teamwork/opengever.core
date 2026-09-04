@@ -62,6 +62,9 @@ msgstr "Erhaltene Aufgaben"
 msgid "assignedtasks"
 msgstr "Zugewiesene Aufgaben"
 
+msgid "bgtasks-cp-tasks"
+msgstr "Hintergrundaufgaben"
+
 msgid "billable"
 msgstr "verrechenb. Std."
 

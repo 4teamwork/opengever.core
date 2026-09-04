@@ -5,6 +5,7 @@
 
   <adapter factory=".tasklisting.GlobalTaskTableSource" />
   <adapter factory=".users.UsersListingTableSource" />
+  <adapter factory=".backgroundtasks.BackgroundTasksTableSource" />
 
   <browser:page
       for="plone.dexterity.interfaces.IDexterityContainer"
@@ -32,6 +33,14 @@
       for="Products.CMFPlone.interfaces.siteroot.IPloneSiteRoot"
       name="ogds-controlpanel"
       class=".ogdscontrolpanel.OGDSControlPanel"
+      permission="cmf.ManagePortal"
+      allowed_interface="ftw.tabbedview.interfaces.ITabbedViewEndpoints"
+      />
+
+  <browser:page
+      for="Products.CMFPlone.interfaces.siteroot.IPloneSiteRoot"
+      name="background-tasks-controlpanel"
+      class=".backgroundtasks.BackgroundTasksControlPanel"
       permission="cmf.ManagePortal"
       allowed_interface="ftw.tabbedview.interfaces.ITabbedViewEndpoints"
       />
@@ -170,6 +179,14 @@
       for="Products.CMFPlone.interfaces.siteroot.IPloneSiteRoot"
       name="tabbedview_view-ogds-cp-alltasks"
       class=".ogdscontrolpanel.OGDSAllTasks"
+      permission="cmf.ManagePortal"
+      />
+
+  <!-- background tasks control panel tabs -->
+  <browser:page
+      for="Products.CMFPlone.interfaces.siteroot.IPloneSiteRoot"
+      name="tabbedview_view-bgtasks-cp-tasks"
+      class=".backgroundtasks.BackgroundTasksListing"
       permission="cmf.ManagePortal"
       />
 
