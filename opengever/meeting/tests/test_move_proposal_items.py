@@ -22,7 +22,10 @@ class TestMoveProposalItems(SolrIntegrationTestCase):
         browser.fill({'Destination': self.subdossier})
         browser.css('#form-buttons-button_submit').first.click()
 
-        assert_message('1 elements were moved successfully')
+        assert_message(
+            '1 items have been queued to be moved in the background. You can '
+            'continue working on other content in the meantime. You will '
+            'receive a notification as soon as the process is complete.')
         self.assertIn(proposal, self.subdossier.objectValues())
 
     @browsing

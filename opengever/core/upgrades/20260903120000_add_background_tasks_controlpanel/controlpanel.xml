@@ -1,0 +1,16 @@
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="portal_controlpanel">
+
+  <!-- BACKGROUND TASKS CONTROL PANEL -->
+  <configlet
+      title="Background Tasks Control Panel"
+      action_id="background-tasks-controlpanel"
+      appId="opengever.bgtasks"
+      category="Products"
+      url_expr="string:${portal_url}/@@background-tasks-controlpanel"
+      condition_expr=""
+      icon_expr="string:$portal_url/++resource++plone.app.registry/icon.png"
+      visible="True">
+    <permission>Manage portal</permission>
+  </configlet>
+
+</object>

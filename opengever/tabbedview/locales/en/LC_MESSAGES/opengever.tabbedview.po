@@ -242,6 +242,72 @@ msgstr "Journal"
 msgid "label_active"
 msgstr "Active"
 
+#. German translation: Erstellt
+#. Default: "Created"
+#: ./opengever/tabbedview/browser/backgroundtasks.py
+msgid "label_background_task_created"
+msgstr "Created"
+
+#. German translation: Beendet
+#. Default: "Finished"
+#: ./opengever/tabbedview/browser/backgroundtasks.py
+msgid "label_background_task_finished"
+msgstr "Finished"
+
+#. German translation: Task-ID
+#. Default: "Task ID"
+#: ./opengever/tabbedview/browser/backgroundtasks.py
+msgid "label_background_task_id"
+msgstr "Task ID"
+
+#. German translation: Gestartet
+#. Default: "Started"
+#: ./opengever/tabbedview/browser/backgroundtasks.py
+msgid "label_background_task_started"
+msgstr "Started"
+
+#. German translation: Status
+#. Default: "Status"
+#: ./opengever/tabbedview/browser/backgroundtasks.py
+msgid "label_background_task_status"
+msgstr "Status"
+
+#. German translation: Fehlgeschlagen
+#. Default: "Failed"
+#: ./opengever/tabbedview/browser/backgroundtasks.py
+msgid "label_background_task_status_failed"
+msgstr "Failed"
+
+#. German translation: Ausstehend
+#. Default: "Pending"
+#: ./opengever/tabbedview/browser/backgroundtasks.py
+msgid "label_background_task_status_pending"
+msgstr "Pending"
+
+#. German translation: Laufend
+#. Default: "Running"
+#: ./opengever/tabbedview/browser/backgroundtasks.py
+msgid "label_background_task_status_running"
+msgstr "Running"
+
+#. German translation: Erfolgreich
+#. Default: "Succeeded"
+#: ./opengever/tabbedview/browser/backgroundtasks.py
+msgid "label_background_task_status_succeeded"
+msgstr "Succeeded"
+
+#. German translation: Aufgabentyp
+#. Default: "Task type"
+#: ./opengever/tabbedview/browser/backgroundtasks.py
+msgid "label_background_task_type"
+msgstr "Task type"
+
+#. German translation: Nicht erfolgreich
+#. Default: "Not succeeded"
+#: ./opengever/tabbedview/browser/backgroundtasks.py
+msgid "label_background_tasks_filter_not_succeeded"
+msgstr "Not succeeded"
+
 #. German translation: In Bearbeitung
 #. Default: "Checked out by"
 #: ./opengever/tabbedview/browser/tabs.py

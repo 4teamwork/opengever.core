@@ -44,6 +44,9 @@ msgstr ""
 msgid "ogds-cp-alltasks"
 msgstr ""
 
+msgid "bgtasks-cp-tasks"
+msgstr ""
+
 msgid "myissuedtasks"
 msgstr ""
 

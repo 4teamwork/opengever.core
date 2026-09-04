@@ -456,7 +456,7 @@ class TestDossierReporter(SolrIntegrationTestCase):
         report_titles = [row[0].value for row in rows[1:]]
         listing_titles = [item.get('title') for item in browser.json.get('items')]
 
-        self.assertEqual(10, len(report_titles))
+        self.assertEqual(11, len(report_titles))
         self.assertEqual(listing_titles, report_titles)
 
     @browsing
@@ -537,7 +537,12 @@ class TestDossierReporter(SolrIntegrationTestCase):
 
         # Subdossiers
         self.assertSequenceEqual(
-            [u'2016', datetime(2016, 8, 31, 0, 0), None, None, u'Active', u'Client1 1.1 / 1.1'],
+            [u'2016',
+             datetime(2016, 8, 31, 0, 0),
+             None,
+             u'Ziegler Robert (robert.ziegler)',
+             u'Active',
+             u'Client1 1.1 / 1.1'],
             [cell.value for cell in rows[2]]
         )
 
