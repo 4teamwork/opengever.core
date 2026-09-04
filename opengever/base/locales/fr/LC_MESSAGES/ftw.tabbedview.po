@@ -62,6 +62,9 @@ msgstr "Tâches reçues"
 msgid "assignedtasks"
 msgstr "Tâches attribuées"
 
+msgid "bgtasks-cp-tasks"
+msgstr "Tâches en arrière-plan"
+
 msgid "billable"
 msgstr "Heures à facturer"
 
