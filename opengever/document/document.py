@@ -427,7 +427,8 @@ class Document(Item, BaseDocumentMixin):
                 self, transition='document-transition-initialize')
 
     def is_finalize_allowed(self):
-        return not self.is_checked_out() and \
+        return not self.is_trashed and \
+            not self.is_checked_out() and \
             not self.is_referenced_by_pending_approval_task()
 
     def is_sign_feature_enabled(self):
@@ -443,9 +444,10 @@ class Document(Item, BaseDocumentMixin):
     def is_reopen_allowed(self):
         # reopen is not allowed if a pending task is referencing the document
         user = api.user.get_current()
-        return ((is_administrator(user)
-                 or user.getId() == self.finalizer)
-                and not self.is_referenced_by_pending_approval_task())
+        return not self.is_trashed and (
+            (is_administrator(user) or user.getId() == self.finalizer)
+            and not self.is_referenced_by_pending_approval_task()
+        )
 
     @property
     def finalizer(self):
