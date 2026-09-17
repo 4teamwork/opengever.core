@@ -10,6 +10,22 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2026.5.0 (2026-09-17)
+---------------------
+
+New features:
+
+
+- Notify the responsible when a to-do in a workspace becomes overdue. [elioschmutz] [TI-3449]
+
+
+Bug fixes:
+
+
+- Change format parameter for docuteam archive client from 'format' to 'package_format'. [elioschmutz] [TI-3710]
+- Prevent non-trash related transitions on a trashed document  [elioschmutz] [TI-4033]
+
+
 2026.4.0 (2026-08-20)
 ---------------------
 
