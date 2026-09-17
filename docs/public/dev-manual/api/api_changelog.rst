@@ -12,6 +12,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+``@deliver-sip-to-archive``: change format parameter for docuteam archive client from `format` to `package_format`
 
 2026.4.0 (2026-08-20)
 ----------------------

@@ -24,7 +24,7 @@ class DocuteamClient(object):
             raise ValueError('Missing required environment variable: DISPOSITION_DOCUTEAM_INGEST_API_KEY')
 
     def deliver(self, sip_package, filename='package.zip'):
-        url = '{}?token={}&format=ech0160'.format(
+        url = '{}?token={}&package_format=ech0160'.format(
             self.ingest_url, self.api_key)
         response = requests.post(
             url,
