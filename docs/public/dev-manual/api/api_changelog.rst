@@ -3,7 +3,7 @@
 API Changelog
 =============
 
-2026.5.0 (unreleased)
+2026.6.0 (unreleased)
 ----------------------
 
 Breaking Changes
@@ -12,7 +12,17 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
-``@deliver-sip-to-archive``: change format parameter for docuteam archive client from `format` to `package_format`
+
+2026.5.0 (2026-09-17)
+----------------------
+
+Breaking Changes
+^^^^^^^^^^^^^^^^
+
+
+Other Changes
+^^^^^^^^^^^^^
+- ``@deliver-sip-to-archive``: change format parameter for docuteam archive client from `format` to `package_format`
 
 2026.4.0 (2026-08-20)
 ----------------------
