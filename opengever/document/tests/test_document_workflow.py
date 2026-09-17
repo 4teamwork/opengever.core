@@ -90,6 +90,17 @@ class TestDocumentWorkflow(IntegrationTestCase):
         self.assertEquals(Document.active_state,
                           api.content.get_state(obj=self.document))
 
+    def test_document_cannot_be_finalized_if_trashed(self):
+        self.login(self.administrator)
+        self.trash_documents(self.document)
+
+        with self.assertRaises(InvalidParameterError):
+            api.content.transition(
+                obj=self.document, transition=Document.finalize_transition)
+
+        self.assertEquals(Document.active_state,
+                          api.content.get_state(obj=self.document))
+
     def test_document_cannot_be_finalized_if_is_referenced_by_pending_approval_task(self):
         self.login(self.administrator)
         self.task_in_protected_dossier.task_type = 'approval'
@@ -100,6 +111,19 @@ class TestDocumentWorkflow(IntegrationTestCase):
                 transition=Document.finalize_transition)
 
         self.assertEquals(Document.active_state,
+                          api.content.get_state(obj=self.document))
+
+    def test_document_cannot_be_reopened_if_trashed(self):
+        self.login(self.administrator)
+        api.content.transition(obj=self.document,
+                               transition=Document.finalize_transition)
+        self.trash_documents(self.document)
+
+        with self.assertRaises(InvalidParameterError):
+            api.content.transition(
+                obj=self.document, transition=Document.reopen_transition)
+
+        self.assertEquals(Document.final_state,
                           api.content.get_state(obj=self.document))
 
     def test_limited_admin_can_reopen_finalized_document(self):
@@ -273,6 +297,21 @@ class TestDocumentWorkflow(IntegrationTestCase):
                 'userid': 'regular_user',
                 'version': 0
             }, Signer(self.document).serialize_pending_signing_job())
+
+    def test_cannot_sign_a_trashed_finalized_document(self):
+        self.activate_feature('sign')
+        self.login(self.administrator)
+
+        api.content.transition(obj=self.document,
+                               transition=Document.finalize_transition)
+        self.trash_documents(self.document)
+
+        with self.assertRaises(InvalidParameterError):
+            api.content.transition(obj=self.document,
+                                   transition=Document.final_signing_transition)
+
+        self.assertEquals(Document.final_state,
+                          api.content.get_state(obj=self.document))
 
     @requests_mock.Mocker()
     def test_sign_transition_is_only_for_internal_use(self, mocker):
