@@ -600,6 +600,15 @@ class DocumentSerializer(CatalogItemSerializer):
                     continue
                 filepath = vdata.referenced_data[BLOB_VERSION_KEY].committed()
                 filesize = os.stat(filepath).st_size
+                # Some version timestamps have only a precision of 1 second, but
+                # the creation timestamp has a higher precision, which could
+                # lead to older versions than the creation date.
+                verschangedat = datetime.fromtimestamp(
+                    vdata.metadata["sys_metadata"]["timestamp"]
+                )
+                created_at = self.as_datetime(self.obj.created())
+                if verschangedat < created_at:
+                    verschangedat = created_at
                 versions.append({
                     'objexternalkey': uid,
                     'version': version,
@@ -607,7 +616,7 @@ class DocumentSerializer(CatalogItemSerializer):
                     'filename': vdata.object.object.file.filename,
                     'filesize': filesize,
                     'versby': userid_to_email(vdata.metadata['sys_metadata']['principal']),
-                    'verschangedat': datetime.fromtimestamp(vdata.metadata['sys_metadata']['timestamp']),
+                    'verschangedat': verschangedat,
                     'versdesc': vdata.metadata['sys_metadata']['comment'],
                 })
         if len(versions) < 1:
