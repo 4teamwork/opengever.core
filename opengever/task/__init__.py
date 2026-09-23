@@ -52,6 +52,7 @@ FINAL_TRANSITIONS = [
     'task-transition-in-progress-tested-and-closed',
     'task-transition-resolved-tested-and-closed',
     'task-transition-planned-skipped',
+    'task-transition-rejected-skipped',
     'forwarding-transition-close']
 
 
