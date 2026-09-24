@@ -77,6 +77,10 @@ msgstr "assigned_inbox_tasks"
 msgid "assignedtasks"
 msgstr "assignedtasks"
 
+#. German translation: Hintergrundaufgaben
+msgid "bgtasks-cp-tasks"
+msgstr "Background tasks"
+
 #. German translation: verrechenb. Std.
 msgid "billable"
 msgstr "billable"

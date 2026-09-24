@@ -1,6 +1,8 @@
 from ftw.testbrowser import browsing
+from opengever.locking.lock import MOVE_LOCK
 from opengever.testing import IntegrationTestCase
 from plone import api
+from plone.locking.interfaces import ILockable
 
 
 BLACKLIST = []
@@ -31,3 +33,45 @@ class TestPloneRestAPI(IntegrationTestCase):
         self.assertEqual(
             [], broken_types,
             "There was an error on requesting these types")
+
+    @browsing
+    def test_no_addable_types_if_dossier_has_move_lock(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(
+            '{}/@types'.format(self.dossier.absolute_url()),
+            headers={'Accept': 'application/json'},
+        )
+        addable_types = [t['title'] for t in browser.json if t['addable']]
+        self.assertEqual(
+            addable_types,
+            [u'Business Case Dossier', u'Document', u'Mail', u'Task'],
+        )
+
+        ILockable(self.dossier).lock(MOVE_LOCK)
+        browser.open(
+            '{}/@types'.format(self.dossier.absolute_url()),
+            headers={'Accept': 'application/json'},
+        )
+        addable_types = [t['title'] for t in browser.json if t['addable']]
+        self.assertEqual(addable_types, [])
+
+    @browsing
+    def test_no_addable_types_if_ancestor_has_move_lock(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(
+            '{}/@types'.format(self.subsubdossier.absolute_url()),
+            headers={'Accept': 'application/json'},
+        )
+        addable_types = [t['title'] for t in browser.json if t['addable']]
+        self.assertEqual(
+            addable_types,
+            [u'Document', u'Mail', u'Task'],
+        )
+
+        ILockable(self.dossier).lock(MOVE_LOCK)
+        browser.open(
+            '{}/@types'.format(self.subsubdossier.absolute_url()),
+            headers={'Accept': 'application/json'},
+        )
+        addable_types = [t['title'] for t in browser.json if t['addable']]
+        self.assertEqual(addable_types, [])

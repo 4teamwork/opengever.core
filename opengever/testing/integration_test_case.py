@@ -111,6 +111,7 @@ FEATURE_FLAGS = {
     'oc-plugin-check-enabled': 'opengever.officeconnector.interfaces.'
                               'IOfficeConnectorSettings.oc_plugin_check_enabled',  # noqa
     'sign': 'opengever.sign.interfaces.ISignSettings.is_feature_enabled',  # noqa
+    'bgtasks': 'opengever.bgtasks.interfaces.IBackgroundTaskSettings.is_feature_enabled',
 }
 
 FEATURE_VALUES = {

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2025-06-24 08:51+0000\n"
+"POT-Creation-Date: 2026-07-10 09:42+0000\n"
 "PO-Revision-Date: 2017-12-03 11:16+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/fr/>\n"
@@ -23,10 +23,6 @@ msgstr " (tâches de clôturation nocturnes en suspens)"
 #: ./opengever/dossier/viewlets/byline.py
 msgid " (currently being resolved)"
 msgstr " (en train d'être clôturé)"
-
-#: ./opengever/dossier/move_items.py
-msgid "${copied_items} Elements were moved successfully"
-msgstr "Les éléments ${copied_items} ont été déplacés avec succès."
 
 #: ./opengever/dossier/behaviors/protect_dossier.py
 msgid "A dossier manager must be selected  when protecting a dossier"
@@ -337,7 +333,8 @@ msgstr "Choisissez un utilisateur ou un groupe pouvant modifier ou enlever la pr
 #. Default: "Whether dossier protection should block role inheritanceor extend the currently inherited role assignments with theadditional roles mapping"
 #: ./opengever/dossier/behaviors/protect_dossier.py
 msgid "description_extend_local_roles"
-msgstr "Par défaut, les droits d'accès hérités sont interrompus lors de la protection d'un dossier.\n"
+msgstr ""
+"Par défaut, les droits d'accès hérités sont interrompus lors de la protection d'un dossier.\n"
 "Sélectionnez cette option si ces droits doivent au contraire être conservés."
 
 #. Default: "The defined keywords will be preselected for new dossies from template."
@@ -667,6 +664,11 @@ msgstr "Ancien numéro de référence"
 #: ./opengever/dossier/browser/tabbed.py
 msgid "label_info"
 msgstr "Info"
+
+#. Default: "${queued_items} item(s) queued to be moved"
+#: ./opengever/dossier/move_items.py
+msgid "label_items_queued_to_be_moved"
+msgstr "${queued_items} 5 éléments ont été mis en file d'attente pour être déplacés en arrière-plan. Vous pouvez continuer à travailler sur d'autres contenus en attendant. Vous recevrez une notification dès que le processus sera terminé."
 
 #. Default: "Journal"
 #: ./opengever/dossier/browser/tabbed.py

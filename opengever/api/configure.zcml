@@ -99,6 +99,16 @@
       factory=".actions.GeverActions"
       name="actions"
       />
+  <adapter factory=".types.TypesInfo" name="types"/>
+
+  <plone:service
+      method="GET"
+      for="zope.interface.Interface"
+      factory=".types.TypesGet"
+      name="@types"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      permission="zope2.View"
+      />
 
   <plone:service
       method="GET"

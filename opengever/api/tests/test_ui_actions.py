@@ -1,7 +1,9 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.locking.lock import MOVE_LOCK
 from opengever.testing import IntegrationTestCase
+from plone.locking.interfaces import ILockable
 
 
 class TestUIActionsGET(IntegrationTestCase):
@@ -159,3 +161,50 @@ class TestUIActionsGET(IntegrationTestCase):
                 u'title': u'Open in ExternalApp'
             }],
             browser.json.get('webactions'))
+
+    @browsing
+    def test_ui_actions_limits_context_actions_if_dossier_has_move_lock(self, browser):
+        self.login(self.regular_user, browser)
+        ILockable(self.dossier).lock(MOVE_LOCK)
+        url = '{}/@ui-actions?categories:list=context_actions'.format(self.dossier.absolute_url())
+        browser.open(url, method='GET', headers=self.api_headers)
+        self.assertEqual(
+            browser.json[u'context_actions'],
+            [{u'id': u'export_pdf'}, {u'id': u'pdf_dossierdetails'}],
+        )
+
+    @browsing
+    def test_ui_actions_limits_listing_actions_if_dossier_has_move_lock(self, browser):
+        self.login(self.regular_user, browser)
+        ILockable(self.dossier).lock(MOVE_LOCK)
+        url = '{}/@ui-actions?categories:list=listing_actions&&listings:list=dossiers'.format(self.dossier.absolute_url())
+        browser.open(url, method='GET', headers=self.api_headers)
+        self.assertEqual(
+            browser.json[u'listing_actions'],
+            [{u'id': u'pdf_dossierlisting'}],
+        )
+
+    @browsing
+    def test_ui_actions_limits_web_actions_if_dossier_has_move_lock(self, browser):
+        self.login(self.webaction_manager, browser)
+        create(Builder('webaction').having(
+            target_url='http://localhost/foo?location={path}'))
+        self.login(self.administrator, browser)
+        ILockable(self.dossier).lock(MOVE_LOCK)
+        url = '{}/@ui-actions?categories:list=listing_actions&&listings:list=dossiers'.format(self.dossier.absolute_url())
+        browser.open(url, method='GET', headers=self.api_headers)
+        self.assertEqual(
+            browser.json[u'listing_actions'],
+            [{u'id': u'pdf_dossierlisting'}],
+        )
+
+    @browsing
+    def test_ui_actions_limits_context_actions_of_document_if_dossier_has_move_lock(self, browser):
+        self.login(self.regular_user, browser)
+        ILockable(self.dossier).lock(MOVE_LOCK)
+        url = '{}/@ui-actions?categories:list=context_actions'.format(self.document.absolute_url())
+        browser.open(url, method='GET', headers=self.api_headers)
+        self.assertEqual(
+            browser.json[u'context_actions'],
+            [{u'id': u'download_copy'}, {u'id': u'oc_view'}],
+        )

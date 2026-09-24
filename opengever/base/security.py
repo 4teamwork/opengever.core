@@ -87,6 +87,26 @@ def elevated_privileges(user_id=None):
 
 
 @contextmanager
+def run_as_user(user):
+    """Temporarily run as the given (already resolved) AccessControl user,
+    restoring the previous security manager afterwards.
+
+    Unlike `elevated_privileges()`, this does not grant any extra roles -
+    it makes `user`'s own real roles and permissions the ones in effect.
+    Used by code that must respect the permissions of a specific user
+    other than whoever is currently authenticated, e.g. a background task
+    executing on behalf of the user who originally queued it, rather than
+    the worker process's own (unrestricted) identity.
+    """
+    old_manager = getSecurityManager()
+    try:
+        newSecurityManager(getRequest(), user)
+        yield
+    finally:
+        setSecurityManager(old_manager)
+
+
+@contextmanager
 def as_internal_workflow_transition():
     """This contextmanager allows to temporarily mark the request as an
     internal workflow transition request.

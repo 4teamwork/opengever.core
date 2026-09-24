@@ -14,6 +14,7 @@ from ftw.testing.layer import COMPONENT_REGISTRY_ISOLATION
 from ftw.testing.quickinstaller import snapshots
 from opengever.activity.interfaces import IActivitySettings
 from opengever.base.model import create_session
+from opengever.bgtasks.interfaces import IBackgroundTaskSettings
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.bumblebee.interfaces import IGeverBumblebeeSettings
 from opengever.bundle.tests.helpers import make_fake_fileloader_configuration
@@ -108,6 +109,18 @@ def activate_bumblebee_feature():
     toggle_feature(IGeverBumblebeeSettings, enabled=True)
 
 
+def deactivate_background_tasks():
+    """No worker runs in tests, so a queued task never executes before
+    assertions run. We disable background tasks by default so callers of
+    queue_task() execute synchronously instead, matching pre-bgtasks
+    behavior. Tests that specifically exercise queueing/worker behavior
+    can reactivate it:
+
+    >>> self.activate_feature('bgtasks')
+    """
+    toggle_feature(IBackgroundTaskSettings, enabled=False)
+
+
 class ComponentUnitTesting(ComponentRegistryLayer):
     """Testing layer for unit-testing zope components.
     This test provides isolation of the component registry and the site hooks
@@ -194,6 +207,7 @@ class OpengeverFixture(PloneSandboxLayer):
         self.disable_recursive_groups_plugin(portal)
         deactivate_activity_center()
         deactivate_bumblebee_feature()
+        deactivate_background_tasks()
 
     def tearDown(self):
         super(OpengeverFixture, self).tearDown()

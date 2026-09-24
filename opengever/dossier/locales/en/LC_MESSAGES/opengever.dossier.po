@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2025-06-24 08:51+0000\n"
+"POT-Creation-Date: 2026-07-10 09:42+0000\n"
 "PO-Revision-Date: 2017-05-23 04:53+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/de/>\n"
@@ -25,11 +25,6 @@ msgstr " (nightly post-resolve jobs pending)"
 #: ./opengever/dossier/viewlets/byline.py
 msgid " (currently being resolved)"
 msgstr " (currently being resolved)"
-
-#. German translation: ${copied_items} Elemente wurden erfolgreich verschoben
-#: ./opengever/dossier/move_items.py
-msgid "${copied_items} Elements were moved successfully"
-msgstr "${copied_items} elements were moved successfully"
 
 #. German translation: Ein Dossier-Verwalter muss ausgewählt werden um das Dossier schützen zu können.
 #: ./opengever/dossier/behaviors/protect_dossier.py
@@ -418,7 +413,8 @@ msgstr "The user or group selected here will be able to modify or disable dossie
 #. Default: "Whether dossier protection should block role inheritanceor extend the currently inherited role assignments with theadditional roles mapping"
 #: ./opengever/dossier/behaviors/protect_dossier.py
 msgid "description_extend_local_roles"
-msgstr "By default, inherited authorizations are interrupted when the dossier is protected.\n"
+msgstr ""
+"By default, inherited authorizations are interrupted when the dossier is protected.\n"
 "Select this option if you want the inherited authorizations to be extended instead."
 
 #. German translation: Durch Aktivieren dieser Option werden bei der Erstellung des Dossiers ab Vorlage die angegebenen Schlagwörter bereits vorausgefüllt.
@@ -809,6 +805,11 @@ msgstr "Former reference number"
 #: ./opengever/dossier/browser/tabbed.py
 msgid "label_info"
 msgstr "Info"
+
+#. Default: "${queued_items} item(s) queued to be moved"
+#: ./opengever/dossier/move_items.py
+msgid "label_items_queued_to_be_moved"
+msgstr "${queued_items} items have been queued to be moved in the background. You can continue working on other content in the meantime. You will receive a notification as soon as the process is complete."
 
 #. German translation: Journal
 #. Default: "Journal"
