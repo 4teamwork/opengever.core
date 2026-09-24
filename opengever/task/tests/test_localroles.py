@@ -912,6 +912,47 @@ class TestLocalRolesRevoking(IntegrationTestCase):
               'reference': Oguid.for_object(self.seq_subtask_2),
               'principal': 'fa_inbox_users'}], storage._storage())
 
+    @browsing
+    def test_skip_a_rejected_task_revokes_roles(self, browser):
+        self.login(self.secretariat_user, browser=browser)
+        self.set_workflow_state('task-state-rejected', self.seq_subtask_1)
+
+        task_oguid = Oguid.for_object(self.seq_subtask_1)
+        task_storage = RoleAssignmentManager(self.seq_subtask_1).storage
+        dossier_storage = RoleAssignmentManager(self.dossier).storage
+
+        def assignments_via_task(storage):
+            return [assignment for assignment in storage._storage()
+                    if assignment['reference'] == task_oguid]
+
+        self.assertEqual(
+            [{'cause': ASSIGNMENT_VIA_TASK,
+              'roles': ['Editor'],
+              'reference': task_oguid,
+              'principal': self.regular_user.id},
+             {'cause': ASSIGNMENT_VIA_TASK_AGENCY,
+              'roles': ['Editor'],
+              'reference': task_oguid,
+              'principal': 'fa_inbox_users'}], task_storage._storage())
+        self.assertEqual(
+            [{'cause': ASSIGNMENT_VIA_TASK,
+              'roles': ['TaskResponsible'],
+              'reference': task_oguid,
+              'principal': self.regular_user.id},
+             {'cause': ASSIGNMENT_VIA_TASK_AGENCY,
+              'roles': ['TaskResponsible'],
+              'reference': task_oguid,
+              'principal': 'fa_inbox_users'}],
+            assignments_via_task(dossier_storage))
+
+        browser.open(self.seq_subtask_1, method='POST', headers=self.api_headers,
+                     view='@workflow/task-transition-rejected-skipped')
+
+        self.assertEqual(
+            'task-state-skipped', api.content.get_state(self.seq_subtask_1))
+        self.assertEqual([], task_storage._storage())
+        self.assertEqual([], assignments_via_task(dossier_storage))
+
     def test_can_delete_related_document_from_task(self):
         """The localroles update event used to explode when a related item was
         deleted.
