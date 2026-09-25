@@ -2,8 +2,8 @@ from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.locking.utils import has_move_lock
 from plone.restapi.interfaces import IExpandableElement
 from plone.restapi.services.types.get import check_security
-from plone.restapi.services.types.get import TypesInfo
 from plone.restapi.services.types.get import TypesGet
+from plone.restapi.services.types.get import TypesInfo
 from Products.CMFCore.interfaces import IFolderish
 from Products.CMFCore.utils import getToolByName
 from zope.component import adapter
@@ -12,8 +12,8 @@ from zope.component import getUtility
 from zope.i18n import translate
 from zope.interface import implementer
 from zope.interface import Interface
-from zope.schema.interfaces import IVocabularyFactory
 from zope.publisher.interfaces import IPublishTraverse
+from zope.schema.interfaces import IVocabularyFactory
 
 
 @implementer(IExpandableElement)

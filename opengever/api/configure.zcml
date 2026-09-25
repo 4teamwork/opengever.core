@@ -99,7 +99,10 @@
       factory=".actions.GeverActions"
       name="actions"
       />
-  <adapter factory=".types.TypesInfo" name="types"/>
+  <adapter
+      factory=".types.TypesInfo"
+      name="types"
+      />
 
   <plone:service
       method="GET"
