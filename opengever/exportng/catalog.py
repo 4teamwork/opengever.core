@@ -524,6 +524,7 @@ class DocumentSerializer(CatalogItemSerializer):
         Attribute('preserved_as_paper', 'gcpreservedaspaper', 'boolean'),
         Attribute('document_type', 'objcategory', 'varchar'),
         Attribute('custom_properties', 'customfieldsjson', 'jsonb'),
+        Attribute('review_state', 'objdocstate', 'varchar'),
     ]
 
     def file_extension(self):
@@ -651,6 +652,16 @@ class DocumentSerializer(CatalogItemSerializer):
 
     def journal_entries_data(self):
         return get_journal_entries_from_document(self.obj)
+
+    def review_state(self):
+        state_mapping = {
+            'document-state-draft': 'EDIT',
+            'document-state-removed': 'CANCELLED',
+            'document-state-final': 'CLOSED',
+            'document-state-signed': 'CLODED',
+            'document-state-signing': 'CLOSED',
+        }
+        return state_mapping.get(api.content.get_state(self.obj))
 
 
 class DocumentSyncer(CatalogSyncer):
@@ -823,6 +834,7 @@ class TaskSerializer(CatalogItemSerializer):
             'objcreatedat': self.created_at.isoformat(),
             'objmodifiedat': self.created_at.isoformat(),
             'objterms': [],
+            'objdocstate': 'EDIT',
         }]
 
     def document_versions_data(self):
