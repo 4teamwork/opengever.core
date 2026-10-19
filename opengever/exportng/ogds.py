@@ -163,7 +163,7 @@ class CommitteeSerializer(OGDSItemSerializer):
         Attribute('title', 'objname', 'varchar'),
         Attribute('workflow_state', 'cdeactivated', 'boolean'),
         Attribute('committee_dossier_location', 'cmeetingdossierlocation', 'varchar'),
-        Attribute('protocoltype', 'cprotocoltype', 'varchar'),
+        Attribute('protocoltype', 'cmeetingminutestype', 'varchar'),
         Attribute('created', 'objcreatedat', 'datetime'),
         Attribute('modified', 'objmodifiedat', 'datetime'),
         Attribute('objsecsecurity', 'objsecsecurity', 'jsonb'),
