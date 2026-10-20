@@ -9,6 +9,7 @@ from opengever.exportng.db import engine
 from opengever.exportng.db import metadata
 from opengever.exportng.journal import get_journal_entries_from_document
 from opengever.exportng.journal import get_journal_entries_from_dossier
+from opengever.exportng.journal import get_manual_journal_entries_from_dossier
 from opengever.exportng.task_pdf import TaskPDFView
 from opengever.exportng.utils import Attribute
 from opengever.exportng.utils import document_parent
@@ -460,6 +461,9 @@ class DossierSerializer(CatalogItemSerializer):
     def journal_entries_data(self):
         return get_journal_entries_from_dossier(self.obj)
 
+    def remarks_data(self):
+        return get_manual_journal_entries_from_dossier(self.obj)
+
     def protected(self):
         return getattr(self.obj, '__ac_local_roles_block__', False)
 
@@ -467,7 +471,7 @@ class DossierSerializer(CatalogItemSerializer):
 class DossierSyncer(CatalogSyncer):
 
     table = 'dossiers'
-    additional_tables = ['journal_entries']
+    additional_tables = ['journal_entries', 'remarks']
     query = {
         'portal_type': [
             'opengever.dossier.businesscasedossier',
