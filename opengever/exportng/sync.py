@@ -12,6 +12,8 @@ from opengever.exportng.db import engine
 from opengever.exportng.db import metadata
 from opengever.exportng.journal import JOURNAL_MAPPING
 from opengever.exportng.journal import JOURNAL_TABLE
+from opengever.exportng.journal import REMARKS_MAPPING
+from opengever.exportng.journal import REMARKS_TABLE
 from opengever.exportng.ogds import AgendaItemSyncer
 from opengever.exportng.ogds import CommitteeMemberSyncer
 from opengever.exportng.ogds import CommitteeSyncer
@@ -41,6 +43,7 @@ class Syncer(object):
         create_table(UserSyncer.table, UserSyncer.serializer.mapping)
         create_table(GroupSyncer.table, GroupSyncer.serializer.mapping)
         create_table(JOURNAL_TABLE, JOURNAL_MAPPING)
+        create_table(REMARKS_TABLE, REMARKS_MAPPING)
         create_table(FileplanEntrySyncer.table, FileplanEntrySyncer.serializer.mapping)
         create_table(DossierSyncer.table, DossierSyncer.serializer.mapping)
         create_table(SubdossierSyncer.table, SubdossierSyncer.serializer.mapping)
