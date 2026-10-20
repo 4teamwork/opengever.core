@@ -34,6 +34,15 @@ JOURNAL_MAPPING = [
     Attribute('journal', '_journal', 'varchar'),
 ]
 
+REMARKS_TABLE = 'remarks'
+REMARKS_MAPPING = [
+    Attribute('UID', 'objexternalkey', 'varchar'),
+    Attribute('actor', 'user', 'varchar'),
+    Attribute('time', 'timestamp', 'datetime'),
+    Attribute('remark', 'remark', 'varchar'),
+    Attribute('category', 'category', 'varchar'),
+]
+
 
 def get_journal_entries_from_document(obj):
     res = []
@@ -108,4 +117,21 @@ def get_journal_entries_from_dossier(obj):
                         'event': parent_event,
                         '_journal': 'dossiers',
                     })
+    return res
+
+
+def get_manual_journal_entries_from_dossier(obj):
+    res = []
+    if IAnnotationsJournalizable.providedBy(obj):
+        journal_entries = JournalManager(obj).list()
+        for entry in journal_entries:
+            action_type = entry.get('action', {}).get('type')
+            if action_type == 'manually-journal-entry':
+                res.append({
+                    'objexternalkey': obj.UID(),
+                    'user': userid_to_email(entry['actor']),
+                    'timestamp': entry['time'].asdatetime().replace(tzinfo=None),
+                    'remark': entry['comments'],
+                    'category': entry.get('action', {}).get('category'),
+                })
     return res
