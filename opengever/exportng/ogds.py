@@ -470,7 +470,7 @@ class AgendaItemSerializer(OGDSItemSerializer):
                 'id': self.item.agenda_item_id,
                 'agendaitem': self.agendaitem_id(),
                 'document': doc.UID(),
-                'attributedefinitiontarget': 'aiprotocolword',
+                'attributedefinitiontarget': 'aimeetingminutesword',
             })
         for doc in excerpts[1:]:
             adata.append({
