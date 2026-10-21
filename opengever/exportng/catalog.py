@@ -768,6 +768,11 @@ class TaskSerializer(CatalogItemSerializer):
             path={'query': '/'.join(self.obj.getPhysicalPath()), 'depth': 1},
             sort_on='getObjPositionInParent',
         )
+        deadline = (
+            datetime.combine(self.obj.deadline, datetime.max.time())
+            if self.obj.deadline
+            else None
+        )
         activity = {
             'objexternalkey': self.uid,
             'objname': self.obj.Title(),
@@ -776,7 +781,7 @@ class TaskSerializer(CatalogItemSerializer):
             'objcreatedat': self.created(),
             'actinstparticipant': userid_to_email(self.dexterity_field_value('responsible')),
             'actinststate': self.state_mapping[self.obj.get_review_state()],
-            'actinstenddeadline': datetime.combine(self.obj.deadline, datetime.max.time()),
+            'actinstenddeadline': deadline,
         }
         if activity['actinststate'] == 'COMPLETED':
             activity['actinststartedat'] = activity['objcreatedat']
@@ -791,6 +796,11 @@ class TaskSerializer(CatalogItemSerializer):
         prev_activity = None
         for subtask in subtasks:
             obj = subtask._unrestrictedGetObject()
+            deadline = (
+                datetime.combine(obj.deadline, datetime.max.time())
+                if obj.deadline
+                else None
+            )
             activity = {
                 'objexternalkey': obj.UID(),
                 'objname': obj.Title(),
@@ -799,7 +809,7 @@ class TaskSerializer(CatalogItemSerializer):
                 'objcreatedat': self.as_datetime(obj.created()),
                 'actinstparticipant': userid_to_email(subtask.responsible),
                 'actinststate': self.state_mapping[obj.get_review_state()],
-                'actinstenddeadline': datetime.combine(obj.deadline, datetime.max.time()),
+                'actinstenddeadline': deadline,
             }
             if prev_activity:
                 activity['actinstprev'] = [prev_activity]
