@@ -730,6 +730,7 @@ class TaskSerializer(CatalogItemSerializer):
         'task-state-open': 'STARTABLE',
         'task-state-rejected': 'NOTEXECUTED ',
         'task-state-resolved': 'COMPLETED',
+        'task-state-skipped': 'NOTEXECUTED',
         'task-state-tested-and-closed': 'COMPLETED',
     }
 
