@@ -28,9 +28,9 @@ class TaskPDFView(BrowserView):
         }
         html = self.template(self, **data)
         weasyprint_url = os.environ.get('WEASYPRINT_URL')
+        resp = None
         try:
             resp = requests.post(weasyprint_url, files={'html': html})
-
             resp.raise_for_status()
         except requests.exceptions.RequestException:
             details = resp.content[:200] if resp is not None else ''
