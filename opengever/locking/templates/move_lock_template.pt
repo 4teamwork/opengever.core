@@ -1,0 +1,12 @@
+<div id="plone-lock-status"
+     i18n:domain="opengever.locking">
+  <dl class="portalMessage info">
+    <dt i18n:domain="plone" i18n:translate="label_locked">Locked</dt>
+    <dd>
+      <tal:block i18n:translate="description_move_lock">
+        This item is being moved to a different location in the background.
+        You cannot make any changes until the process is complete.
+      </tal:block>
+    </dd>
+  </dl>
+</div>

@@ -35,6 +35,7 @@ ZIP_CODE_LENGTH = 16
 
 tables = [
     'admin_units',
+    'background_tasks',
     'favorites',
     'groups_users',
     'groups',

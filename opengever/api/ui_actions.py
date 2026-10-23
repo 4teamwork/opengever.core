@@ -1,9 +1,20 @@
 from opengever.base.interfaces import IContextActions
 from opengever.base.interfaces import IListingActions
+from opengever.locking.utils import has_move_lock
 from opengever.webactions.renderer import WebActionsSafeDataGetter
 from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.services import Service
 from zope.component import queryMultiAdapter
+
+
+ALLOWED_ACTIONS_WITH_MOVE_LOCK = set([
+    'download_copy',
+    'export_pdf',
+    'oc_view',
+    'open_as_pdf',
+    'pdf_dossierdetails',
+    'pdf_dossierlisting',
+])
 
 
 class UIActionsGet(Service):
@@ -62,4 +73,17 @@ class UIActionsGet(Service):
             self.extend_with_listing_actions(response, listings)
         if 'webactions' in categories:
             self.extend_with_webactions(response)
+
+        if has_move_lock(self.context):
+            for category in categories:
+                if category == 'webactions':
+                    response[category] = [
+                        a for a in response[category]
+                        if a[u'action_id'] in ALLOWED_ACTIONS_WITH_MOVE_LOCK
+                    ]
+                else:
+                    response[category] = [
+                        a for a in response[category]
+                        if a[u'id'] in ALLOWED_ACTIONS_WITH_MOVE_LOCK
+                    ]
         return response
