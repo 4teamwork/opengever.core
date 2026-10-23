@@ -56,7 +56,10 @@ class TestBackgroundTasksListing(IntegrationTestCase):
 
     def listing_rows(self, browser):
         """Returns the data rows (without the header row) of the listing."""
-        return browser.css('.listing').first.lists()[1:]
+        if browser.css('.listing'):
+            return browser.css('.listing').first.lists()[1:]
+        else:
+            return []
 
     def listed_task_ids(self, browser):
         """Returns the task ids of the listed rows, in listing order.
@@ -147,7 +150,7 @@ class TestBackgroundTasksListing(IntegrationTestCase):
         self.create_task(u'pending-task')
         self.login(self.manager, browser)
 
-        browser.open(self.portal, view='background-tasks-controlpanel')
+        browser.open(self.portal, view='tabbedview_view-bgtasks-cp-tasks')
 
         self.assertEqual(1, len(browser.css('.listing')))
 
@@ -259,4 +262,4 @@ class TestBackgroundTasksListing(IntegrationTestCase):
         self.assertEqual('Background Tasks Control Panel', configlet.title)
         self.assertEqual(
             'string:${portal_url}/@@background-tasks-controlpanel',
-            configlet.url_expr)
+            configlet.getActionExpression())
