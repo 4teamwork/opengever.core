@@ -21,6 +21,7 @@
   <include package="opengever.workspace" file="permissions.zcml" />
   <include package="opengever.workspaceclient" file="permissions.zcml" />
   <include package="opengever.ogds.base" file="permissions.zcml" />
+  <include package="opengever.bgtasks" file="permissions.zcml" />
 
   <include package=".schema" />
 
@@ -599,7 +600,7 @@
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       factory=".backgroundtasks.BackgroundTasksGet"
       name="@backgroundtasks"
-      permission="cmf.ManagePortal"
+      permission="opengever.bgtasks.ManageBackgroundTasks"
       />
 
   <plone:service
