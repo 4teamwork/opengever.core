@@ -9,4 +9,4 @@ class IBackgroundTaskSettings(Interface):
         description=u'Whether background tasks are queued and executed '
                     u'asynchronously by the worker. When disabled, '
                     u'queue_task() executes tasks synchronously instead.',
-        default=True)
+        default=False)
