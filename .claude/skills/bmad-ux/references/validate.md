@@ -4,7 +4,7 @@ Critique an existing spine pair (`DESIGN.md` + `EXPERIENCE.md`) or any format of
 
 ## Orient
 
-Subagent-extract from `.decision-log.md`, sources in frontmatter, `imports/`, `mockups/`, `wireframes/`, `DESIGN.md`, `EXPERIENCE.md`. Parent assembles from extracts.
+Subagent-extract from `.memlog.md`, sources in frontmatter, `imports/`, `mockups/`, `wireframes/`, `DESIGN.md`, `EXPERIENCE.md`. Parent assembles from extracts.
 
 ## Reviewer Gate
 
@@ -34,7 +34,7 @@ Rubric walker prompt:
 >
 > 7. **Inheritance discipline.** `sources` frontmatter resolves. UJ / requirement names verbatim from sources. Glossary identical across spines and sources. Component names identical across all sections in both files. EXPERIENCE.md token references resolve to DESIGN.md tokens by name.
 >
-> 8. **Shape fit.** DESIGN.md sections in canonical order (Brand & Style → Colors → Typography → Layout & Spacing → Elevation & Depth → Shapes → Components → Do's and Don'ts; omittable but order-locked when present). EXPERIENCE.md required defaults present (Foundation, IA, Voice and Tone, Component Patterns, State Patterns, Interaction Primitives, Accessibility Floor, Key Flows). Dropped defaults defensible. Required-when-applicable present where triggered (Inspiration when sources / log show reference products or rejects; Responsive when multi-surface or breakpoints). Invented sections earn their place.
+> 8. **Shape fit.** DESIGN.md sections in canonical order (Brand & Style → Colors → Typography → Layout & Spacing → Elevation & Depth → Shapes → Components → Do's and Don'ts; omittable but order-locked when present). EXPERIENCE.md required defaults present (Foundation, IA, Voice and Tone, Component Patterns, State Patterns, Interaction Primitives, Accessibility Floor, Key Flows). Dropped defaults defensible. Required-when-applicable present where triggered (Inspiration when sources / memlog show reference products or rejects; Responsive when multi-surface or breakpoints). Invented sections earn their place.
 >
 > Severity = downstream impact, not fix difficulty.
 >
@@ -69,7 +69,7 @@ Under Validate intent, after every reviewer returns, render one consolidated rep
 2. Fill `{workflow.validation_report_template}`. No overall grade — the per-category verdicts and severity counts already say what's true. Synthesis paragraph lifts the rubric's overall verdict; add a second if extra reviewers shift the picture. One section per rubric category (open if thin / broken), one per extra reviewer (closed, adversarial voice preserved).
 3. Write `{doc_workspace}/validation-report.html`.
 4. Write the Markdown twin `{doc_workspace}/validation-report.md` — same content grouped by severity.
-5. Open HTML: `python3 -c "import webbrowser, pathlib; webbrowser.open(pathlib.Path('{doc_workspace}/validation-report.html').resolve().as_uri())"`. Skip headless.
+5. Open HTML with the platform opener — `open "{doc_workspace}/validation-report.html"` on macOS, `xdg-open` on Linux, `start ""` on Windows, path always double-quoted. On failure, give the user the path instead. Skip headless.
 
 Re-running overwrites the consolidated report; individual `review-*.md` files persist.
 

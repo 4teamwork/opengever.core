@@ -4,7 +4,7 @@ The Validate intent playbook. Standalone — this intent critiques an existing P
 
 ## Orient
 
-Source-extract against `.decision-log.md`, any original inputs, and the PRD/addendum themselves. Delegate to subagents per PRD Discipline → "Extract, don't ingest" (in SKILL.md); the parent assembles from extracts.
+Source-extract against `.memlog.md`, any original inputs, and the PRD/addendum themselves. Delegate to subagents per PRD Discipline → "Extract, don't ingest" (in SKILL.md); the parent assembles from extracts.
 
 ## Run the Reviewer Gate
 
@@ -41,11 +41,11 @@ Once every selected reviewer has returned, the parent synthesizes one consolidat
    - **Footer.** Rubric path, ISO timestamp.
 3. Write the filled HTML to `{doc_workspace}/validation-report.html`.
 4. Write the markdown twin to `{doc_workspace}/validation-report.md` (same content, grouped by severity rather than by dimension — see format below; this is the canonical form for downstream re-reading).
-5. Open the HTML in the default browser:
+5. Open the HTML in the default browser with the platform opener — `open` on macOS, `xdg-open` on Linux, `start ""` on Windows — double-quoting the path:
    ```bash
-   python3 -c "import webbrowser, pathlib; webbrowser.open(pathlib.Path('{doc_workspace}/validation-report.html').resolve().as_uri())"
+   open "{doc_workspace}/validation-report.html"
    ```
-   Skip the open step in headless mode (see `references/headless.md`).
+   If the command fails, don't retry with another opener: tell the user the file path and move on. Skip the open step in headless mode (see `references/headless.md`).
 
 ### Markdown twin format
 

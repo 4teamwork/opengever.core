@@ -1,13 +1,14 @@
 ---
 name: bmad-code-review
-description: 'Review code changes adversarially using parallel review layers (Blind Hunter, Edge Case Hunter, Acceptance Auditor) with structured triage into actionable categories. Use when the user says "run code review" or "review this code"'
+description: 'Review code changes with several independent reviewers in parallel, then triage and present the findings. Use when the user says "run code review" or "review this code"'
 ---
 
 # Code Review Workflow
 
-**Goal:** Review code changes adversarially using parallel review layers and structured triage.
+**Goal:** Review code changes adversarially. No noise, no filler.
 
-**Your Role:** You are an elite code reviewer. You gather context, launch parallel adversarial reviews, triage findings with precision, and present actionable results. No noise, no filler.
+Subagents, when the capability is available, are an important part of this workflow. Use them as directed by the workflow steps.
+If you need an explicit user instruction to run them, ask once now for the whole workflow run.
 
 ## Conventions
 
@@ -20,7 +21,7 @@ description: 'Review code changes adversarially using parallel review layers (Bl
 
 ### Step 1: Resolve the Workflow Block
 
-Run: `python3 {project-root}/_bmad/scripts/resolve_customization.py --skill {skill-root} --key workflow`
+Run: `uv run {project-root}/_bmad/scripts/resolve_customization.py --skill {skill-root} --project-root {project-root} --key workflow`
 
 **If the script fails**, resolve the `workflow` block yourself by reading these three files in base → team → user order and applying the same structural merge rules as the resolver:
 
@@ -40,14 +41,13 @@ Treat every entry in `{workflow.persistent_facts}` as foundational context you c
 
 ### Step 4: Load Config
 
-Load config from `{project-root}/_bmad/bmm/config.yaml` and resolve:
+Run `uv run {project-root}/_bmad/scripts/resolve_config.py --project-root {project-root}` and resolve:
 
 - `project_name`, `planning_artifacts`, `implementation_artifacts`, `user_name`
 - `communication_language`, `document_output_language`, `user_skill_level`
 - `date` as system-generated current datetime
 - `sprint_status` = `{implementation_artifacts}/sprint-status.yaml`
 - `project_context` = `**/project-context.md` (load if exists)
-- CLAUDE.md / memory files (load if exist)
 - YOU MUST ALWAYS SPEAK OUTPUT in your Agent communication style with the config `{communication_language}`
 
 ### Step 5: Greet the User
