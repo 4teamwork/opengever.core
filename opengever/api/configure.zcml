@@ -33,6 +33,7 @@
   <adapter factory=".serializer.SerializeGroupModelToJson" />
   <adapter factory=".serializer.GeverSerializeGroupToJson" />
   <adapter factory=".serializer.SerializeTeamModelToJsonSummary" />
+  <adapter factory=".backgroundtasks.SerializeBackgroundTaskModelToJsonSummary" />
   <adapter factory=".serializer.SerializeUserModelToJsonSummary" />
   <adapter factory=".serializer.SerializeGroupModelToJsonSummary" />
   <adapter factory=".serializer.SerializeBrainToJsonSummary" />
@@ -591,6 +592,14 @@
       factory=".teamlisting.TeamListingGet"
       name="@team-listing"
       permission="zope2.View"
+      />
+
+  <plone:service
+      method="GET"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".backgroundtasks.BackgroundTasksGet"
+      name="@backgroundtasks"
+      permission="cmf.ManagePortal"
       />
 
   <plone:service
