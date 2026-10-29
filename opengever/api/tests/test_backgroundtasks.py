@@ -14,10 +14,10 @@ from zExceptions import BadRequest
 class TestBackgroundTasksGet(IntegrationTestCase):
 
     def create_task(self, status=TASK_STATUS_PENDING, admin_unit_id=None,
-                    created=None, **kwargs):
+                    created=None, task_type=u'dummy', **kwargs):
         task = BackgroundTask(
             admin_unit_id=admin_unit_id or get_current_admin_unit().unit_id,
-            task_type=u'dummy',
+            task_type=task_type,
             status=status,
             created=created or datetime(2026, 1, 1),
             **kwargs)
@@ -83,6 +83,23 @@ class TestBackgroundTasksGet(IntegrationTestCase):
                 self.portal,
                 view='@backgroundtasks?filters.status:record:list=bogus',
                 headers=self.api_headers)
+
+    @browsing
+    def test_task_type_filter(self, browser):
+        self.login(self.manager, browser=browser)
+        self.create_task(task_type=u'dummy')
+        move = self.create_task(task_type=u'move')
+        reindex = self.create_task(task_type=u'reindex')
+
+        self.assertEqual(
+            [move.task_id],
+            self.get_task_ids(browser, '?filters.task_type:record:list=move'))
+        self.assertItemsEqual(
+            [move.task_id, reindex.task_id],
+            self.get_task_ids(
+                browser,
+                '?filters.task_type:record:list=move'
+                '&filters.task_type:record:list=reindex'))
 
     @browsing
     def test_defaults_to_current_admin_unit(self, browser):

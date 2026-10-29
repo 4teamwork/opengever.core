@@ -35,6 +35,7 @@ class BackgroundTasksGet(OGDSListingBaseService):
 
     - filters.status: only tasks with one of the given statuses
     - filters.admin_unit: only tasks of the given admin units
+    - filters.task_type: only tasks of the given task types
     """
 
     searchable_columns = (
@@ -58,6 +59,10 @@ class BackgroundTasksGet(OGDSListingBaseService):
             query = query.filter(BackgroundTask.status.in_(statuses))
         else:
             query = query.filter(BackgroundTask.status != TASK_STATUS_SUCCEEDED)
+
+        task_types = as_list(filters.get('task_type'))
+        if task_types:
+            query = query.filter(BackgroundTask.task_type.in_(task_types))
 
         admin_units = as_list(filters.get('admin_unit'))
         if not admin_units:
