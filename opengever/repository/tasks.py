@@ -11,16 +11,30 @@ logger = logging.getLogger('opengever.bgtasks')
 
 TASK_TYPE = u'update-reference-prefixes'
 
+CHECKPOINT_INTERVAL = 100
 
-def reindex_children_with_new_prefix(obj):
+
+def reindex_children_with_new_prefix(obj, last_path=None, commit_checkpoint=None):
     """Reindex `obj` and everything contained in it after its reference
     number prefix has changed.
+
+    Objects are processed in the catalog's path order. If `last_path` is given,
+    objects up to and including that path are skipped. If `commit_checkpoint` is given,
+    it is called with the last processed path every `CHECKPOINT_INTERVAL`
+    objects.
     """
     catalog = api.portal.get_tool('portal_catalog')
     children = catalog.unrestrictedSearchResults(
-        path='/'.join(obj.getPhysicalPath()))
+        path='/'.join(obj.getPhysicalPath()), sort_on='path')
+    processed = 0
+    skipping = last_path is not None
     with elevated_privileges():
         for child in children:
+            path = child.getPath()
+            if skipping:
+                skipping = path != last_path
+                continue
+
             child_obj = child.getObject()
             idxs = ['reference', 'sortable_reference']
             if IBaseDocument.providedBy(child_obj):
@@ -36,6 +50,10 @@ def reindex_children_with_new_prefix(obj):
                          'title_en']
 
             child_obj.reindexObject(idxs=idxs)
+
+            processed += 1
+            if commit_checkpoint is not None and processed % CHECKPOINT_INTERVAL == 0:
+                commit_checkpoint({u'last_path': path})
 
 
 class UpdateReferencePrefixesTask(BaseBackgroundTask):
@@ -73,7 +91,11 @@ class UpdateReferencePrefixesTask(BaseBackgroundTask):
                 u'update_reference_prefixes' % uid)
             return
 
-        reindex_children_with_new_prefix(obj)
+        checkpoint = self.get_checkpoint(task) or {}
+        reindex_children_with_new_prefix(
+            obj,
+            last_path=checkpoint.get(u'last_path'),
+            commit_checkpoint=commit_checkpoint)
 
 
 register_task_type(TASK_TYPE, UpdateReferencePrefixesTask)

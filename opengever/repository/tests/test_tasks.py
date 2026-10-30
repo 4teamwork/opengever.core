@@ -75,7 +75,7 @@ class TestUpdateReferencePrefixesTask(IntegrationTestCase):
         import opengever.repository.tasks as tasks_mod
         calls = []
         real_reindex = tasks_mod.reindex_children_with_new_prefix
-        tasks_mod.reindex_children_with_new_prefix = lambda obj: calls.append(obj)
+        tasks_mod.reindex_children_with_new_prefix = lambda obj, **kw: calls.append(obj)
 
         def restore():
             tasks_mod.reindex_children_with_new_prefix = real_reindex
@@ -102,3 +102,34 @@ class TestUpdateReferencePrefixesTask(IntegrationTestCase):
         handler.execute(task, self._no_op_commit_checkpoint)
 
         self.assertEqual(0, len(calls))
+
+    def _patch_checkpoint_interval(self, value):
+        import opengever.repository.tasks as tasks_mod
+        original = tasks_mod.CHECKPOINT_INTERVAL
+        tasks_mod.CHECKPOINT_INTERVAL = value
+        self.addCleanup(setattr, tasks_mod, 'CHECKPOINT_INTERVAL', original)
+
+    def test_execute_commits_checkpoint_every_n_objects(self):
+        self._patch_checkpoint_interval(2)
+        task = self._make_task(self.repository_root.UID())
+
+        checkpoints = []
+        UpdateReferencePrefixesTask().execute(task, checkpoints.append)
+
+        self.assertGreater(len(checkpoints), 0)
+        paths = [cp[u'last_path'] for cp in checkpoints]
+        self.assertEqual(len(paths), len(set(paths)))
+
+    def test_execute_resumes_after_last_checkpointed_path(self):
+        self._patch_checkpoint_interval(2)
+        task = self._make_task(self.repository_root.UID())
+
+        first_run = []
+        UpdateReferencePrefixesTask().execute(task, first_run.append)
+        self.assertGreater(len(first_run), 1)
+
+        task.checkpoint_data = json.dumps(first_run[0])
+        second_run = []
+        UpdateReferencePrefixesTask().execute(task, second_run.append)
+
+        self.assertEqual(first_run[1:], second_run)
