@@ -88,12 +88,13 @@ erhalten.
 Die alternative Adresse ersetzt die primäre Empfängeradresse für einzelne
 Benachrichtigungen, tägliche Zusammenfassungen und Mitteilungen beim Teilen von
 Teamraum-Inhalten. Ohne alternative Adresse wird die primäre Adresse verwendet;
-ohne zustellbare Adresse wird keine E-Mail versendet und eine Zusammenfassung
-nicht als versendet markiert. Einladungen sowie Absender- und Reply-To-Adressen
+ohne zustellbare Adresse wird keine E-Mail versendet. Die betroffenen
+Benachrichtigungen werden für die Zusammenfassung als verarbeitet markiert,
+ohne einen erfolgreichen Versand zu protokollieren. Einladungen sowie Absender- und Reply-To-Adressen
 bleiben unverändert. Beim Teilen bleiben To/Cc/Bcc erhalten: Adressen in To/Cc
 sind für andere E-Mail-Empfänger sichtbar.
 
 Die Einstellung wird nicht in Benutzerlisten, Profilen, Reports oder
 Dokumenteigenschaften veröffentlicht und übersteht OGDS-Synchronisation und
-Deaktivierung. Es gibt keine Bestätigungs-E-Mail, Doppelzustellung,
-Teamraum-spezifische Benutzereinstellung oder Steuerung in der klassischen UI.
+Deaktivierung. Die Adresse wird ohne Bestätigungs-E-Mail verwendet; die Verwaltung erfolgt
+ausschliesslich in der neuen UI.

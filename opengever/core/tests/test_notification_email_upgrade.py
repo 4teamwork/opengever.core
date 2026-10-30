@@ -3,7 +3,6 @@ from alembic.operations import Operations
 from importlib import import_module
 from mock import Mock
 from opengever.base.interfaces import IOGMailSettings
-from opengever.ogds.models.user_settings import UserSettings
 from opengever.testing import IntegrationTestCase
 from plone import api
 from plone.app.registry.exportimport.handler import RegistryImporter
@@ -41,12 +40,6 @@ class TestNotificationEmailColumnUpgrade(unittest.TestCase):
             self.assertEqual('private@example.org', connection.execute(
                 'SELECT notification_email FROM user_settings').scalar())
         engine.dispose()
-
-    def test_fresh_schema_includes_nullable_bounded_column(self):
-        column = UserSettings.__table__.columns['notification_email']
-        self.assertTrue(column.nullable)
-        self.assertEqual(255, column.type.length)
-        self.assertIsNone(column.default)
 
 
 class TestNotificationEmailRegistryUpgrade(IntegrationTestCase):

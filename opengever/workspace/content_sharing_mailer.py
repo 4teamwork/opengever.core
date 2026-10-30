@@ -16,9 +16,6 @@ class ContentSharingMailer(Mailer):
     def share_content(self, target_object, sender_id, to_email, cc_email=None,
                       bcc_email=None, comment=u'', is_self_notification=None):
 
-        if not (to_email or cc_email or bcc_email):
-            return
-
         subject = translate(
             _(u'share_mail_subject',
               default=u'Notification to "${title}"',

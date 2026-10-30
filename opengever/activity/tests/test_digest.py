@@ -55,23 +55,45 @@ class TestDigestMail(IntegrationTestCase):
         self.assertTrue(self.note1.sent_in_digest)
         self.assertIsNotNone(Digest.query.get_by_userid(self.regular_user.id))
 
-    def test_no_address_leaves_digest_pending_without_send_record(self):
+    def test_no_address_processes_digest_without_send_record(self):
         self.get_ogds_user(self.regular_user).email = None
         DigestMailer().send_digests()
         process_mail_queue()
         self.assertEqual(1, len(Mailing(self.portal).get_messages()))
-        self.assertFalse(self.note1.sent_in_digest)
+        self.assertTrue(self.note1.sent_in_digest)
         self.assertIsNone(Digest.query.get_by_userid(self.regular_user.id))
 
-    def test_whitespace_only_address_leaves_digest_pending(self):
+    def test_adding_address_does_not_send_old_digest_notifications(self):
+        user = self.get_ogds_user(self.regular_user)
+        user.email = None
+        DigestMailer().send_digests()
+        process_mail_queue()
+        Mailing(self.portal).reset()
+
+        user.email = 'restored@example.org'
+        DigestMailer().send_digests()
+        process_mail_queue()
+        self.assertEqual([], Mailing(self.portal).get_messages())
+        self.assertIsNone(Digest.query.get_by_userid(self.regular_user.id))
+
+        create(Builder('notification')
+               .having(activity=self.note1.activity, is_digest=True,
+                       userid=self.regular_user.id))
+        DigestMailer().send_digests()
+        process_mail_queue()
+        messages = Mailing(self.portal).get_messages()
+        self.assertEqual(1, len(messages))
+        self.assertEqual('restored@example.org', message_from_string(messages[0])['To'])
+
+    def test_whitespace_only_address_processes_digest_without_send_record(self):
         self.get_ogds_user(self.regular_user).email = u' \t\r\n '
         DigestMailer().send_digests()
         process_mail_queue()
         self.assertEqual(1, len(Mailing(self.portal).get_messages()))
-        self.assertFalse(self.note1.sent_in_digest)
+        self.assertTrue(self.note1.sent_in_digest)
         self.assertIsNone(Digest.query.get_by_userid(self.regular_user.id))
 
-    def test_missing_user_leaves_digest_pending(self):
+    def test_missing_user_processes_digest_without_send_record(self):
 
         from mock import patch
         with patch('opengever.activity.digest.ogds_service') as service:
@@ -79,8 +101,8 @@ class TestDigestMail(IntegrationTestCase):
             DigestMailer().send_digests()
         process_mail_queue()
         self.assertEqual([], Mailing(self.portal).get_messages())
-        self.assertFalse(self.note1.sent_in_digest)
-        self.assertFalse(self.note2.sent_in_digest)
+        self.assertTrue(self.note1.sent_in_digest)
+        self.assertTrue(self.note2.sent_in_digest)
         self.assertEqual(0, Digest.query.count())
 
     def test_sends_mail_to_all_notified_users(self):

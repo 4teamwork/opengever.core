@@ -97,6 +97,7 @@ class DigestMailer(Mailer):
             today = api.portal.get_localized_time(date.today())
             user = ogds_service().fetch_user(userid)
             if not get_notification_email(user):
+                self.mark_as_sent(notifications)
                 logger.info('  Digest skipped for %s: Missing email address', userid)
                 continue
 

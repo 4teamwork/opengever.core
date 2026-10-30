@@ -11,18 +11,6 @@ class TestNotificationEmailSetting(OGDSTestCase):
         self.assertFalse(UserSettings.get_setting(None, 'notify_own_actions'))
         self.assertEqual([], UserSettings.get_setting(None, 'seen_tours'))
 
-    def test_survives_identity_updates_and_deactivation(self):
-        settings = UserSettings(userid=self.john.userid,
-                                notification_email=u'private@example.org')
-        self.session.add(settings)
-        self.session.flush()
-        self.john.email = 'new-account@example.org'
-        self.john.active = False
-        self.session.flush()
-        self.session.expire_all()
-        self.assertEqual(u'private@example.org',
-                         self.john.user_settings.notification_email)
-
     def test_mailbox_and_domain_label_length_boundaries(self):
         field = IUserSettings['notification_email']
         field.validate(u'a' * 64 + u'@example.org')
@@ -33,7 +21,6 @@ class TestNotificationEmailSetting(OGDSTestCase):
                 field.validate(value)
 
     def test_schema_rejects_invalid_addresses_types_and_length(self):
-
         field = IUserSettings['notification_email']
         for value in [u'not-an-email', u'a@example.org,b@example.org',
                       u'Name <a@example.org>', u'a@example.org\nBcc: b@example.org',

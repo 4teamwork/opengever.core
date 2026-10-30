@@ -14,7 +14,7 @@ from zope.interface import alsoProvides
 
 class ShareContentPost(Service):
 
-    def get_email_adresses(self, actors, is_term=False, notification_address=True):
+    def get_email_adresses(self, actors, is_term=False, primary_emails=None):
         emails = set()
 
         if is_term:
@@ -27,8 +27,9 @@ class ShareContentPost(Service):
         for actor in actors:
             for representative in ActorLookup(getToken(actor)).lookup().representatives():
                 if representative.active:
-                    address = (get_notification_email(representative)
-                               if notification_address else representative.email)
+                    if primary_emails is not None and representative.email:
+                        primary_emails.add(representative.email)
+                    address = get_notification_email(representative)
                     if address:
                         emails.add(address)
         return ', '.join(emails)
@@ -56,9 +57,10 @@ class ShareContentPost(Service):
             emails_cc = ""
             emails_bcc = self.get_email_adresses(source.search(''), self.notify_all)
         else:
-            primary_emails_to = self.get_email_adresses(
-                self.actors_to, notification_address=False)
-            emails_to = self.get_email_adresses(self.actors_to)
+            primary_emails = set()
+            emails_to = self.get_email_adresses(
+                self.actors_to, primary_emails=primary_emails)
+            primary_emails_to = ', '.join(primary_emails)
             emails_cc = self.get_email_adresses(self.actors_cc)
             emails_bcc = ""
 

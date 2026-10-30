@@ -316,6 +316,32 @@ class TestAlternativeNotificationEmail(IntegrationTestCase):
         self.assertEqual('test@localhost', mail_from)
         self.assertIn('robert.ziegler@gever.local', msg['Reply-To'].encode())
 
+    def test_sender_policy_with_feature_enabled_and_disabled(self):
+        from opengever.activity.mail import PloneNotificationMailer
+        mailer = PloneNotificationMailer()
+        mailer.prepare_html = lambda data: u'Notification'
+        recipient = self.get_ogds_user(self.regular_user)
+        for enabled in [False, True]:
+            api.portal.set_registry_record(
+                'alternative_notification_email_enabled', enabled, IOGMailSettings)
+            for actor_from in [False, True]:
+                api.portal.set_registry_record(
+                    'send_with_actor_from_address', actor_from, IOGMailSettings)
+                for actor_id in [self.regular_user.id, self.dossier_responsible.id]:
+                    actor = self.get_ogds_user(
+                        self.regular_user if actor_id == self.regular_user.id
+                        else self.dossier_responsible)
+                    msg, mail_to, mail_from = mailer.prepare_mail(
+                        to_userid=recipient.userid, from_userid=actor_id)
+                    self.assertEqual(
+                        'private@example.org' if enabled else recipient.email, mail_to)
+                    if actor_from and actor_id != recipient.userid:
+                        self.assertEqual(actor.email, mail_from)
+                        self.assertIsNone(msg['Reply-To'])
+                    else:
+                        self.assertEqual('test@localhost', mail_from)
+                        self.assertIn(actor.email, msg['Reply-To'].encode())
+
     def test_self_notification_uses_userid_with_actor_from_enabled(self):
         from opengever.activity.mail import PloneNotificationMailer
         api.portal.set_registry_record('send_with_actor_from_address', True, IOGMailSettings)

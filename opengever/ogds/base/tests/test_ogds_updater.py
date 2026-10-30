@@ -120,7 +120,6 @@ class TestOGDSUpdater(FunctionalTestCase):
                          [user.userid for user in ogds_service().all_users()])
 
     def test_flags_users_not_present_in_ldap_as_inactive(self):
-
         create(Builder('ogds_user').id('john.doe'))
         create(Builder('ogds_user').id('hugo.boss'))
 
