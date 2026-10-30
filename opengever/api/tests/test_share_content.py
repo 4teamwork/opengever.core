@@ -41,7 +41,6 @@ class TestShareContentPost(IntegrationTestCase):
         self.assertIn(self.workspace_member.getProperty('email'), mail['Reply-To'])
 
     @browsing
-
     def test_alternative_recipients_preserve_to_cc_and_sender(self, browser):
         self.login(self.workspace_member, browser)
         api.portal.set_registry_record(
@@ -84,7 +83,6 @@ class TestShareContentPost(IntegrationTestCase):
         self.assertIsNone(mail['Cc'])
 
     @browsing
-
     def test_share_workspace(self, browser):
         self.login(self.workspace_member, browser=browser)
         process_mail_queue()

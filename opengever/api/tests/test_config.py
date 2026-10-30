@@ -46,7 +46,6 @@ class TestConfig(IntegrationTestCase):
             self.assertNotIn('notification_email', browser.json['current_user'])
 
     @browsing
-
     def test_config_contains_id(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.config_url, headers=self.api_headers)

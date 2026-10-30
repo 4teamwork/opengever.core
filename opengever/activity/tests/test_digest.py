@@ -94,7 +94,6 @@ class TestDigestMail(IntegrationTestCase):
         self.assertIsNone(Digest.query.get_by_userid(self.regular_user.id))
 
     def test_missing_user_processes_digest_without_send_record(self):
-
         from mock import patch
         with patch('opengever.activity.digest.ogds_service') as service:
             service.return_value.fetch_user.return_value = None
@@ -106,7 +105,6 @@ class TestDigestMail(IntegrationTestCase):
         self.assertEqual(0, Digest.query.count())
 
     def test_sends_mail_to_all_notified_users(self):
-
         DigestMailer().send_digests()
         process_mail_queue()
 

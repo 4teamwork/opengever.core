@@ -389,7 +389,6 @@ class TestAlternativeNotificationEmail(IntegrationTestCase):
                         self.assertEqual('private@example.org', mail_to)
 
     def test_direct_email_callers_keep_their_address(self):
-
         from opengever.activity.mail import PloneNotificationMailer
         mailer = PloneNotificationMailer()
         mailer.prepare_html = lambda data: u'Notification'

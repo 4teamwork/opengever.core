@@ -18,7 +18,6 @@ class TestContentSharingMail(IntegrationTestCase):
         self.assertEqual([], Mailing(self.portal).get_messages())
 
     def test_content_sharing_mail(self):
-
         self.login(self.workspace_member)
         process_mail_queue()
         mailing = Mailing(self.portal)

@@ -75,7 +75,6 @@ class TestInvitationMail(IntegrationTestCase):
         self.assertNotIn('private@example.org', mail.as_string())
 
     def test_adding_invitation_sends_mail(self):
-
         self.login(self.workspace_admin)
 
         process_mail_queue()

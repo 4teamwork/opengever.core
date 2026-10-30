@@ -230,7 +230,6 @@ class TestNotificationEmailSettings(IntegrationTestCase):
             self.assertEqual(u'private@example.org', setting.notification_email)
 
     def test_document_properties_exclude_notification_email(self):
-
         from opengever.dossier.docprops import DefaultMemberDocPropertyProvider
         self.login(self.regular_user)
         setting = UserSettings.get_or_create(self.regular_user.id)
