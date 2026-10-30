@@ -120,8 +120,9 @@ class BackgroundTaskWorker(object):
             task.checkpoint_data = json.dumps(data)
             transaction.commit()
             # Always commit Solr updates, even when no ZODB objects were modified.
-            solr.manager.connection.commit(after_commit=False)
-            self.log.debug('Checkpoint committed for task %s' % task.task_id)
+            if solr is not None:
+                solr.manager.connection.commit(after_commit=False)
+                self.log.debug('Checkpoint committed for task %s' % task.task_id)
 
         task_id = task.task_id
         task_type = task.task_type
@@ -150,8 +151,9 @@ class BackgroundTaskWorker(object):
         task.finished = datetime.now()
         transaction.commit()
         # Always commit Solr updates, even when no ZODB objects were modified.
-        solr.manager.connection.commit(after_commit=False)
-        self.log.info('Task %s succeeded' % task_id)
+        if solr is not None:
+            solr.manager.connection.commit(after_commit=False)
+            self.log.info('Task %s succeeded' % task_id)
 
     def _handle_failure(self, task, error_message):
         task.error_message = error_message
