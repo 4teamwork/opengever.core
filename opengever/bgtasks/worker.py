@@ -116,13 +116,29 @@ class BackgroundTaskWorker(object):
         transaction.commit()
         solr = queryUtility(ISolrSearch)
 
-        def commit_checkpoint(data):
+        def commit_checkpoint(data, processed, total=None):
+            # Reenroll the session in the current transaction
+            session = create_session()
+            task = session.query(BackgroundTask).get(task_id)
             task.checkpoint_data = json.dumps(data)
             transaction.commit()
             # Always commit Solr updates, even when no ZODB objects were modified.
             if solr is not None:
                 solr.manager.connection.commit(after_commit=False)
-                self.log.debug('Checkpoint committed for task %s' % task.task_id)
+            if total is None:
+                self.log.info(
+                    'Checkpoint committed for task %s. Processed %d items.',
+                    task.task_id,
+                    processed,
+                )
+            else:
+                self.log.info(
+                    'Checkpoint committed for task %s. Processed %d of %d items (%.2f %%).',
+                    task.task_id,
+                    processed,
+                    total,
+                    100 * float(processed) / total,
+                )
 
         task_id = task.task_id
         task_type = task.task_type

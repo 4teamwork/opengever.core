@@ -26,12 +26,14 @@ def reindex_children_with_new_prefix(obj, last_path=None, commit_checkpoint=None
     catalog = api.portal.get_tool('portal_catalog')
     children = catalog.unrestrictedSearchResults(
         path='/'.join(obj.getPhysicalPath()), sort_on='path')
+    total = len(children)
     processed = 0
     skipping = last_path is not None
     with elevated_privileges():
         for child in children:
             path = child.getPath()
             if skipping:
+                processed += 1
                 skipping = path != last_path
                 continue
 
@@ -53,7 +55,7 @@ def reindex_children_with_new_prefix(obj, last_path=None, commit_checkpoint=None
 
             processed += 1
             if commit_checkpoint is not None and processed % CHECKPOINT_INTERVAL == 0:
-                commit_checkpoint({u'last_path': path})
+                commit_checkpoint({u'last_path': path}, processed, total)
 
 
 class UpdateReferencePrefixesTask(BaseBackgroundTask):
