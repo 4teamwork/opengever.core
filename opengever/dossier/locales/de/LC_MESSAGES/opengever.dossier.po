@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2025-06-24 08:51+0000\n"
+"POT-Creation-Date: 2026-07-10 09:42+0000\n"
 "PO-Revision-Date: 2017-05-23 04:53+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/de/>\n"
@@ -23,10 +23,6 @@ msgstr " (nächtliche Abschlussarbeiten ausstehend)"
 #: ./opengever/dossier/viewlets/byline.py
 msgid " (currently being resolved)"
 msgstr " (wird gerade abgeschlossen)"
-
-#: ./opengever/dossier/move_items.py
-msgid "${copied_items} Elements were moved successfully"
-msgstr "${copied_items} Elemente wurden erfolgreich verschoben"
 
 #: ./opengever/dossier/behaviors/protect_dossier.py
 msgid "A dossier manager must be selected  when protecting a dossier"
@@ -668,6 +664,11 @@ msgstr "Früheres Aktenzeichen"
 #: ./opengever/dossier/browser/tabbed.py
 msgid "label_info"
 msgstr "Info"
+
+#. Default: "${queued_items} item(s) queued to be moved"
+#: ./opengever/dossier/move_items.py
+msgid "label_items_queued_to_be_moved"
+msgstr "${queued_items} Elemente wurden in die Warteschlange hinzugefügt und werden im Hintergrund verschoben. Sie können währenddessen mit anderen Inhalten weiterarbeiten. Sobald der Vorgang abgeschlossen ist, erhalten Sie eine Benachrichtigung."
 
 #. Default: "Journal"
 #: ./opengever/dossier/browser/tabbed.py

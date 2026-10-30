@@ -443,6 +443,11 @@
       <role name="LimitedAdmin" />
     </permission>
 
+    <permission name="opengever.bgtasks: Manage background tasks" acquire="True">
+      <role name="Manager" />
+      <role name="Administrator" />
+    </permission>
+
     <permission name="opengever.workspace: Export Workspace Participants" acquire="True">
       <role name="Manager" />
       <role name="Administrator" />

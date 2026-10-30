@@ -50,12 +50,14 @@ class TestTokenManager(IntegrationTestCase):
 
     def test_issued_token_is_valid_for_one_month(self):
         self.login(self.regular_user)
+        now = datetime(2026, 9, 1, 14, 0)
         manager = TokenManager(self.document)
-        token = manager.issue_token()
+        with freeze(now):
+            token = manager.issue_token()
 
-        with freeze(datetime.today() + timedelta(days=30)):
+        with freeze(now + timedelta(days=30)):
             self.assertTrue(manager.validate_token(token))
 
-        with freeze(datetime.today() + timedelta(days=31)):
+        with freeze(now + timedelta(days=31)):
             with self.assertRaises(InvalidToken):
                 TokenManager(self.subdocument).validate_token(token)

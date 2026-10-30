@@ -191,6 +191,61 @@ msgstr "Historique"
 msgid "label_active"
 msgstr "Actif"
 
+#. Default: "Created"
+#: ./opengever/tabbedview/browser/backgroundtasks.py
+msgid "label_background_task_created"
+msgstr "Créé"
+
+#. Default: "Finished"
+#: ./opengever/tabbedview/browser/backgroundtasks.py
+msgid "label_background_task_finished"
+msgstr "Terminé"
+
+#. Default: "Task ID"
+#: ./opengever/tabbedview/browser/backgroundtasks.py
+msgid "label_background_task_id"
+msgstr "ID de tâche"
+
+#. Default: "Started"
+#: ./opengever/tabbedview/browser/backgroundtasks.py
+msgid "label_background_task_started"
+msgstr "Démarré"
+
+#. Default: "Status"
+#: ./opengever/tabbedview/browser/backgroundtasks.py
+msgid "label_background_task_status"
+msgstr "Statut"
+
+#. Default: "Failed"
+#: ./opengever/tabbedview/browser/backgroundtasks.py
+msgid "label_background_task_status_failed"
+msgstr "Échoué"
+
+#. Default: "Pending"
+#: ./opengever/tabbedview/browser/backgroundtasks.py
+msgid "label_background_task_status_pending"
+msgstr "En attente"
+
+#. Default: "Running"
+#: ./opengever/tabbedview/browser/backgroundtasks.py
+msgid "label_background_task_status_running"
+msgstr "En cours"
+
+#. Default: "Succeeded"
+#: ./opengever/tabbedview/browser/backgroundtasks.py
+msgid "label_background_task_status_succeeded"
+msgstr "Réussi"
+
+#. Default: "Task type"
+#: ./opengever/tabbedview/browser/backgroundtasks.py
+msgid "label_background_task_type"
+msgstr "Type de tâche"
+
+#. Default: "Not succeeded"
+#: ./opengever/tabbedview/browser/backgroundtasks.py
+msgid "label_background_tasks_filter_not_succeeded"
+msgstr "Non réussi"
+
 #. Default: "Checked out by"
 #: ./opengever/tabbedview/browser/tabs.py
 msgid "label_checked_out"

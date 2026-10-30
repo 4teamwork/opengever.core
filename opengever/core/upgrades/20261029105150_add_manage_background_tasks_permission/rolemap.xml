@@ -1,0 +1,8 @@
+<rolemap>
+  <permissions>
+    <permission name="opengever.bgtasks: Manage background tasks" acquire="True">
+      <role name="Manager" />
+      <role name="Administrator" />
+    </permission>
+  </permissions>
+</rolemap>
