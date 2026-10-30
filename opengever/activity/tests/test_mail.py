@@ -293,3 +293,104 @@ class TestNotificationMailsAndSavepoints(IntegrationTestCase):
         # Creating a savepoint will fail with the MailDataManager if it's
         # already registered as a transaction manager at that point
         transaction.savepoint()
+
+
+class TestAlternativeNotificationEmail(IntegrationTestCase):
+
+    def setUp(self):
+        super(TestAlternativeNotificationEmail, self).setUp()
+        self.portal.email_from_address = 'test@localhost'
+        self.login(self.regular_user)
+        api.portal.set_registry_record(
+            'alternative_notification_email_enabled', True, IOGMailSettings)
+        UserSettings.get_or_create(self.regular_user.id).notification_email = u'private@example.org'
+
+    def test_recipient_changes_but_sender_and_reply_to_use_identity_address(self):
+        from opengever.activity.mail import PloneNotificationMailer
+        mailer = PloneNotificationMailer()
+        mailer.prepare_html = lambda data: u'Notification'
+        msg, mail_to, mail_from = mailer.prepare_mail(
+            to_userid=self.regular_user.id, from_userid=self.dossier_responsible.id)
+        self.assertEqual('private@example.org', mail_to)
+        self.assertEqual('private@example.org', msg['To'])
+        self.assertEqual('test@localhost', mail_from)
+        self.assertIn('robert.ziegler@gever.local', msg['Reply-To'].encode())
+
+    def test_self_notification_uses_userid_with_actor_from_enabled(self):
+        from opengever.activity.mail import PloneNotificationMailer
+        api.portal.set_registry_record('send_with_actor_from_address', True, IOGMailSettings)
+        mailer = PloneNotificationMailer()
+        mailer.prepare_html = lambda data: u'Notification'
+        msg, mail_to, mail_from = mailer.prepare_mail(
+            to_userid=self.regular_user.id, from_userid=self.regular_user.id)
+        self.assertEqual('private@example.org', mail_to)
+        self.assertEqual('test@localhost', mail_from)
+        self.assertIn('foo@example.com', msg['Reply-To'].encode())
+
+    def test_distinct_users_with_same_primary_keep_sender_policy(self):
+        from opengever.activity.mail import PloneNotificationMailer
+        actor = self.get_ogds_user(self.dossier_responsible)
+        actor.email = self.get_ogds_user(self.regular_user).email
+        api.portal.set_registry_record('send_with_actor_from_address', True, IOGMailSettings)
+        mailer = PloneNotificationMailer()
+        mailer.prepare_html = lambda data: u'Notification'
+        for enabled in [False, True]:
+            api.portal.set_registry_record(
+                'alternative_notification_email_enabled', enabled, IOGMailSettings)
+            msg, mail_to, mail_from = mailer.prepare_mail(
+                to_userid=self.regular_user.id, from_userid=self.dossier_responsible.id)
+            self.assertEqual('test@localhost', mail_from)
+            self.assertIn('test@localhost', msg['From'].encode())
+            self.assertIn(actor.email, msg['Reply-To'].encode())
+
+    def test_actor_without_primary_uses_deployment_sender_without_reply_to(self):
+        from opengever.activity.mail import PloneNotificationMailer
+        actor = self.get_ogds_user(self.regular_user)
+        mailer = PloneNotificationMailer()
+        mailer.prepare_html = lambda data: u'Notification'
+        for primary in [None, '', '  ']:
+            actor.email = primary
+            for actor_from in [False, True]:
+                api.portal.set_registry_record('send_with_actor_from_address', actor_from, IOGMailSettings)
+                for recipient_id in [self.regular_user.id, self.dossier_responsible.id]:
+                    msg, mail_to, mail_from = mailer.prepare_mail(
+                        to_userid=recipient_id, from_userid=self.regular_user.id)
+                    self.assertEqual('test@localhost', mail_from)
+                    self.assertIn('test@localhost', msg['From'].encode())
+                    self.assertNotIn('private@example.org', msg['From'].encode())
+                    self.assertIsNone(msg['Reply-To'])
+                    if recipient_id == self.regular_user.id:
+                        self.assertEqual('private@example.org', mail_to)
+
+    def test_direct_email_callers_keep_their_address(self):
+
+        from opengever.activity.mail import PloneNotificationMailer
+        mailer = PloneNotificationMailer()
+        mailer.prepare_html = lambda data: u'Notification'
+        msg, mail_to, mail_from = mailer.prepare_mail(
+            to_email='direct@example.org', from_userid=self.regular_user.id)
+        self.assertEqual('direct@example.org', mail_to)
+
+    def test_missing_user_is_not_queued(self):
+        from mock import patch
+        from opengever.activity.mail import PloneNotificationMailer
+        mailer = PloneNotificationMailer()
+        mailer.prepare_html = lambda data: u'Notification'
+        with patch('opengever.activity.mailer.mail_queue.put') as queue:
+            msg, mail_to, mail_from = mailer.prepare_mail(to_userid='missing-user')
+            mailer.send_mail(msg, mail_to, mail_from)
+            self.assertFalse(queue.called)
+
+    def test_dispatch_presence_check_uses_alternative_without_primary(self):
+        from mock import Mock
+        from mock import patch
+        from opengever.activity.mail import PloneNotificationMailer
+        self.get_ogds_user(self.regular_user).email = None
+        notification = Mock(userid=self.regular_user.id)
+        mailer = PloneNotificationMailer()
+        mailer.get_data = lambda notification: {}
+        mailer.prepare_html = lambda data: u'Notification'
+        notification.activity.actor_id = None
+        with patch.object(mailer, 'send_mail') as send:
+            mailer.dispatch_notification(notification)
+            self.assertEqual('private@example.org', send.call_args[0][1])

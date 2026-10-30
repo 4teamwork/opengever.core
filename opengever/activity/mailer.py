@@ -2,6 +2,7 @@ from email.header import Header
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from opengever.activity.error_handling import NotificationErrorHandler
+from opengever.activity.notification_email import get_notification_email
 from opengever.base.interfaces import IOGMailSettings
 from opengever.base.model import get_locale
 from opengever.mail.utils import make_addr_header
@@ -85,10 +86,14 @@ class Mailer(object):
         We therefore defer the dispatching of notification mails until the
         very end of the transaction to work around this issue.
         """
-        mail_queue.put(msg, [each.strip() for each in mail_to.split(',')], mail_from)
+        recipients = [each.strip() for each in (mail_to or '').split(',')
+                      if each.strip()]
+        if recipients:
+            mail_queue.put(msg, recipients, mail_from)
 
     def prepare_mail(self, subject=u'', to_userid=None, to_email=None,
-                     cc_email=None, bcc_email=None, from_userid=None, data=None):
+                     cc_email=None, bcc_email=None, from_userid=None, data=None,
+                     is_self_notification=None):
         if data is None:
             data = {}
 
@@ -98,15 +103,21 @@ class Mailer(object):
         noreply_gever_address = api.portal.get().email_from_address
         from_mail = noreply_gever_address
 
+        recipient = ogds_service().fetch_user(to_userid) if to_userid else None
         if to_userid:
-            to_email = ogds_service().fetch_user(to_userid).email
+            to_email = get_notification_email(recipient)
 
         send_with_actor_from_address = api.portal.get_registry_record(
             name='send_with_actor_from_address', interface=IOGMailSettings)
 
         if actor:
-            is_same_sender_and_receiver = actor.email == to_email
-            use_actors_email_for_from = send_with_actor_from_address and not is_same_sender_and_receiver
+            actor_email = (actor.email or '').strip()
+            if is_self_notification is None:
+                primary_to_email = recipient.email if recipient else to_email
+                is_self_notification = (
+                    from_userid == to_userid or actor.email == primary_to_email)
+            use_actors_email_for_from = (
+                send_with_actor_from_address and not is_self_notification and actor_email)
             if not use_actors_email_for_from:
                 # Set From: header to full name of actor, but 'noreply' address
                 # of the GEVER deployment. Sending mails with the From-address of
@@ -116,15 +127,16 @@ class Mailer(object):
                                                noreply_gever_address, 'utf-8')
 
                 # Set the Reply-To header to the actual user's address
-                msg['Reply-To'] = make_addr_header(actor.fullname(),
-                                                   actor.email, 'utf-8')
+                if actor_email:
+                    msg['Reply-To'] = make_addr_header(actor.fullname(),
+                                                       actor_email, 'utf-8')
             else:
                 # Use the actor's email address for the From: header.
                 # This might be caught in spam filters because it's effectively
                 # sender address spoofing, but is sometimes desired by
                 # customers for compatibility with autoresponders.
-                msg['From'] = make_addr_header(actor.fullname(), actor.email, 'utf-8')
-                from_mail = actor.email
+                msg['From'] = make_addr_header(actor.fullname(), actor_email, 'utf-8')
+                from_mail = actor_email
         else:
             msg['From'] = make_addr_header(
                 self.default_addr_header, noreply_gever_address, 'utf-8')
