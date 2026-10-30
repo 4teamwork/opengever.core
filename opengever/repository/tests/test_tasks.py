@@ -114,7 +114,10 @@ class TestUpdateReferencePrefixesTask(IntegrationTestCase):
         task = self._make_task(self.repository_root.UID())
 
         checkpoints = []
-        UpdateReferencePrefixesTask().execute(task, checkpoints.append)
+
+        def commit_checkpoint(data, processed, total=None):
+            checkpoints.append(data)
+        UpdateReferencePrefixesTask().execute(task, commit_checkpoint)
 
         self.assertGreater(len(checkpoints), 0)
         paths = [cp[u'last_path'] for cp in checkpoints]
@@ -125,11 +128,18 @@ class TestUpdateReferencePrefixesTask(IntegrationTestCase):
         task = self._make_task(self.repository_root.UID())
 
         first_run = []
-        UpdateReferencePrefixesTask().execute(task, first_run.append)
+
+        def first_run_checkpoint(data, processed, total=None):
+            first_run.append(data)
+        UpdateReferencePrefixesTask().execute(task, first_run_checkpoint)
         self.assertGreater(len(first_run), 1)
 
         task.checkpoint_data = json.dumps(first_run[0])
+
         second_run = []
-        UpdateReferencePrefixesTask().execute(task, second_run.append)
+
+        def second_run_checkpoint(data, processed, total=None):
+            second_run.append(data)
+        UpdateReferencePrefixesTask().execute(task, second_run_checkpoint)
 
         self.assertEqual(first_run[1:], second_run)
