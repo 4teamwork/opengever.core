@@ -69,7 +69,7 @@ Auslesen (GET)
 Gleich wie bei anderen PATCH Requests ist es auch hier möglich die Representation als Response zu erhalten, hierzu muss ein ``Prefer`` Header mit dem Wert ``return=representation`` gesetzt werden.
 
 Alternative Benachrichtigungsadresse
------------------------------------
+------------------------------------
 
 Wenn ``features.alternative_notification_email_enabled`` in ``@config`` aktiv ist,
 liefern ``@user-settings`` und ``@config.user_settings`` zusätzlich

@@ -338,7 +338,7 @@ user_settings
         Gesehene Hilfe-Touren
 
 Alternative Benachrichtigungsadresse
------------------------------------
+------------------------------------
 
 ``features.alternative_notification_email_enabled`` zeigt an, ob Benutzer in der
 neuen UI eine persönliche Benachrichtigungsadresse verwalten können. Der
