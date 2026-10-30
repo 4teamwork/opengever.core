@@ -3,10 +3,12 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testing.mailing import Mailing
 from opengever.activity.mailer import process_mail_queue
+from opengever.base.interfaces import IOGMailSettings
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.user import User
+from opengever.ogds.models.user_settings import UserSettings
 from opengever.testing import IntegrationTestCase
 from plone import api
 import email
@@ -17,6 +19,72 @@ class TestShareContentPost(IntegrationTestCase):
     features = ('workspace', 'activity')
 
     @browsing
+    def test_sharing_to_self_preserves_sender_and_reply_to_with_alternative(self, browser):
+        self.login(self.workspace_member, browser)
+        api.portal.set_registry_record(
+            'alternative_notification_email_enabled', True, IOGMailSettings)
+        api.portal.set_registry_record('send_with_actor_from_address', True, IOGMailSettings)
+        UserSettings.get_or_create(self.workspace_member.id).notification_email = u'private@example.org'
+        process_mail_queue()
+        mailing = Mailing(self.portal)
+        mailing.reset()
+        browser.open(self.workspace, view='@share-content', method='POST',
+                     headers=self.api_headers, data=json.dumps({
+                         'actors_to': [{'token': self.workspace_member.id}],
+                         'actors_cc': [{'token': self.workspace_admin.id}]}))
+        process_mail_queue()
+        message, = mailing.get_mailhost().messages
+        mail = email.message_from_string(message.messageText)
+        self.assertEqual('private@example.org', mail['To'])
+        self.assertEqual('test@localhost', message.mfrom)
+        self.assertIn('test@localhost', mail['From'])
+        self.assertIn(self.workspace_member.getProperty('email'), mail['Reply-To'])
+
+    @browsing
+
+    def test_alternative_recipients_preserve_to_cc_and_sender(self, browser):
+        self.login(self.workspace_member, browser)
+        api.portal.set_registry_record(
+            'alternative_notification_email_enabled', True, IOGMailSettings)
+        UserSettings.get_or_create(self.workspace_guest.id).notification_email = u'guest-private@example.org'
+        UserSettings.get_or_create(self.workspace_admin.id).notification_email = u'admin-private@example.org'
+        self.get_ogds_user(self.workspace_guest).email = None
+        process_mail_queue()
+        mailing = Mailing(self.portal)
+        mailing.reset()
+        browser.open(self.workspace, view='@share-content', method='POST',
+                     headers=self.api_headers, data=json.dumps({
+                         'actors_to': [{'token': self.workspace_guest.id}],
+                         'actors_cc': [{'token': self.workspace_admin.id}]}))
+        process_mail_queue()
+        message, = mailing.get_mailhost().messages
+        self.assertItemsEqual(['guest-private@example.org', 'admin-private@example.org'], message.mto)
+        mail = email.message_from_string(message.messageText)
+        self.assertEqual('guest-private@example.org', mail['To'])
+        self.assertEqual('admin-private@example.org', mail['Cc'])
+        self.assertIn(self.workspace_member.getProperty('email'), mail['Reply-To'])
+
+    @browsing
+    def test_notify_all_resolves_bcc_recipients(self, browser):
+        self.login(self.workspace_member, browser)
+        api.portal.set_registry_record(
+            'alternative_notification_email_enabled', True, IOGMailSettings)
+        UserSettings.get_or_create(self.workspace_guest.id).notification_email = u'guest-private@example.org'
+        process_mail_queue()
+        mailing = Mailing(self.portal)
+        mailing.reset()
+        browser.open(self.workspace, view='@share-content', method='POST',
+                     headers=self.api_headers, data=json.dumps({'notify_all': True}))
+        process_mail_queue()
+        message, = mailing.get_mailhost().messages
+        self.assertIn('guest-private@example.org', message.mto)
+        self.assertNotIn(self.workspace_guest.getProperty('email'), message.mto)
+        mail = email.message_from_string(message.messageText)
+        self.assertIsNone(mail['To'])
+        self.assertIsNone(mail['Cc'])
+
+    @browsing
+
     def test_share_workspace(self, browser):
         self.login(self.workspace_member, browser=browser)
         process_mail_queue()

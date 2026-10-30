@@ -8,7 +8,17 @@ import email
 class TestContentSharingMail(IntegrationTestCase):
     features = ('workspace', 'activity')
 
+    def test_no_recipients_does_not_send(self):
+        self.login(self.workspace_member)
+        process_mail_queue()
+        Mailing(self.portal).reset()
+        ContentSharingMailer().share_content(
+            self.workspace, self.workspace_member.id, '', '', '')
+        process_mail_queue()
+        self.assertEqual([], Mailing(self.portal).get_messages())
+
     def test_content_sharing_mail(self):
+
         self.login(self.workspace_member)
         process_mail_queue()
         mailing = Mailing(self.portal)
