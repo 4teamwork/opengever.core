@@ -23,6 +23,7 @@ from opengever.workspace import is_workspace_feature_enabled
 from path import Path
 from plone import api
 from Products.Five import BrowserView
+from zExceptions import BadRequest
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.i18n import translate
 import json
@@ -162,6 +163,8 @@ class NotificationSettingsView(BrowserView):
             return JSONResponse(self.request).error(msg).proceed().dump()
 
         config_name = self.request.form['config_name']
+        if config_name not in [setting['id'] for setting in USER_SETTINGS]:
+            raise BadRequest('Unknown notification setting')
         value = json.loads(self.request.form['value'])
 
         UserSettings.save_setting_for_user(
@@ -207,6 +210,8 @@ class NotificationSettingsView(BrowserView):
         """API function to reset a user setting of a specific name.
         """
         config_name = self.request.form['config_name']
+        if config_name not in [setting['id'] for setting in USER_SETTINGS]:
+            raise BadRequest('Unknown notification setting')
         default = self.get_default_user_setting_value(config_name)
 
         UserSettings.save_setting_for_user(

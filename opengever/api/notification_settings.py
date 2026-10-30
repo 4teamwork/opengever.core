@@ -172,9 +172,7 @@ class GeneralNotificationSettingHandler(object):
     validation_schema = IGeneralNotificationSetting
 
     def validate_setting_id(self, setting_id):
-        try:
-            getattr(UserSettings, setting_id)
-        except AttributeError:
+        if setting_id not in [setting['id'] for setting in USER_SETTINGS]:
             raise BadRequest("'{}' does not exist".format(setting_id))
 
     def reset_setting(self, setting_id, userid):

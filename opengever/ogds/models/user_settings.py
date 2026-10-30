@@ -1,5 +1,6 @@
 from opengever.base.model import Base
 from opengever.base.model import create_session
+from opengever.base.model import EMAIL_LENGTH
 from opengever.base.model import USER_ID_LENGTH
 from opengever.ogds.models.user import User
 from sqlalchemy import Boolean
@@ -29,6 +30,7 @@ class UserSettings(Base):
     userid = Column(String(USER_ID_LENGTH), ForeignKey(User.userid), primary_key=True)
     user = relationship(User, backref=backref("user_settings", uselist=False))
 
+    notification_email = Column(String(EMAIL_LENGTH), nullable=True)
     notify_own_actions = Column(Boolean, default=False, nullable=False)
     notify_inbox_actions = Column(Boolean, default=True, nullable=False)
     _seen_tours = Column(Text, nullable=True)
@@ -44,7 +46,8 @@ class UserSettings(Base):
             # User has no personal setting
             if setting_name == 'seen_tours':
                 return []
-            return getattr(cls, setting_name).default.arg
+            default = getattr(cls, setting_name).default
+            return default.arg if default is not None else None
 
         # User has a personal setting
         return getattr(setting, setting_name)
