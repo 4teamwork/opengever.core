@@ -3,6 +3,7 @@ from AccessControl.users import nobody
 from collections import OrderedDict
 from ftw import bumblebee
 from opengever.activity.interfaces import IActivitySettings
+from opengever.activity.notification_email import is_alternative_notification_email_enabled
 from opengever.api.user_settings import serialize_setting
 from opengever.base.casauth import get_cas_server_url
 from opengever.base.casauth import get_gever_portal_url
@@ -141,6 +142,7 @@ class GeverSettingsAdpaterV1(object):
 
     def get_features(self):
         features = OrderedDict()
+        features['alternative_notification_email_enabled'] = is_alternative_notification_email_enabled()
         features['activity'] = api.portal.get_registry_record('is_feature_enabled', interface=IActivitySettings)
         features['archival_file_conversion'] = api.portal.get_registry_record('archival_file_conversion_enabled', interface=IDossierResolveProperties)  # noqa
         features['archival_file_conversion_blacklist'] = api.portal.get_registry_record('archival_file_conversion_blacklist', interface=IDossierResolveProperties)  # noqa

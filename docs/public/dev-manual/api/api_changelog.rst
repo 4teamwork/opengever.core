@@ -12,6 +12,10 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- ``@user-settings``: Optional, private ``notification_email`` for the current user.
+  Available only with the default-off ``alternative_notification_email_enabled``
+  feature exposed by ``@config``; empty string/null clears the address.
+  Disabled or invalid writes return HTTP 400 atomically.
 
 2026.5.0 (2026-09-17)
 ----------------------

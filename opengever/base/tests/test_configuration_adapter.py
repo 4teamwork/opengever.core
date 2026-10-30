@@ -60,6 +60,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
                 ])),
             ('p7m_extension_replacement', 'eml'),
             ('features', OrderedDict([
+                ('alternative_notification_email_enabled', False),
                 ('activity', False),
                 ('archival_file_conversion', False),
                 ('archival_file_conversion_blacklist', []),

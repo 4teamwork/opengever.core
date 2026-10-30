@@ -13,9 +13,29 @@ from sqlalchemy.orm import relationship
 from zope import schema
 from zope.interface import Interface
 import json
+import re
+
+
+def is_valid_notification_email(value):
+    # A single mailbox only: reject display names, address lists and headers.
+    if '@' not in value:
+        return False
+    local_part, domain = value.rsplit('@', 1)
+    if len(local_part) > 64 or any(len(label) > 63 for label in domain.split('.')):
+        return False
+    return bool(re.match(
+        r"\A[A-Za-z0-9!#$%&'*+/=?^_`{|}~-]+"
+        r"(?:\.[A-Za-z0-9!#$%&'*+/=?^_`{|}~-]+)*@"
+        r"[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?"
+        r"(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?)+\Z",
+        value))
 
 
 class IUserSettings(Interface):
+
+    notification_email = schema.TextLine(
+        required=False, max_length=EMAIL_LENGTH,
+        constraint=is_valid_notification_email)
 
     notify_own_actions = schema.Bool(required=False, default=False)
     notify_inbox_actions = schema.Bool(required=False, default=True)
