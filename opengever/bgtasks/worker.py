@@ -1,4 +1,5 @@
 from datetime import datetime
+from ftw.solr.interfaces import ISolrSearch
 from opengever.base.model import create_session
 from opengever.base.sentry import log_msg_to_sentry
 from opengever.bgtasks.model import BackgroundTask
@@ -7,6 +8,7 @@ from opengever.bgtasks.model import TASK_STATUS_PENDING
 from opengever.bgtasks.model import TASK_STATUS_RUNNING
 from opengever.bgtasks.model import TASK_STATUS_SUCCEEDED
 from opengever.bgtasks.task import get_task_class
+from zope.component import queryUtility
 from zope.globalrequest import getRequest
 import json
 import logging
@@ -75,10 +77,13 @@ class BackgroundTaskWorker(object):
         task.status = TASK_STATUS_RUNNING
         task.started = datetime.now()
         transaction.commit()
+        solr = queryUtility(ISolrSearch)
 
         def commit_checkpoint(data):
             task.checkpoint_data = json.dumps(data)
             transaction.commit()
+            # Always commit Solr updates, even when no ZODB objects were modified.
+            solr.manager.connection.commit(after_commit=False)
             self.log.debug('Checkpoint committed for task %s' % task.task_id)
 
         task_id = task.task_id
@@ -107,6 +112,8 @@ class BackgroundTaskWorker(object):
         task.status = TASK_STATUS_SUCCEEDED
         task.finished = datetime.now()
         transaction.commit()
+        # Always commit Solr updates, even when no ZODB objects were modified.
+        solr.manager.connection.commit(after_commit=False)
         self.log.info('Task %s succeeded' % task_id)
 
     def _handle_failure(self, task, error_message):
