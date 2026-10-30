@@ -35,7 +35,7 @@ class CheckpointingTask(BaseBackgroundTask):
     task_type = u'checkpointing'
 
     def execute(self, task, commit_checkpoint):
-        commit_checkpoint({u'step': 1, u'done': True})
+        commit_checkpoint({u'step': 1, u'done': True}, 1)
 
 
 register_task_type(u'succeeding', SucceedingTask)
