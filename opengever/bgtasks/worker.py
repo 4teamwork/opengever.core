@@ -12,8 +12,9 @@ from zope.component import queryUtility
 from zope.globalrequest import getRequest
 import json
 import logging
+import signal
 import sys
-import time
+import threading
 import traceback
 import transaction
 
@@ -27,18 +28,54 @@ class BackgroundTaskWorker(object):
 
     def __init__(self, log=None):
         self.log = log or logger
+        self._stop_event = threading.Event()
+
+    def request_stop(self):
+        self._stop_event.set()
+
+    def _install_signal_handlers(self):
+        """Request a graceful stop on SIGINT/SIGTERM.
+
+        A second signal restores the original handler, so that the process
+        can still be terminated forcefully.
+        """
+        original_handlers = {}
+
+        def handle_signal(signum, frame):
+            self.request_stop()
+            self._restore_signal_handlers(original_handlers)
+
+        for sig in (signal.SIGINT, signal.SIGTERM):
+            original_handlers[sig] = signal.signal(sig, handle_signal)
+        return original_handlers
+
+    def _restore_signal_handlers(self, handlers):
+        for sig, handler in handlers.items():
+            # signal.signal returns None for handlers not installed from Python
+            signal.signal(sig, handler if handler is not None else signal.SIG_DFL)
 
     def run_forever(self, admin_unit_id):
         self.log.info('Background task worker starting for admin unit: %s' % admin_unit_id)
-        self.reset_interrupted_tasks(admin_unit_id)
+        self._stop_event.clear()
+        original_handlers = {}
+        # Signal handlers can only be installed from the main thread
+        if isinstance(threading.current_thread(), threading._MainThread):
+            original_handlers = self._install_signal_handlers()
 
-        while True:
-            task = self.claim_next_task(admin_unit_id)
-            if task:
-                self.execute_task(task)
-            else:
-                self.log.debug('No pending tasks, sleeping %ds' % IDLE_SLEEP_SECONDS)
-                time.sleep(IDLE_SLEEP_SECONDS)
+        try:
+            self.reset_interrupted_tasks(admin_unit_id)
+
+            while not self._stop_event.is_set():
+                task = self.claim_next_task(admin_unit_id)
+                if task:
+                    self.execute_task(task)
+                else:
+                    self.log.debug('No pending tasks, sleeping %ds' % IDLE_SLEEP_SECONDS)
+                    self._stop_event.wait(IDLE_SLEEP_SECONDS)
+        finally:
+            self._restore_signal_handlers(original_handlers)
+
+        self.log.info('Background task worker stopped (shutdown requested)')
 
     def reset_interrupted_tasks(self, admin_unit_id):
         session = create_session()

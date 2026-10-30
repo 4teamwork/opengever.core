@@ -11,6 +11,8 @@ from opengever.bgtasks.worker import BackgroundTaskWorker
 from opengever.core.testing import MEMORY_DB_LAYER
 import json
 import logging
+import os
+import signal
 import transaction
 import unittest
 
@@ -182,3 +184,19 @@ class TestBackgroundTaskWorker(unittest.TestCase):
         self.assertEqual(task.status, TASK_STATUS_PENDING)
         resumed = json.loads(task.checkpoint_data)
         self.assertEqual(resumed[u'progress'], 42)
+
+    def test_run_forever_stops_gracefully_on_sigint(self):
+        task = self._make_task(task_type=u'succeeding')
+        original_handler = signal.getsignal(signal.SIGINT)
+        self.addCleanup(signal.signal, signal.SIGINT, original_handler)
+        original_execute = self.worker.execute_task
+
+        def execute_and_interrupt(task):
+            os.kill(os.getpid(), signal.SIGINT)
+            original_execute(task)
+
+        self.worker.execute_task = execute_and_interrupt
+        self.worker.run_forever(u'unit-1')
+
+        self.assertEqual(task.status, TASK_STATUS_SUCCEEDED)
+        self.assertEqual(original_handler, signal.getsignal(signal.SIGINT))
