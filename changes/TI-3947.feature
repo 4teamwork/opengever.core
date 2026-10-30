@@ -1,0 +1,1 @@
+Add an optional private notification email address, managed by its owner in the new UI and enabled per installation. Applies to individual notifications, digests and workspace content sharing, preserving identity and invitation routing. [TI-3947]
