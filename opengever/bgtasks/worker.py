@@ -55,7 +55,6 @@ class BackgroundTaskWorker(object):
             signal.signal(sig, handler if handler is not None else signal.SIG_DFL)
 
     def run_forever(self, admin_unit_id):
-        self.log.info('Background task worker starting for admin unit: %s' % admin_unit_id)
         self._stop_event.clear()
         original_handlers = {}
         # Signal handlers can only be installed from the main thread
@@ -65,6 +64,7 @@ class BackgroundTaskWorker(object):
         try:
             self.reset_interrupted_tasks(admin_unit_id)
 
+            self.log.info('Background task worker ready for admin unit: %s' % admin_unit_id)
             while not self._stop_event.is_set():
                 task = self.claim_next_task(admin_unit_id)
                 if task:
