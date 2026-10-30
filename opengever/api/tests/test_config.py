@@ -25,6 +25,27 @@ class TestConfig(IntegrationTestCase):
         return self.portal.absolute_url() + '/@config'
 
     @browsing
+    def test_alternative_notification_email_config_in_gever_and_teamraum(self, browser):
+        from opengever.base.interfaces import IOGMailSettings
+        from opengever.ogds.models.user_settings import UserSettings
+        from plone import api
+        self.login(self.regular_user, browser)
+        UserSettings.get_or_create(self.regular_user.id).notification_email = u'private@example.org'
+        browser.open(self.config_url, headers=self.api_headers)
+        self.assertFalse(browser.json['features']['alternative_notification_email_enabled'])
+        self.assertNotIn('notification_email', browser.json['user_settings'])
+        api.portal.set_registry_record(
+            'alternative_notification_email_enabled', True, IOGMailSettings)
+        for workspace in [False, True]:
+            if workspace:
+                self.activate_feature('workspace')
+            browser.open(self.config_url, headers=self.api_headers)
+            self.assertTrue(browser.json['features']['alternative_notification_email_enabled'])
+            self.assertEqual('private@example.org', browser.json['user_settings']['notification_email'])
+            self.assertEqual('foo@example.com', browser.json['current_user']['email'])
+            self.assertNotIn('notification_email', browser.json['current_user'])
+
+    @browsing
     def test_config_contains_id(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.config_url, headers=self.api_headers)
@@ -64,6 +85,7 @@ class TestConfig(IntegrationTestCase):
             browser.json.get(u'features'),
             {
                 u'activity': False,
+                u'alternative_notification_email_enabled': False,
                 u'archival_file_conversion': False,
                 u'archival_file_conversion_blacklist': [],
                 u'automatically_set_end_date': False,

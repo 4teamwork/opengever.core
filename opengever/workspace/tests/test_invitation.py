@@ -56,6 +56,24 @@ class TestInvitationMail(IntegrationTestCase):
         'activity',
         )
 
+    def test_alternative_notification_email_does_not_redirect_invitation(self):
+        from opengever.base.interfaces import IOGMailSettings
+        from opengever.ogds.models.user_settings import UserSettings
+        self.login(self.workspace_admin)
+        api.portal.set_registry_record(
+            'alternative_notification_email_enabled', True, IOGMailSettings)
+        UserSettings.get_or_create(self.regular_user.id).notification_email = u'private@example.org'
+        process_mail_queue()
+        mailing = Mailing(self.portal)
+        mailing.reset()
+        getUtility(IInvitationStorage).add_invitation(
+            self.workspace, self.regular_user.getProperty('email'),
+            self.workspace_admin.id, 'WorkspaceGuest')
+        process_mail_queue()
+        mail = email.message_from_string(mailing.get_messages()[0])
+        self.assertEqual(self.regular_user.getProperty('email'), mail['To'])
+        self.assertNotIn('private@example.org', mail.as_string())
+
     def test_adding_invitation_sends_mail(self):
         self.login(self.workspace_admin)
 

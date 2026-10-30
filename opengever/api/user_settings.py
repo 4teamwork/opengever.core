@@ -1,3 +1,4 @@
+from opengever.activity.notification_email import is_alternative_notification_email_enabled
 from opengever.api.validation import get_validation_errors
 from opengever.ogds.models.user import User
 from opengever.ogds.models.user_settings import IUserSettings
@@ -14,6 +15,9 @@ def serialize_setting(setting):
     ogds_user = User.query.filter_by(userid=userid).one_or_none()
     data = {}
     for name, field in getFieldsInOrder(IUserSettings):
+        if name == 'notification_email' and not is_alternative_notification_email_enabled():
+            continue
+
         # Hardcode that a pure plone users has always seen all tours.
         #
         # This is because a pure plone-user has no user-settings,
@@ -44,6 +48,14 @@ class UserSettingsPatch(Service):
     def reply(self):
         userid = api.user.get_current().id
         data = json_body(self.request)
+
+        if 'notification_email' in data:
+            if not is_alternative_notification_email_enabled():
+                raise BadRequest('Alternative notification email is disabled')
+            if not User.query.filter_by(userid=userid).one_or_none():
+                raise BadRequest('Notification email requires an OGDS user')
+            if data['notification_email'] == u'':
+                data['notification_email'] = None
 
         errors = get_validation_errors(data, IUserSettings)
         if errors:

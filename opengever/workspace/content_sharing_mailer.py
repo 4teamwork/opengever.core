@@ -13,7 +13,8 @@ class ContentSharingMailer(Mailer):
     template = ViewPageTemplateFile("content_sharing_mail.pt")
     default_addr_header = u'Teamraum'
 
-    def share_content(self, target_object, sender_id, to_email, cc_email=None, bcc_email=None, comment=u''):
+    def share_content(self, target_object, sender_id, to_email, cc_email=None,
+                      bcc_email=None, comment=u'', is_self_notification=None):
 
         subject = translate(
             _(u'share_mail_subject',
@@ -50,6 +51,7 @@ class ContentSharingMailer(Mailer):
         }
         msg, mail_to, mail_from = self.prepare_mail(
             subject=subject, to_email=to_email, cc_email=cc_email,
-            bcc_email=bcc_email, from_userid=sender_id, data=data)
+            bcc_email=bcc_email, from_userid=sender_id, data=data,
+            is_self_notification=is_self_notification)
 
         self.send_mail(msg, mail_to, mail_from)

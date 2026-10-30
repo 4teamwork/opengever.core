@@ -1,5 +1,7 @@
+from opengever.activity.notification_email import get_notification_email
 from opengever.ogds.base.actor import ActorLookup
 from opengever.ogds.base.sources import WorkspaceContentMemberUsersSource
+from opengever.ogds.models.service import ogds_service
 from opengever.workspace.content_sharing_mailer import ContentSharingMailer
 from opengever.workspace.utils import is_within_workspace
 from plone import api
@@ -12,7 +14,7 @@ from zope.interface import alsoProvides
 
 class ShareContentPost(Service):
 
-    def get_email_adresses(self, actors, is_term=False):
+    def get_email_adresses(self, actors, is_term=False, primary_emails=None):
         emails = set()
 
         if is_term:
@@ -24,8 +26,12 @@ class ShareContentPost(Service):
 
         for actor in actors:
             for representative in ActorLookup(getToken(actor)).lookup().representatives():
-                if representative.active and representative.email:
-                    emails.add(representative.email)
+                if representative.active:
+                    if primary_emails is not None and representative.email:
+                        primary_emails.add(representative.email)
+                    address = get_notification_email(representative)
+                    if address:
+                        emails.add(address)
         return ', '.join(emails)
 
     def extract_data(self):
@@ -46,17 +52,26 @@ class ShareContentPost(Service):
 
         if self.notify_all:
             source = WorkspaceContentMemberUsersSource(self.context)
+            primary_emails_to = ""
             emails_to = ""
             emails_cc = ""
             emails_bcc = self.get_email_adresses(source.search(''), self.notify_all)
         else:
-            emails_to = self.get_email_adresses(self.actors_to)
+            primary_emails = set()
+            emails_to = self.get_email_adresses(
+                self.actors_to, primary_emails=primary_emails)
+            primary_emails_to = ', '.join(primary_emails)
             emails_cc = self.get_email_adresses(self.actors_cc)
             emails_bcc = ""
 
         sender_id = api.user.get_current().getId()
         mailer = ContentSharingMailer()
-        mailer.share_content(self.context, sender_id, emails_to, emails_cc, emails_bcc, self.comment)
+        sender = ogds_service().fetch_user(sender_id)
+        # Routing the recipients must not change the existing sender policy.
+        is_self_notification = bool(sender and sender.email == primary_emails_to)
+        mailer.share_content(
+            self.context, sender_id, emails_to, emails_cc, emails_bcc,
+            self.comment, is_self_notification=is_self_notification)
 
         self.request.response.setStatus(204)
         return super(ShareContentPost, self).reply()

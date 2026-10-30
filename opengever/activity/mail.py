@@ -1,6 +1,7 @@
 from opengever.activity.browser import resolve_notification_url
 from opengever.activity.dispatcher import NotificationDispatcher
 from opengever.activity.mailer import Mailer
+from opengever.activity.notification_email import get_notification_email
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.models.service import ogds_service
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
@@ -30,7 +31,7 @@ class PloneNotificationMailer(NotificationDispatcher, Mailer):
         data = self.get_data(notification)
 
         recipient_user = ogds_service().fetch_user(notification.userid)
-        if recipient_user and not recipient_user.email:
+        if not get_notification_email(recipient_user):
             logger.warn(
                 'Notification %s skipped: Missing email address for '
                 'user %r.' % (notification.notification_id, recipient_user))

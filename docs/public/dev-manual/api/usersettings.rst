@@ -67,3 +67,34 @@ Auslesen (GET)
 
 
 Gleich wie bei anderen PATCH Requests ist es auch hier möglich die Representation als Response zu erhalten, hierzu muss ein ``Prefer`` Header mit dem Wert ``return=representation`` gesetzt werden.
+
+Alternative Benachrichtigungsadresse
+------------------------------------
+
+Wenn ``features.alternative_notification_email_enabled`` in ``@config`` aktiv ist,
+liefern ``@user-settings`` und ``@config.user_settings`` zusätzlich
+``notification_email`` (E-Mail-Adresse oder ``null``). Die Einstellung gehört
+immer dem angemeldeten Benutzer; auch Administratoren können sie nicht für andere
+Benutzer lesen oder ändern. Ein OGDS-Benutzerkonto ist erforderlich.
+
+Ein PATCH wie ``{"notification_email": "privat@example.org"}`` setzt oder ersetzt
+die Adresse. ``{"notification_email": null}`` oder eine leere Zeichenfolge löscht
+sie. Ungültige Adressen, andere Datentypen und mehr als 255 Zeichen werden mit
+HTTP 400 abgewiesen; dabei werden auch andere Felder desselben PATCH nicht geändert.
+Wenn die Funktion deaktiviert ist, fehlt das Feld in Antworten und jeder PATCH
+auf dieses Feld wird mit HTTP 400 abgewiesen. Bereits gespeicherte Werte bleiben
+erhalten.
+
+Die alternative Adresse ersetzt die primäre Empfängeradresse für einzelne
+Benachrichtigungen, tägliche Zusammenfassungen und Mitteilungen beim Teilen von
+Teamraum-Inhalten. Ohne alternative Adresse wird die primäre Adresse verwendet;
+ohne zustellbare Adresse wird keine E-Mail versendet. Die betroffenen
+Benachrichtigungen werden für die Zusammenfassung als verarbeitet markiert,
+ohne einen erfolgreichen Versand zu protokollieren. Einladungen sowie Absender- und Reply-To-Adressen
+bleiben unverändert. Beim Teilen bleiben To/Cc/Bcc erhalten: Adressen in To/Cc
+sind für andere E-Mail-Empfänger sichtbar.
+
+Die Einstellung wird nicht in Benutzerlisten, Profilen, Reports oder
+Dokumenteigenschaften veröffentlicht und übersteht OGDS-Synchronisation und
+Deaktivierung. Die Adresse wird ohne Bestätigungs-E-Mail verwendet; die Verwaltung erfolgt
+ausschliesslich in der neuen UI.

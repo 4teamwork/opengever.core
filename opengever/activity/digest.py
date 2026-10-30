@@ -5,6 +5,7 @@ from opengever.activity.dispatcher import NotificationDispatcher
 from opengever.activity.mailer import Mailer
 from opengever.activity.model import Digest
 from opengever.activity.model import Notification
+from opengever.activity.notification_email import get_notification_email
 from opengever.base.browser.resolveoguid import ResolveOGUIDView
 from opengever.base.date_time import utcnow_tz_aware
 from opengever.base.model import create_session
@@ -95,6 +96,10 @@ class DigestMailer(Mailer):
 
             today = api.portal.get_localized_time(date.today())
             user = ogds_service().fetch_user(userid)
+            if not get_notification_email(user):
+                self.mark_as_sent(notifications)
+                logger.info('  Digest skipped for %s: Missing email address', userid)
+                continue
 
             subject = translate(
                 _(u'subject_digest',
@@ -117,7 +122,7 @@ class DigestMailer(Mailer):
             self.send_mail(msg, mail_to, mail_from)
             self.mark_as_sent(notifications)
             self.record_digest(userid)
-            logger.info('  Digest sent for %s (%s)' % (userid, user.email))
+            logger.info('  Digest sent for %s', userid)
 
         logger.info('Done sending digests.')
 

@@ -17,6 +17,7 @@ from opengever.ogds.base.tests.ldaphelpers import FakeLDAPUserFolder
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.service import ogds_service
 from opengever.ogds.models.user import User
+from opengever.ogds.models.user_settings import UserSettings
 from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
 from plone import api
@@ -426,6 +427,34 @@ class TestOGDSUpdater(FunctionalTestCase):
 
         group = ogds_service().fetch_group('duplicate_group')
         self.assertEqual(group.is_local, True)
+
+
+class TestNotificationEmailSync(IntegrationTestCase):
+
+    def test_notification_email_survives_import_updates_and_deactivation(self):
+        ldap_users = FakeLDAPUserFolder()
+        self.portal.acl_users._setObject('ldap', FakeLDAPPlugin(ldap_users))
+        self.portal.getSiteManager().registerAdapter(FakeLDAPSearchUtility)
+        create(Builder('ogds_user').id('notification.owner').having(email='old@example.org'))
+        UserSettings.get_or_create('notification.owner').notification_email = u'private@example.org'
+        create_session().flush()
+        ldap_users.users = [
+            create(Builder('ldapuser').named('notification.owner')
+                   .having(email='new@example.org', firstname='Updated'))]
+        updater = IOGDSUpdater(self.portal)
+        updater.import_users()
+        create_session().expire_all()
+        user = ogds_service().fetch_user('notification.owner')
+        self.assertEqual('new@example.org', user.email)
+        self.assertEqual('Updated', user.firstname)
+        self.assertEqual(u'private@example.org', user.user_settings.notification_email)
+
+        ldap_users.users = []
+        updater.import_users()
+        create_session().expire_all()
+        user = ogds_service().fetch_user('notification.owner')
+        self.assertFalse(user.active)
+        self.assertEqual(u'private@example.org', user.user_settings.notification_email)
 
 
 class TestImportStamp(IntegrationTestCase):

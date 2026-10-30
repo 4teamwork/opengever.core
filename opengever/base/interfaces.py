@@ -377,6 +377,10 @@ class IRecentlyTouchedSettings(Interface):
 
 class IOGMailSettings(Interface):
 
+    alternative_notification_email_enabled = schema.Bool(
+        title=u'Allow users to set an alternative notification email address',
+        default=False)
+
     send_with_actor_from_address = schema.Bool(
         title=u"Send mails with actor's email address in From: header",
         description=u"Whether mails sent on behalf of actors (users) should "

@@ -336,3 +336,27 @@ user_settings
 
     seen_tours
         Gesehene Hilfe-Touren
+
+Alternative Benachrichtigungsadresse
+------------------------------------
+
+``features.alternative_notification_email_enabled`` zeigt an, ob Benutzer in der
+neuen UI eine persönliche Benachrichtigungsadresse verwalten können. Der
+Registry-Eintrag
+``opengever.base.interfaces.IOGMailSettings.alternative_notification_email_enabled``
+ist standardmässig ``False``. Die Funktion ist in GEVER und Teamraum verfügbar.
+Bei Aktivierung enthält ``user_settings.notification_email`` die Einstellung des
+aktuellen Benutzers (Adresse oder ``null``); ``current_user.email`` bleibt die
+primäre Identitätsadresse. Bei deaktivierter Funktion fehlt das neue Einstellungsfeld.
+
+Vor der Aktivierung müssen das additive SQL-Schema-Upgrade und das
+Registry-Upgrade installiert sein. Es werden
+keine Daten aus ``User.email2`` oder AD übernommen. Weitere Details und Grenzen
+stehen unter :ref:`usersettings`.
+
+Bei Verwendung alternativer Benachrichtigungsadressen sollte
+``opengever.base.interfaces.IOGMailSettings.send_with_actor_from_address`` auf
+``False`` gesetzt sein. Damit wird die konfigurierte Absenderadresse der
+Installation verwendet; Antworten gehen an die primäre Adresse des Akteurs.
+Dies gilt auch für Einladungen und Benachrichtigungen an primäre Adressen.
+Die neue Funktion verändert diese unabhängige Absendereinstellung nicht.

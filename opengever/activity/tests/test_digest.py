@@ -8,7 +8,10 @@ from ftw.testing.mailing import Mailing
 from opengever.activity.digest import DigestMailer
 from opengever.activity.mailer import process_mail_queue
 from opengever.activity.model import Digest
+from opengever.base.interfaces import IOGMailSettings
+from opengever.ogds.models.user_settings import UserSettings
 from opengever.testing import IntegrationTestCase
+from plone import api
 import pytz
 
 
@@ -38,6 +41,68 @@ class TestDigestMail(IntegrationTestCase):
         super(TestDigestMail, self).tearDown()
         process_mail_queue()
         Mailing(self.portal).tear_down()
+
+    def test_alternative_recipient_without_primary(self):
+        api.portal.set_registry_record(
+            'alternative_notification_email_enabled', True, IOGMailSettings)
+        self.get_ogds_user(self.regular_user).email = None
+        UserSettings.get_or_create(self.regular_user.id).notification_email = u'private@example.org'
+        DigestMailer().send_digests()
+        process_mail_queue()
+        recipients = [message_from_string(mail)['To']
+                      for mail in Mailing(self.portal).get_messages()]
+        self.assertIn('private@example.org', recipients)
+        self.assertTrue(self.note1.sent_in_digest)
+        self.assertIsNotNone(Digest.query.get_by_userid(self.regular_user.id))
+
+    def test_no_address_processes_digest_without_send_record(self):
+        self.get_ogds_user(self.regular_user).email = None
+        DigestMailer().send_digests()
+        process_mail_queue()
+        self.assertEqual(1, len(Mailing(self.portal).get_messages()))
+        self.assertTrue(self.note1.sent_in_digest)
+        self.assertIsNone(Digest.query.get_by_userid(self.regular_user.id))
+
+    def test_adding_address_does_not_send_old_digest_notifications(self):
+        user = self.get_ogds_user(self.regular_user)
+        user.email = None
+        DigestMailer().send_digests()
+        process_mail_queue()
+        Mailing(self.portal).reset()
+
+        user.email = 'restored@example.org'
+        DigestMailer().send_digests()
+        process_mail_queue()
+        self.assertEqual([], Mailing(self.portal).get_messages())
+        self.assertIsNone(Digest.query.get_by_userid(self.regular_user.id))
+
+        create(Builder('notification')
+               .having(activity=self.note1.activity, is_digest=True,
+                       userid=self.regular_user.id))
+        DigestMailer().send_digests()
+        process_mail_queue()
+        messages = Mailing(self.portal).get_messages()
+        self.assertEqual(1, len(messages))
+        self.assertEqual('restored@example.org', message_from_string(messages[0])['To'])
+
+    def test_whitespace_only_address_processes_digest_without_send_record(self):
+        self.get_ogds_user(self.regular_user).email = u' \t\r\n '
+        DigestMailer().send_digests()
+        process_mail_queue()
+        self.assertEqual(1, len(Mailing(self.portal).get_messages()))
+        self.assertTrue(self.note1.sent_in_digest)
+        self.assertIsNone(Digest.query.get_by_userid(self.regular_user.id))
+
+    def test_missing_user_processes_digest_without_send_record(self):
+        from mock import patch
+        with patch('opengever.activity.digest.ogds_service') as service:
+            service.return_value.fetch_user.return_value = None
+            DigestMailer().send_digests()
+        process_mail_queue()
+        self.assertEqual([], Mailing(self.portal).get_messages())
+        self.assertTrue(self.note1.sent_in_digest)
+        self.assertTrue(self.note2.sent_in_digest)
+        self.assertEqual(0, Digest.query.count())
 
     def test_sends_mail_to_all_notified_users(self):
         DigestMailer().send_digests()
