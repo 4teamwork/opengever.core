@@ -61,6 +61,10 @@ class Move(Move):
 
         data = json_body(self.request)
 
+        synchronous = data.get('synchronous', False)
+        if not isinstance(synchronous, bool):
+            raise BadRequest("Property 'synchronous' must be a boolean")
+
         source = data.get('source', None)
 
         if not source:
@@ -77,6 +81,8 @@ class Move(Move):
         parents_objs = {}
         for item in source:
             obj = self.get_object(item)
+            if synchronous and obj is None:
+                raise BadRequest("Every source must resolve to an existing object")
             if obj is not None:
                 # -- Commented out the following block to disable checking for
                 # -- delete permission, as in GEVER the user is not allowed to
@@ -100,10 +106,27 @@ class Move(Move):
         destination_uid = self.context.UID()
         user_id = api.user.get_current().getId()
 
+        if synchronous:
+            source_urls = {(parent, obj.getId()): obj.absolute_url()
+                           for parent, objs in parents_objs.items()
+                           for obj in objs}
+
         results = []
         for parent, objs in parents_objs.items():
             ids = [o.getId() for o in objs]
             clipboard = self.clipboard(parent, ids)
+
+            if synchronous:
+                # The explicit mode must propagate paste failures and report
+                # actual IDs, including names changed to avoid collisions.
+                pasted = self.context.manage_pasteObjects(cb_copy_data=clipboard)
+                for item in pasted:
+                    results.append({
+                        'source': source_urls[(parent, item['id'])],
+                        'target': self.context[item['new_id']].absolute_url(),
+                    })
+                status = 200
+                continue
 
             if admin_unit is None:
                 # OGDS not ready yet (e.g. setup/test contexts) - paste

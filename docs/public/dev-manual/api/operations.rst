@@ -317,3 +317,49 @@ in GEVER verboten und in teamraum erlaubt.
        **Code-Beispiel (Python)**
 
     .. literalinclude:: examples/example_delete.py
+
+
+Inhalte synchron verschieben (POST @move)
+-----------------------------------------
+
+``POST {ziel}/@move`` akzeptiert neben ``source`` die optionale boolesche
+Eigenschaft ``synchronous``. ``source`` kann wie bisher ein einzelnes Objekt
+oder eine Liste von Objekten bezeichnen.
+
+.. sourcecode:: http
+
+   POST /ordnungssystem/fuehrung/dossier-24/@move HTTP/1.1
+   Accept: application/json
+   Content-Type: application/json
+
+   {
+     "source": "https://example.org/ordnungssystem/fuehrung/dossier-23/document-1",
+     "synchronous": true
+   }
+
+Bei ``synchronous: true`` wird direkt unter dem Benutzer des Requests
+verschoben, auch wenn Hintergrundaufgaben aktiviert sind. Es werden weder eine
+Move-Hintergrundaufgabe noch Move-Sperren angelegt. Berechtigungs- und
+Verschiebbarkeitsprüfungen bleiben unverändert. Ein erfolgreicher Request liefert
+HTTP 200 und eine Liste von ``source``/``target``-Paaren. ``target`` enthält die
+tatsächliche Ziel-URL, einschliesslich einer beim Einfügen wegen Namenskollision
+geänderten ID. Einfügefehler werden als HTTP-Fehler zurückgegeben; sie werden
+nicht als erfolgreiche Hintergrundaufgabe quittiert. Alle Verschiebungen eines
+Requests gehören zur selben Transaktion.
+
+Fehlt ``synchronous`` oder ist es ``false``, bleibt das bisherige Verhalten
+unverändert, einschliesslich HTTP 202 bei eingereihten Hintergrundaufgaben.
+Andere Werte (auch ``null``, Zahlen und Strings) werden vor der Verschiebung mit
+HTTP 400 abgelehnt.
+Im synchronen Modus muss jede Quelle auf ein vorhandenes Objekt auflösbar sein.
+Fehlt eine Quelle, wird der gesamte Request vor der ersten Verschiebung mit
+HTTP 400 abgelehnt.
+
+Clients, die einen abgeschlossenen synchronen Move benötigen, müssen HTTP 200
+und das Ergebnis prüfen und HTTP 202 ablehnen. Diese GEVER-Version muss vor
+solchen Clients ausgerollt werden: ältere Server können die unbekannte Option
+ignorieren und Einfügefehler unterdrücken. Der synchrone Request kann bei grossen
+Verschiebungen lange dauern; Client- und Proxy-Timeouts müssen dazu passen.
+Ein Verbindungsabbruch beweist keinen Rollback. Vor einem manuellen erneuten
+Versuch ist der Objektstand in GEVER zu prüfen; Clients sollen nicht automatisch
+wiederholen.
