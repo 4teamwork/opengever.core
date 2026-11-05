@@ -10,6 +10,23 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2026.6.0 (2026-11-05)
+---------------------
+
+New features:
+
+
+- Introduce background tasks (opengever.bgtasks) for long-running operations. Moving multiple objects, reindexing reference prefixes, dossier titles and object security are now queued and processed asynchronously by a dedicated worker, and objects are move-locked while a move is queued. Includes a control panel to manage background tasks and a feature flag (disabled by default). [buchi] [GH-8247]
+- Add an optional private notification email address, managed by its owner in the new UI and enabled per installation. Applies to individual notifications, digests and workspace content sharing, preserving identity and invitation routing. [TI-3947]
+
+
+Bug fixes:
+
+
+- Bump ftw.zopemaster to 1.4.1 for read-only mode support. [buchi] [GH-8256]
+- Revoke temporary task permissions when skipping a rejected task. [elioschmutz] [TI-4088]
+
+
 2026.5.0 (2026-09-17)
 ---------------------
 
