@@ -28,6 +28,7 @@ tests_require = [
     'plone.resource',
     'plone.testing',
     'Products.CMFPlone',
+    'psycopg2',
     'PyJWT',
     'pyquery',
     'requests_mock',
