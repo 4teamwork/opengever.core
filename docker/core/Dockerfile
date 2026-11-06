@@ -1,11 +1,27 @@
 ARG ALPINE_VERSION=3.22
 
+# ogcore base image
+# -----------------------------------------------------------------------------
+FROM 4teamwork/plone:4.3.20-alpine${ALPINE_VERSION} AS base
+
+USER root
+RUN apk add \
+    libldap \
+    libffi \
+    libpq \
+    procps-ng \
+    curl
+
+VOLUME /data
+WORKDIR /app
+ENV PATH="/app/bin:$PATH"
+USER plone
+EXPOSE 8160
+
 # ogcore builder
 # -----------------------------------------------------------------------------
-FROM 4teamwork/plone:4.3.20-alpine${ALPINE_VERSION} AS builder
+FROM base AS builder
 USER root
-
-RUN apk add curl
 
 RUN --mount=type=secret,id=gldt \
     export GITLAB_DEPLOY_TOKEN=$(cat /run/secrets/gldt) && \
@@ -94,7 +110,7 @@ RUN mkdir -p /app/var/log /app/var/instance \
 RUN ln -sf /dev/null /app/var/log/upgrade_stats.csv
 
 # Patch cacert.pem with a recent version to address CVE-2023-37920
-RUN wget -O /app/lib/python2.7/site-packages/certifi/cacert.pem https://raw.githubusercontent.com/certifi/python-certifi/2024.02.02/certifi/cacert.pem
+RUN curl -L -o /app/lib/python2.7/site-packages/certifi/cacert.pem https://raw.githubusercontent.com/certifi/python-certifi/2024.02.02/certifi/cacert.pem
 
 # Patch ftw.bumblebee to use time.time() for timestamp generation
 # datetime.now().strftime('%s') does not return the same on Alpine Linux (musl)
@@ -107,6 +123,24 @@ RUN python2.7 -m compileall /app/lib/python2.7/site-packages/ftw/bumblebee/hashi
 # to utf-8 which should be fine for us.
 COPY ./docker/core/patches/p_a_theming_transform.py /app/lib/python2.7/site-packages/plone/app/theming/transform.py
 RUN python2.7 -m compileall /app/lib/python2.7/site-packages/plone/app/theming/transform.py
+
+# ogcore dev
+# -----------------------------------------------------------------------------
+FROM builder AS dev
+
+COPY ./docker/core/requirements-test.txt /app/
+
+RUN --mount=type=cache,target=/root/.cache \
+    --mount=type=secret,id=gldt \
+    export GITLAB_DEPLOY_TOKEN=$(cat /run/secrets/gldt) && \
+    CFLAGS="-I/usr/include/openssl1.1" \
+    LDFLAGS="-L/usr/lib/openssl1.1" \
+    pip install \
+    --prefix /app \
+    --extra-index-url https://__token__:$GITLAB_DEPLOY_TOKEN@git.4teamwork.ch/api/v4/projects/486/packages/pypi/simple \
+    -r requirements-test.txt
+
+COPY ./docker/core/test /app/bin/
 
 # go-crond builder
 # -----------------------------------------------------------------------------
@@ -130,20 +164,7 @@ RUN make build
 
 # ogcore production image
 # -----------------------------------------------------------------------------
-FROM 4teamwork/plone:4.3.20-alpine${ALPINE_VERSION} AS prod
-
-USER root
-RUN apk add \
-    libldap \
-    libffi \
-    libpq \
-    procps-ng
+FROM base AS prod
 
 COPY --from=builder /app /app
 COPY --from=go-crond-builder /go/src/github.com/webdevops/go-crond /usr/local/bin
-
-VOLUME /data
-WORKDIR /app
-ENV PATH="/app/bin:$PATH"
-USER plone
-EXPOSE 8160
