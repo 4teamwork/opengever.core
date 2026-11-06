@@ -1,0 +1,2 @@
+plone.reload==3.0.2
+collective.z3cinspector==1.1
