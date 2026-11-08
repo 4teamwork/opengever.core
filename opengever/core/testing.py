@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from App.config import getConfiguration
 from collective.taskqueue.interfaces import ITaskQueue
 from collective.transmogrifier import transmogrifier
