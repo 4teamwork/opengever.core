@@ -598,24 +598,33 @@ class ContentFixtureLayer(NoSolrTestingBase, OpengeverFixture):
 class SolrTestingBase(object):
 
     def maybe_start_solr(self):
-        SolrServer.get_instance().configure(self.solr_port, self.solr_core).start()
+        if 'SOLR_HOST' in os.environ:
+            SolrServer.get_instance().configure(
+                os.environ.get('SOLR_PORT', '8983'),
+                os.environ.get('SOLR_CORE', 'testing'),
+                hostname='solr',
+            )
+        else:
+            SolrServer.get_instance().configure(self.solr_port, self.solr_core).start()
         import collective.indexing.monkey  # noqa
         import ftw.solr.patches  # noqa
 
     def maybe_stop_solr(self):
-        SolrServer.get_instance().stop()
+        if 'SOLR_HOST' not in os.environ:
+            SolrServer.get_instance().stop()
 
     def maybe_configure_solr(self, configurationContext):
         # Solr must be started before registering the connection since ftw.solr
         # will get the schema from solr and cache it.
-        SolrServer.get_instance().await_ready()
+        solr = SolrServer.get_instance()
+        solr.await_ready()
         xmlconfig.string(
             '<configure xmlns:solr="http://namespaces.plone.org/solr">'
-            '  <solr:connection host="localhost"'
-            '                   port="{SOLR_PORT}"'
-            '                   base="/solr/{SOLR_CORE}"'
+            '  <solr:connection host="{solr_host}"'
+            '                   port="{solr_port}"'
+            '                   base="/solr/{solr_core}"'
             '                   upload_blobs="true"/>'
-            '</configure>'.format(SOLR_PORT=self.solr_port, SOLR_CORE=self.solr_core),
+            '</configure>'.format(solr_host=solr.hostname, solr_port=solr.port, solr_core=solr.core),
             context=configurationContext)
 
         # Clear ftw.solr's thread-local connection cache
