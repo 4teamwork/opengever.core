@@ -165,7 +165,11 @@ RUN --mount=type=cache,target=/root/.cache \
     --extra-index-url https://__token__:$GITLAB_DEPLOY_TOKEN@git.4teamwork.ch/api/v4/projects/486/packages/pypi/simple \
     -r requirements-test.txt
 
-COPY ./docker/core/test /app/bin/
+COPY ./docker/core/test ./docker/core/format-all-xml /app/bin/
+COPY ./.flake8 ./.isort.cfg /app
+
+RUN curl -o /app/bin/format-xml https://raw.githubusercontent.com/4teamwork/ftw-buildouts/master/format-xml \
+ && chmod a+x /app/bin/format-xml
 
 RUN mkdir /app/testreports \
  && chown plone:plone /app/testreports
