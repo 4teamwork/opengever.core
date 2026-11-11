@@ -77,6 +77,16 @@ class TestConfig(IntegrationTestCase):
         self.assertEqual(browser.json['current_user'].get(u'email'), u'foo@example.com')
 
     @browsing
+    def test_config_background_tasks_feature_follows_flag(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.config_url, headers=self.api_headers)
+        self.assertFalse(browser.json['features']['background_tasks'])
+
+        self.activate_feature('bgtasks')
+        browser.open(self.config_url, headers=self.api_headers)
+        self.assertTrue(browser.json['features']['background_tasks'])
+
+    @browsing
     def test_config_contains_features(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.config_url, headers=self.api_headers)
@@ -89,6 +99,7 @@ class TestConfig(IntegrationTestCase):
                 u'archival_file_conversion': False,
                 u'archival_file_conversion_blacklist': [],
                 u'automatically_set_end_date': False,
+                u'background_tasks': False,
                 u'changed_for_end_date': True,
                 u'classic_ui_enabled': True,
                 u'contacts': 'plone',
