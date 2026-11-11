@@ -20,16 +20,18 @@ class DockerServiceLayer(Layer):
     service_url_env = None
 
     def setUp(self):
-        self.port = os.environ.get(self.port_env, self.find_free_port())
-        base_name = self.image_name.split(':')[0].replace('/', '_')
-        self.container_name = '{}_{}'.format(base_name, self.port)
-        self.start_container()
+        if self.service_url_env not in os.environ:
+            self.port = os.environ.get(self.port_env, self.find_free_port())
+            base_name = self.image_name.split(':')[0].replace('/', '_')
+            self.container_name = '{}_{}'.format(base_name, self.port)
+            self.start_container()
         self.wait_until_ready()
 
     def tearDown(self):
-        self.run('docker stop {}'.format(self.container_name))
-        self.run('docker rm {}'.format(self.container_name))
-        del os.environ[self.service_url_env]
+        if getattr(self, 'container_name', False):
+            self.run('docker stop {}'.format(self.container_name))
+            self.run('docker rm {}'.format(self.container_name))
+            del os.environ[self.service_url_env]
 
     def start_container(self):
         self.run(
@@ -39,7 +41,7 @@ class DockerServiceLayer(Layer):
 
     def healthcheck(self):
         try:
-            requests.get('http://localhost:{}/healthcheck'.format(self.port))
+            requests.get('{}/healthcheck'.format(os.environ[self.service_url_env].rstrip('/')))
         except requests.ConnectionError:
             return False
         else:

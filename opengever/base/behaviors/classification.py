@@ -1,5 +1,5 @@
 from opengever.base import _
-from opengever.base.acquisition import acquired_default_factory
+from opengever.base.acquisition_ import acquired_default_factory
 from opengever.base.utils import language_cache_key
 from opengever.base.vocabulary import wrap_vocabulary
 from plone import api

@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+set -euo pipefail
+IFS=$'\n'
+pkgdir="/app/opengever"
+formatter="/app/bin/format-xml"
+$formatter $(find $pkgdir \! -path "*/upgrades/*" -type f \( -iname \*.xml -o -iname \*.zcml \) ! -name definition.xml ! -name solrconfig.xml ) "$@"
+exit $?

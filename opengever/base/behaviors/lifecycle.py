@@ -1,6 +1,6 @@
 from ftw.datepicker.widget import DatePickerFieldWidget
 from opengever.base import _
-from opengever.base.acquisition import acquired_default_factory
+from opengever.base.acquisition_ import acquired_default_factory
 from opengever.base.interfaces import IBaseCustodyPeriods
 from opengever.base.interfaces import IRetentionPeriodRegister
 from plone.autoform import directives as form

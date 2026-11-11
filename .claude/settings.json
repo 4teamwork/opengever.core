@@ -1,5 +1,8 @@
 {
   "permissions": {
+    "allow": [
+        Bash(git show:*)
+    ],
     "deny": [
       "Read(./plonetheme/**)",
       "Read(./opengever/ech0147/**)",
@@ -7,7 +10,6 @@
       "Read(./opengever/base/upgrades/**)",
       "Read(./opengever/core/upgrades/**)",
       "Read(./docs/**)",
-      "Read(./docker/**)",
       "Read(./solr-conf/**)"
     ]
   }

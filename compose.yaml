@@ -1,56 +1,114 @@
+x-ogcore: &x-ogcore
+  image: 4teamwork/ogcore:latest
+  environment: &ogcore-environment
+    PLONE_LDAP_BIND_UID: ${LDAP_BIND_DN:-cn=admin,dc=dev,dc=onegovgever,dc=ch}
+    PLONE_LDAP_BIND_PWD: ${LDAP_BIND_PASSWORD:-secret}
+    MSGCONVERT_URL: http://msgconvert:8080/
+    SABLON_URL: http://sablon:8080/
+    PDFLATEX_URL: http://pdflatex:8080/
+    WEASYPRINT_URL: http://weasyprint:8080/
+    OGDS_SYNC_URL: http://ogds-sync:8080/
+  volumes:
+    - ogcore:/data
+
 services:
-  ogcore: &ogcore
+  ogcore:
+    <<: *x-ogcore
     build:
       context: .
       dockerfile: ./docker/core/Dockerfile
+      target: dev
       secrets:
         - gldt
-    image: 4teamwork/ogcore:latest
+    image: 4teamwork/ogcore:dev
+    environment:
+      <<: *ogcore-environment
+      DEBUG_MODE: 'on'
+      VERBOSE_SECURITY: 'on'
+      STORAGE: filestorage
+      SOLR_BASE: /solr/development
+      zope_i18n_compile_mo_files: 'true'
+    stdin_open: true
+    tty: true
     volumes:
       - ogcore:/data
+      - './opengever:/app/opengever'
+    ports:
+      - "8080:8080"
+    depends_on:
+      - ogds
+      - solr
+      - ogds-sync
+      - sablon
+      - msgconvert
+      - pdflatex
+
+  ogcore-test:
+    <<: *x-ogcore
+    build:
+      context: .
+      dockerfile: ./docker/core/Dockerfile
+      target: test
+      secrets:
+        - gldt
+    image: 4teamwork/ogcore:test
+    entrypoint: ""
+    environment:
+      <<: *ogcore-environment
+      SOLR_HOST: solr
+      SOLR_PORT: "8983"
+    volumes:
+      - './opengever:/app/opengever'
+    depends_on:
+      - solr
+      - sablon
+      - msgconvert
+      - pdflatex
+    profiles:
+      - test
+
+  ogcore-prod:
+    <<: *x-ogcore
+    image: 4teamwork/ogcore:latest
     ports:
       - "8080:8080"
       - "8160:8160"
-    environment:
-      - PLONE_LDAP_BIND_UID=${LDAP_BIND_DN:-cn=admin,dc=dev,dc=onegovgever,dc=ch}
-      - PLONE_LDAP_BIND_PWD=${LDAP_BIND_PASSWORD:-secret}
-      - MSGCONVERT_URL=http://msgconvert:8080/
-      - SABLON_URL=http://sablon:8080/
-      - PDFLATEX_URL=http://pdflatex:8080/
-      - WEASYPRINT_URL=http://weasyprint:8080/
-      - OGDS_SYNC_URL=http://ogds-sync:8080/
     depends_on:
       - zeoserver
       - ogds
       - solr
+      - ogds-sync
+      - sablon
+      - msgconvert
+      - pdflatex
     profiles:
-      - all
-      - ogcore
+      - prod
+
   ogcore-cron:
-    <<: *ogcore
+    <<: *x-ogcore
     command: cron
-    ports:
-      - "8082:8080"
     profiles:
-      - all
+      - prod
       - ogcore-cron
+
   zeoserver:
     image: 4teamwork/zeoserver:4.3.20
     volumes:
       - ogcore:/data
     profiles:
-      - all
-      - ogcore
+      - prod
+
   ogds:
-    image: postgres:13-alpine
+    image: postgres:18-alpine
     volumes:
-      - ogds:/var/lib/postgresql/data
+      - ogds:/var/lib/postgresql
     environment:
       - POSTGRES_USER=${OGDS_DB_USER:-ogds}
       - POSTGRES_PASSWORD=${OGDS_DB_PASSWORD:-secret}
       - POSTGRES_DB=${OGDS_DB_NAME:-ogds}
     ports:
       - 15432:5432
+
   ogds-sync:
     image: 4teamwork/ogds-sync:latest
     ports:
@@ -65,11 +123,10 @@ services:
       - LDAP_GROUP_BASE_DN=${LDAP_GROUP_BASE_DN:-ou=Groups,dc=dev,dc=onegovgever,dc=ch}
     depends_on:
       - ogds
+      - ldap
+
   solr:
     image: 4teamwork/ogsolr:latest
-    build:
-      context: .
-      dockerfile: ./docker/solr/Dockerfile
     command: solr-foreground
     volumes:
       - solr:/var/solr
@@ -81,6 +138,7 @@ services:
       nofile:
         soft: 65000
         hard: 65000
+
   ldap:
     image: bitnamilegacy/openldap:2.6
     ports:
@@ -93,6 +151,7 @@ services:
     volumes:
       - ldap:/bitnami/openldap
       - ./docker/ldap.ldif:/ldifs/ldap.ldif
+
   redis:
     image: redis:6.2-alpine
     command:
@@ -102,10 +161,13 @@ services:
       - 6379:6379
     volumes:
       - redis:/data
-  ogui:
-    image: 4teamwork/ogui:latest
+
+  geverui:
+    image: ghcr.io/4teamwork/gever-ui:${GEVERUI_VERSION:-latest}
     profiles:
-      - all
+      - prod
+      - geverui
+
   httpd:
     image: 4teamwork/oghttpd:latest
     build:
@@ -114,30 +176,35 @@ services:
     ports:
       - "8088:80"
     depends_on:
-      - ogui
+      - geverui
       - ogcore
     environment:
       - HTTP_PROTOCOL=http
       - HTTP_PORT=8088
       - PORTAL_HOST=ianus-frontend
     profiles:
-      - all
+      - prod
+
   msgconvert:
     image: 4teamwork/msgconvert:latest
     ports:
       - 8090:8080
+
   sablon:
     image: 4teamwork/sablon:latest
     ports:
       - 8091:8080
+
   pdflatex:
     image: 4teamwork/pdflatex:latest
     ports:
       - 8092:8080
+
   weasyprint:
     image: 4teamwork/weasyprint:latest
     ports:
       - 8093:8080
+
   clamav:
     image: clamav/clamav:latest
     ports:
@@ -147,6 +214,7 @@ services:
       - ./clamav/clamd.conf:/etc/clamav/clamd.conf
     profiles:
       - clamav
+
   mta:
     image: 4teamwork/ogmta:latest
     build:
@@ -161,6 +229,7 @@ services:
       VIRTUAL_DOMAINS_0: name=dev.onegovgever.ch,url=http://ogcore:8080/ogsite
     profiles:
       - mta
+
   ianus-frontend:
     image: ghcr.io/4teamwork/ianus-frontend:2024.2.0
     ports:
@@ -171,8 +240,8 @@ services:
       - IANUS_BACKEND_HOST=ianus-backend
       - IANUS_PATH_PREFIX=/portal
     profiles:
-      - all
       - ianus
+
   ianus-backend:
     image: ghcr.io/4teamwork/ianus-backend:2024.2.0
     ports:
@@ -203,21 +272,20 @@ services:
       - DJANGO_AUTH_LDAP_GROUP_SEARCH_FILTER=(objectClass=groupOfUniqueNames)
       - DJANGO_AUTH_LDAP_USER_ADDITIONAL_ATTRS=memberOf
       - DJANGO_CAS_USER_ATTR_MAP={'email':'mail','firstname':'givenName','lastname':'sn','groups':'memberOf'}
-
     profiles:
-      - all
       - ianus
+
   ianus-db:
-    image: postgres:13-alpine
+    image: postgres:18-alpine
     volumes:
-      - ./var/ianus-db:/var/lib/postgresql/data
+      - ./var/ianus-db:/var/lib/postgresql
     environment:
       - POSTGRES_DB=ianus
       - POSTGRES_USER=ianus
       - POSTGRES_PASSWORD=secret
     profiles:
-      - all
       - ianus
+
   testserver-solr:
     image: 4teamwork/ogsolr:latest
     build:
@@ -230,6 +298,7 @@ services:
       - 18983:8983
     profiles:
       - testserver
+
   testserver:
     build:
       context: .
@@ -277,6 +346,7 @@ services:
       - kub_media:/app/media
     profiles:
       - kub
+
   kub-db:
     image: postgres:13-alpine
     volumes:
