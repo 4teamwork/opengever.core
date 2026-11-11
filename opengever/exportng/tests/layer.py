@@ -22,16 +22,11 @@ class ExportNGDBLayer(DockerServiceLayer):
 
     def healthcheck(self):
         try:
-            psycopg2.connect(
-                dbname='exportng',
-                user='exportng',
-                password='secret',
-                host='127.0.0.1',
-                port=self.port,
-            )
-        except psycopg2.errors.OperationalError:
+            conn = psycopg2.connect(os.environ[self.service_url_env])
+        except psycopg2.OperationalError:
             return False
         else:
+            conn.close()
             return True
 
 

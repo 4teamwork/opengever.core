@@ -57,13 +57,20 @@ services:
       <<: *ogcore-environment
       SOLR_HOST: solr
       SOLR_PORT: "8983"
+      EXPORTNG_DSN: postgresql://exportng:secret@exportng-db/exportng
     volumes:
       - './opengever:/app/opengever'
     depends_on:
-      - solr
-      - sablon
-      - msgconvert
-      - pdflatex
+      solr:
+        condition: service_started
+      sablon:
+        condition: service_started
+      msgconvert:
+        condition: service_started
+      pdflatex:
+        condition: service_started
+      exportng-db:
+        condition: service_healthy
     profiles:
       - test
 
@@ -204,6 +211,22 @@ services:
     image: 4teamwork/weasyprint:latest
     ports:
       - 8093:8080
+
+  exportng-db:
+    image: postgres:18-alpine
+    environment:
+      - POSTGRES_USER=exportng
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=exportng
+    tmpfs:
+      - /var/lib/postgresql
+    command: postgres --fsync=off --synchronous-commit=off --full-page-writes=off
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "exportng"]
+      interval: 1s
+      retries: 30
+    profiles:
+      - test
 
   clamav:
     image: clamav/clamav:latest
