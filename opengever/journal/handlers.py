@@ -728,6 +728,8 @@ DOSSIER_EXPORTED = 'Dossier included in a zip export'
 
 
 def dossier_zipped(context, event):
+    if context._p_jar.isReadOnly():
+        return
     title = _(u'label_dossier_zipped',
               default=u'Dossier included in a zip export: ${title}',
               mapping={'title': context.title_or_id()})
@@ -741,6 +743,8 @@ DOCUMENT_EXPORTED = 'Document exported in zip export'
 
 
 def document_zipped(context, event):
+    if context._p_jar.isReadOnly():
+        return
     title = _(u'label_document_zipped',
               default=u'Document included in a zip export: ${title}',
               mapping={'title': context.title_or_id()})
