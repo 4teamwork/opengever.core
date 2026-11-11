@@ -428,3 +428,232 @@ class TestMove(IntegrationTestCase):
 
         self.assertEqual(200, browser.status_code)
         self.assertFalse(ILockable(document).locked())
+
+    def move(self, browser, destination, sources):
+        browser.open(
+            destination, view='@move',
+            data=json.dumps({'source': sources}),
+            method='POST', headers=self.api_headers)
+
+    def assert_nothing_locked_or_queued(self, *objs):
+        for obj in objs:
+            self.assertFalse(ILockable(obj).locked())
+        self.assertEqual(0, create_session().query(BackgroundTask).count())
+
+    @browsing
+    def test_move_with_unresolvable_sources_returns_empty_result(self, browser):
+        self.login(self.regular_user, browser)
+        self.move(browser, self.empty_dossier,
+                  [self.dossier.absolute_url() + '/does-not-exist'])
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual([], browser.json)
+
+    @browsing
+    def test_multi_source_collects_all_errors_in_one_forbidden(self, browser):
+        self.activate_feature('bgtasks')
+        self.login(self.regular_user, browser)
+        ILockable(self.document).lock()
+        ILockable(self.mail_eml).lock()
+        sources = [self.document.absolute_url(),
+                   self.taskdocument.absolute_url(),
+                   self.mail_eml.absolute_url(),
+                   self.subdocument.absolute_url()]
+        with browser.expect_http_error(code=403):
+            self.move(browser, self.empty_dossier, sources)
+
+        self.assertEqual(u'Forbidden', browser.json['type'])
+        self.assertEqual(u'Inputs not valid', browser.json['translated_message'])
+        fields = browser.json['additional_metadata']['fields']
+        self.assertEqual(
+            [self.document.absolute_url(), self.taskdocument.absolute_url(),
+             self.mail_eml.absolute_url()],
+            [f['field'] for f in fields])
+        self.assertEqual(
+            [u'ResourceLockedError', u'Forbidden', u'ResourceLockedError'],
+            [f['type'] for f in fields])
+        self.assertEqual(
+            [self.document.title, self.taskdocument.title, self.mail_eml.title],
+            [f['item_title'] for f in fields])
+        self.assertEqual(
+            [u'Locked documents cannot be moved.',
+             u'Documents inside a task cannot be moved.',
+             u'Locked documents cannot be moved.'],
+            [f['translated_message'] for f in fields])
+        self.assert_nothing_locked_or_queued(self.subdocument)
+
+    @browsing
+    def test_multi_source_with_flag_off_collects_all_errors(self, browser):
+        self.login(self.regular_user, browser)
+        ILockable(self.document).lock()
+        with browser.expect_http_error(code=403):
+            self.move(browser, self.empty_dossier,
+                      [self.document.absolute_url(),
+                       self.subdocument.absolute_url()])
+
+        self.assertEqual(u'Inputs not valid', browser.json['translated_message'])
+        fields = browser.json['additional_metadata']['fields']
+        self.assertEqual([self.document.absolute_url()],
+                         [f['field'] for f in fields])
+        self.assertIn(self.subdocument.getId(), self.subdossier.objectIds())
+        self.assertNotIn(self.subdocument.getId(), self.empty_dossier.objectIds())
+
+    @browsing
+    def test_valid_multi_source_with_flag_off_moves_all(self, browser):
+        self.login(self.regular_user, browser)
+        ids = [self.document.getId(), self.subdocument.getId()]
+        self.move(browser, self.empty_dossier,
+                  [self.document.absolute_url(), self.subdocument.absolute_url()])
+
+        self.assertEqual(200, browser.status_code)
+        for id_ in ids:
+            self.assertIn(id_, self.empty_dossier.objectIds())
+
+    @browsing
+    def test_multi_source_container_and_descendant(self, browser):
+        self.activate_feature('bgtasks')
+        self.login(self.regular_user, browser)
+        api.portal.set_registry_record(name='maximum_dossier_depth', value=10,
+                                       interface=IDossierContainerTypes)
+        with browser.expect_http_error(code=403):
+            self.move(browser, self.empty_dossier,
+                      [self.dossier.absolute_url(),
+                       self.subdossier.absolute_url()])
+
+        fields = browser.json['additional_metadata']['fields']
+        self.assertEqual(
+            [{u'field': self.subdossier.absolute_url(),
+              u'item_title': self.subdossier.title,
+              u'type': u'Forbidden',
+              u'translated_message': u'This item is located inside another '
+                                     u'item that is being moved.'}],
+            fields)
+        self.assert_nothing_locked_or_queued(self.dossier, self.subdossier)
+
+    @browsing
+    def test_destination_inside_single_source_is_plain_forbidden(self, browser):
+        self.activate_feature('bgtasks')
+        self.login(self.regular_user, browser)
+        with browser.expect_http_error(code=403):
+            self.move(browser, self.subdossier, [self.dossier.absolute_url()])
+
+        self.assertEqual(u'Forbidden', browser.json['type'])
+        self.assertEqual({}, browser.json['additional_metadata'])
+        self.assertEqual(
+            u'An item cannot be moved into itself or one of its subitems.',
+            browser.json['translated_message'])
+        self.assert_nothing_locked_or_queued(self.dossier)
+
+    @browsing
+    def test_destination_equal_to_source_is_forbidden(self, browser):
+        self.activate_feature('bgtasks')
+        self.login(self.regular_user, browser)
+        with browser.expect_http_error(code=403):
+            self.move(browser, self.empty_dossier,
+                      [self.empty_dossier.absolute_url()])
+
+        self.assertEqual({}, browser.json['additional_metadata'])
+        self.assertEqual(
+            u'An item cannot be moved into itself or one of its subitems.',
+            browser.json['translated_message'])
+        self.assert_nothing_locked_or_queued(self.empty_dossier)
+
+    @browsing
+    def test_destination_inside_source_in_batch_gives_entry(self, browser):
+        self.activate_feature('bgtasks')
+        self.login(self.regular_user, browser)
+        api.portal.set_registry_record(name='maximum_dossier_depth', value=10,
+                                       interface=IDossierContainerTypes)
+        with browser.expect_http_error(code=403):
+            self.move(browser, self.subdossier,
+                      [self.dossier.absolute_url(), self.empty_dossier.absolute_url()])
+
+        fields = browser.json['additional_metadata']['fields']
+        self.assertEqual([self.dossier.absolute_url()],
+                         [f['field'] for f in fields])
+        self.assertEqual(
+            u'An item cannot be moved into itself or one of its subitems.',
+            fields[0]['translated_message'])
+        self.assert_nothing_locked_or_queued(self.dossier, self.empty_dossier)
+
+    @browsing
+    def test_destination_with_move_lock_is_forbidden(self, browser):
+        self.activate_feature('bgtasks')
+        self.login(self.regular_user, browser)
+        ILockable(self.empty_dossier).lock(MOVE_LOCK)
+        with browser.expect_http_error(code=403):
+            self.move(browser, self.empty_dossier, [self.document.absolute_url()])
+
+        self.assertEqual({}, browser.json['additional_metadata'])
+        self.assertEqual(
+            u'Items cannot be moved into a destination that is currently '
+            u'being moved.',
+            browser.json['translated_message'])
+        self.assert_nothing_locked_or_queued(self.document)
+
+    @browsing
+    def test_destination_below_move_locked_ancestor_is_forbidden(self, browser):
+        self.activate_feature('bgtasks')
+        self.login(self.regular_user, browser)
+        document = create(Builder('document').within(self.empty_dossier))
+        ILockable(self.dossier).lock(MOVE_LOCK)
+        with browser.expect_http_error(code=403):
+            self.move(browser, self.subdossier, [document.absolute_url()])
+
+        self.assertEqual(
+            u'Items cannot be moved into a destination that is currently '
+            u'being moved.',
+            browser.json['translated_message'])
+        self.assert_nothing_locked_or_queued(document)
+
+    @browsing
+    def test_destination_lock_wins_over_source_errors_in_batch(self, browser):
+        self.activate_feature('bgtasks')
+        self.login(self.regular_user, browser)
+        ILockable(self.empty_dossier).lock(MOVE_LOCK)
+        with browser.expect_http_error(code=403):
+            self.move(browser, self.empty_dossier,
+                      [self.taskdocument.absolute_url(),
+                       self.subdocument.absolute_url()])
+
+        self.assertEqual({}, browser.json['additional_metadata'])
+        self.assertEqual(
+            u'Items cannot be moved into a destination that is currently '
+            u'being moved.',
+            browser.json['translated_message'])
+        self.assert_nothing_locked_or_queued(self.subdocument)
+
+    @browsing
+    def test_single_locked_source_returns_plain_error(self, browser):
+        self.login(self.regular_user, browser)
+        ILockable(self.document).lock()
+        with browser.expect_http_error(code=423):
+            self.move(browser, self.empty_dossier, self.document.absolute_url())
+
+        self.assertEqual({}, browser.json['additional_metadata'])
+        self.assertEqual(u'Locked documents cannot be moved.',
+                         browser.json['translated_message'])
+
+    @browsing
+    def test_single_resolved_source_returns_plain_error(self, browser):
+        self.login(self.regular_user, browser)
+        ILockable(self.document).lock()
+        for sources in ([self.document.absolute_url(), self.document.absolute_url()],
+                        [self.document.absolute_url(),
+                         self.dossier.absolute_url() + '/does-not-exist']):
+            with browser.expect_http_error(code=423):
+                self.move(browser, self.empty_dossier, sources)
+
+            self.assertEqual({}, browser.json['additional_metadata'])
+            self.assertEqual(u'Locked documents cannot be moved.',
+                             browser.json['translated_message'])
+
+    @browsing
+    def test_duplicate_sources_are_moved_once(self, browser):
+        self.activate_feature('bgtasks')
+        self.login(self.regular_user, browser)
+        self.move(browser, self.empty_dossier,
+                  [self.document.absolute_url(), self.document.absolute_url()])
+
+        self.assertEqual(202, browser.status_code)
+        self.assertEqual(1, len(browser.json))
+        self.assertEqual(1, create_session().query(BackgroundTask).count())

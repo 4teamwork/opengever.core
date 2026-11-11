@@ -128,6 +128,21 @@ msgstr "Un document de requête doit avoir le mimetype ${docx_mimetype}."
 msgid "msg_filename_required"
 msgstr "Les fichiers sans nom ne sont pas autorisés."
 
+#. Default: "An item cannot be moved into itself or one of its subitems."
+#: ./opengever/api/move.py
+msgid "msg_move_destination_inside_source"
+msgstr "Un élément ne peut pas être déplacé dans lui-même ou dans l'un de ses sous-éléments."
+
+#. Default: "This item is located inside another item that is being moved."
+#: ./opengever/api/move.py
+msgid "msg_move_item_inside_other_source"
+msgstr "Cet élément se trouve dans un autre élément en cours de déplacement."
+
+#. Default: "Items cannot be moved into a destination that is currently being moved."
+#: ./opengever/api/move.py
+msgid "msg_move_destination_locked"
+msgstr "Des éléments ne peuvent pas être déplacés vers une destination en cours de déplacement."
+
 #. Default: "Inputs not valid"
 #: ./opengever/api/errors.py
 msgid "msg_inputs_not_valid"

@@ -51,3 +51,7 @@
 - **No row cap or time window on the background tasks listing.** Combined with the point above, `filter_all` on a large table means a full scan plus a `COUNT(*)` per request. A default "created within the last N days" restriction would bound it, but that changes the spec'd behaviour ("all background tasks"), so it needs a product decision.
 - **The background tasks configlet ignores the `bgtasks` feature flag.** `condition_expr=""` in `opengever/core/profiles/default/controlpanel.xml`, and neither the control panel nor the listing consults `is_background_tasks_enabled()`. A site with the feature off still shows the panel with a permanently empty table. project-context.md says "Never hardcode feature availability - always check the registry flag."
 - **The extjs rendering path is untested for tabbedview listings.** `IntegrationTestCase` deactivates extjs, but production runs with it, and `generic_with_filters.pt` only renders the filters-on-empty-result block inside its `view/extjs_enabled` branch. The behaviour that motivated using `FilteredListingTab` is therefore not covered by an automated test.
+
+## Deferred from: code review of 1-backend-move-validation.md (2026-11-11)
+
+- **API docs not updated for TI-4257**: `features.background_tasks` in `@config` and the new aggregated `@move` 403 shape (`additional_metadata.fields[]` with `item_title`) are missing from `docs/public/dev-manual/api/config.rst` and `api_changelog.rst`. `docs/` is denied to the agent, so the user must update them before merge.
