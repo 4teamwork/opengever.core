@@ -51,3 +51,10 @@
 - **No row cap or time window on the background tasks listing.** Combined with the point above, `filter_all` on a large table means a full scan plus a `COUNT(*)` per request. A default "created within the last N days" restriction would bound it, but that changes the spec'd behaviour ("all background tasks"), so it needs a product decision.
 - **The background tasks configlet ignores the `bgtasks` feature flag.** `condition_expr=""` in `opengever/core/profiles/default/controlpanel.xml`, and neither the control panel nor the listing consults `is_background_tasks_enabled()`. A site with the feature off still shows the panel with a permanently empty table. project-context.md says "Never hardcode feature availability - always check the registry flag."
 - **The extjs rendering path is untested for tabbedview listings.** `IntegrationTestCase` deactivates extjs, but production runs with it, and `generic_with_filters.pt` only renders the filters-on-empty-result block inside its `view/extjs_enabled` branch. The behaviour that motivated using `FilteredListingTab` is therefore not covered by an automated test.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-exportng-syncer-tests.md`
+  summary: A soft-deleted object that reappears in the catalog is inserted again as a duplicate row.
+  evidence: `CatalogSyncer.sql_items` filters `_deleted == false()`, so a returning key counts as added, and `create_table` defines no primary key. Not verified by a test.
+- source_spec: `_bmad-output/implementation-artifacts/spec-exportng-syncer-tests.md`
+  summary: Add tests for the dossier syncer's additional tables (`journal_entries`, `remarks`) and for the other syncers.
+  evidence: The mixin only checks the main table; the other syncers are untested.
