@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 import opengever.ogds.base  # isort:skip # noqa fix cyclic import
 from Acquisition import aq_parent
+from DateTime import DateTime
 from datetime import date
 from datetime import datetime
-from DateTime import DateTime
 from opengever.base.interfaces import IReferenceNumber
 from opengever.exportng.db import engine
 from opengever.exportng.db import metadata
