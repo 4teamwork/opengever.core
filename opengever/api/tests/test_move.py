@@ -657,3 +657,79 @@ class TestMove(IntegrationTestCase):
         self.assertEqual(202, browser.status_code)
         self.assertEqual(1, len(browser.json))
         self.assertEqual(1, create_session().query(BackgroundTask).count())
+
+    def assert_move_locked_source_is_rejected(self, browser, source, destination):
+        ILockable(source).lock(MOVE_LOCK)
+        with browser.expect_http_error(code=423):
+            self.move(browser, destination, source.absolute_url())
+
+        self.assertEqual({}, browser.json['additional_metadata'])
+        self.assertEqual(u'This item is already being moved.',
+                         browser.json['translated_message'])
+
+    @browsing
+    def test_document_with_move_lock_cannot_be_moved_again(self, browser):
+        self.login(self.manager, browser)
+        self.assert_move_locked_source_is_rejected(
+            browser, self.document, self.empty_dossier)
+
+    @browsing
+    def test_mail_with_move_lock_cannot_be_moved_again(self, browser):
+        self.login(self.manager, browser)
+        self.assert_move_locked_source_is_rejected(
+            browser, self.mail_eml, self.empty_dossier)
+
+    @browsing
+    def test_dossier_with_move_lock_cannot_be_moved_again(self, browser):
+        self.login(self.manager, browser)
+        self.assert_move_locked_source_is_rejected(
+            browser, self.subdossier, self.empty_dossier)
+
+    @browsing
+    def test_repository_folder_with_move_lock_cannot_be_moved_again(self, browser):
+        self.login(self.manager, browser)
+        self.assert_move_locked_source_is_rejected(
+            browser, self.leaf_repofolder, self.empty_repofolder)
+
+    @browsing
+    def test_task_with_move_lock_cannot_be_moved_again(self, browser):
+        self.login(self.manager, browser)
+        self.assert_move_locked_source_is_rejected(
+            browser, self.task, self.empty_dossier)
+
+    @browsing
+    def test_forwarding_with_move_lock_cannot_be_moved_again(self, browser):
+        self.login(self.manager, browser)
+        self.assert_move_locked_source_is_rejected(
+            browser, self.inbox_forwarding, self.empty_dossier)
+
+    @browsing
+    def test_source_below_move_locked_container_cannot_be_moved(self, browser):
+        self.login(self.manager, browser)
+        ILockable(self.dossier).lock(MOVE_LOCK)
+        with browser.expect_http_error(code=423):
+            self.move(browser, self.empty_dossier, self.subdocument.absolute_url())
+
+        self.assertEqual(u'This item is already being moved.',
+                         browser.json['translated_message'])
+
+    @browsing
+    def test_batch_reports_move_locked_source_alongside_other_errors(self, browser):
+        self.activate_feature('bgtasks')
+        self.login(self.regular_user, browser)
+        ILockable(self.subdossier).lock(MOVE_LOCK)
+        with browser.expect_http_error(code=403):
+            self.move(browser, self.empty_dossier,
+                      [self.subdossier.absolute_url(),
+                       self.taskdocument.absolute_url(),
+                       self.document.absolute_url()])
+
+        fields = browser.json['additional_metadata']['fields']
+        self.assertEqual(
+            [(self.subdossier.absolute_url(), u'ResourceLockedError'),
+             (self.taskdocument.absolute_url(), u'Forbidden')],
+            [(f['field'], f['type']) for f in fields])
+        self.assertEqual(u'This item is already being moved.',
+                         fields[0]['translated_message'])
+        self.assertEqual(0, create_session().query(BackgroundTask).count())
+        self.assertFalse(ILockable(self.document).locked())

@@ -590,6 +590,11 @@ msgstr "Can't paste items; the clipboard is emtpy"
 msgid "msg_no_items_available"
 msgstr "No items available"
 
+#. Default: "This item is already being moved."
+#: ./opengever/base/adapters.py
+msgid "msg_object_is_being_moved"
+msgstr "This item is already being moved."
+
 #. German translation: Es ist nicht erlaubt die Objekte an diesem Ort einzufügen.
 #. Default: "Can't paste items, the context does not allow pasting items."
 #: ./opengever/base/browser/paste.py

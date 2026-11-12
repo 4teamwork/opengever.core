@@ -1,1 +1,1 @@
-Release the move lock when a background move task aborts on an unexpected error.
+Release the move lock when a background move task aborts on an unexpected error, and reject moving items that are already being moved. [TI-4257]
