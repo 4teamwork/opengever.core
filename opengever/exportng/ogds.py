@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from Acquisition import aq_parent
 from datetime import date
-from DateTime import DateTime
 from datetime import datetime
+from DateTime import DateTime
 from opengever.base.exceptions import InvalidOguidIntIdPart
 from opengever.exportng.utils import Attribute
 from opengever.exportng.utils import garbage_collect
@@ -18,8 +18,8 @@ from opengever.ogds.models.user import User
 from plone.app.uuid.utils import uuidToObject
 from sqlalchemy.sql.expression import false
 from zope.component.hooks import getSite
-
 import logging
+
 
 logger = logging.getLogger('opengever.exportng')
 

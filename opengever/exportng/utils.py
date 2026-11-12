@@ -9,6 +9,7 @@ from zope.component.hooks import setSite
 import gc
 import os
 
+
 CACHE = {}
 
 Attribute = namedtuple(
