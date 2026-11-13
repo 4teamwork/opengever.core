@@ -64,6 +64,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
                 ('activity', False),
                 ('archival_file_conversion', False),
                 ('archival_file_conversion_blacklist', []),
+                ('background_tasks', False),
                 ('changed_for_end_date', True),
                 ('classic_ui_enabled', True),
                 ('contacts', 'plone'),

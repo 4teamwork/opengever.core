@@ -14,6 +14,7 @@ from opengever.base.interfaces import IGeverUI
 from opengever.base.interfaces import IHubSpotSettings
 from opengever.base.interfaces import IRecentlyTouchedSettings
 from opengever.base.interfaces import ISearchSettings
+from opengever.bgtasks.task import is_background_tasks_enabled
 from opengever.bumblebee.interfaces import IGeverBumblebeeSettings
 from opengever.disposition import is_sip_archive_delivery_enabled
 from opengever.disposition.interfaces import IDispositionSettings
@@ -146,6 +147,7 @@ class GeverSettingsAdpaterV1(object):
         features['activity'] = api.portal.get_registry_record('is_feature_enabled', interface=IActivitySettings)
         features['archival_file_conversion'] = api.portal.get_registry_record('archival_file_conversion_enabled', interface=IDossierResolveProperties)  # noqa
         features['archival_file_conversion_blacklist'] = api.portal.get_registry_record('archival_file_conversion_blacklist', interface=IDossierResolveProperties)  # noqa
+        features['background_tasks'] = is_background_tasks_enabled()
         features['changed_for_end_date'] = api.portal.get_registry_record('use_changed_for_end_date', interface=IDossierResolveProperties)  # noqa
         features['classic_ui_enabled'] = api.portal.get_registry_record('is_classic_ui_enabled', interface=IGeverUI)
         features['contacts'] = self._get_contact_type()
