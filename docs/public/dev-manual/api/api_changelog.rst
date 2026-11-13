@@ -7,6 +7,18 @@ API Changelog
 2026.7.0 (unreleased)
 ----------------------
 
+Breaking Changes
+^^^^^^^^^^^^^^^^
+
+
+Other Changes
+^^^^^^^^^^^^^
+- ``@config``: New ``features.background_tasks`` flag.
+- ``@move``: All sources are validated before any is locked or queued. Moving into
+  a source or its subitems, moving nested sources together, or moving into a
+  destination that is being moved returns HTTP 403. With multiple sources, a single
+  403 lists each failing item (``field``, ``item_title``, ``error``, ``message``).
+
 2026.6.0 (2026-11-05)
 ----------------------
 
