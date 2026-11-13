@@ -494,6 +494,11 @@ msgstr "Es können keine Objekte eingefügt werden; die Zwischenablage ist leer.
 msgid "msg_no_items_available"
 msgstr "Es sind keine Elemente verfügbar."
 
+#. Default: "This item is already being moved."
+#: ./opengever/base/adapters.py
+msgid "msg_object_is_being_moved"
+msgstr "Dieses Element wird bereits verschoben."
+
 #. Default: "Can't paste items, the context does not allow pasting items."
 #: ./opengever/base/browser/paste.py
 msgid "msg_pasting_not_allowed"

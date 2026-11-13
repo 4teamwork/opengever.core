@@ -868,10 +868,10 @@ msgid "label_not_movable_since_inside_task"
 msgstr "Document ${name} is inside a task and therefore not movable. Please move the task instead."
 
 #. German translation: Das Dokument «${name}» ist gesperrt und ist nicht verschiebbar.
-#. Default: "Document ${name} is locked and therefore not movable."
+#. Default: "Item ${name} is locked and therefore not movable."
 #: ./opengever/dossier/move_items.py
 msgid "label_not_movable_since_locked"
-msgstr "Document ${name} is locked and therefore not movable."
+msgstr "Item ${name} is locked and therefore not movable."
 
 #. Default: "Object ${name} cannot be moved because you do not have the permissions."
 #: ./opengever/dossier/move_items.py

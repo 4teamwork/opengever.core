@@ -92,6 +92,14 @@ class BaseBackgroundTask(object):
         """
         raise NotImplementedError
 
+    def cleanup_after_failure(self, task):
+        """Hook called by the worker after `execute()` raised for the last
+        time, i.e. once the task is marked as failed and will not be retried.
+
+        The failed transaction has already been aborted, and the worker
+        commits whatever this hook changes in its own transaction.
+        """
+
     def get_arguments(self, task):
         if task.task_arguments:
             return json.loads(task.task_arguments)

@@ -143,6 +143,7 @@ class BackgroundTaskWorker(object):
         task_id = task.task_id
         task_type = task.task_type
 
+        handler = None
         try:
             task_cls = get_task_class(task.task_type)
             handler = task_cls()
@@ -158,6 +159,7 @@ class BackgroundTaskWorker(object):
             task = session.query(BackgroundTask).get(task_id)
             if task is not None:
                 self._handle_failure(task, formatted)
+                self._cleanup_after_permanent_failure(handler, task_id)
             return
 
         # Reenroll the session in the current transaction
@@ -170,6 +172,27 @@ class BackgroundTaskWorker(object):
         if solr is not None:
             solr.manager.connection.commit(after_commit=False)
             self.log.info('Task %s succeeded' % task_id)
+
+    def _cleanup_after_permanent_failure(self, handler, task_id):
+        """Let the handler undo side effects of a task that will not be
+        retried, e.g. release locks, in a transaction of its own. Runs after
+        the failure is committed, so a broken cleanup cannot prevent the task
+        from being marked as failed.
+        """
+        if handler is None:
+            return
+        # Reenroll the session, the commit in _handle_failure closed it
+        task = create_session().query(BackgroundTask).get(task_id)
+        if task is None or task.status != TASK_STATUS_FAILED:
+            return
+        try:
+            handler.cleanup_after_failure(task)
+            transaction.commit()
+        except Exception:
+            transaction.abort()
+            self.log.error(
+                'Cleanup after failure of task %s failed:\n%s' % (
+                    task_id, traceback.format_exc()))
 
     def _handle_failure(self, task, error_message):
         task.error_message = error_message

@@ -715,7 +715,7 @@ msgstr ""
 msgid "label_not_movable_since_inside_task"
 msgstr ""
 
-#. Default: "Document ${name} is locked and therefore not movable."
+#. Default: "Item ${name} is locked and therefore not movable."
 #: ./opengever/dossier/move_items.py
 msgid "label_not_movable_since_locked"
 msgstr ""
