@@ -128,6 +128,21 @@ msgstr "Der Mimetype eines Antragsdokument muss ${docx_mimetype} sein."
 msgid "msg_filename_required"
 msgstr "Der Dateiname muss zwingend definiert werden"
 
+#. Default: "An item cannot be moved into itself or one of its subitems."
+#: ./opengever/api/move.py
+msgid "msg_move_destination_inside_source"
+msgstr "Ein Element kann nicht in sich selbst oder in eines seiner Unterelemente verschoben werden."
+
+#. Default: "This item is located inside another item that is being moved."
+#: ./opengever/api/move.py
+msgid "msg_move_item_inside_other_source"
+msgstr "Dieses Element befindet sich in einem anderen Element, das verschoben wird."
+
+#. Default: "Items cannot be moved into a destination that is currently being moved."
+#: ./opengever/api/move.py
+msgid "msg_move_destination_locked"
+msgstr "Elemente können nicht an einen Ort verschoben werden, der gerade selbst verschoben wird."
+
 #. Default: "Inputs not valid"
 #: ./opengever/api/errors.py
 msgid "msg_inputs_not_valid"

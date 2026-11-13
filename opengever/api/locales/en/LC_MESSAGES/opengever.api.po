@@ -128,6 +128,21 @@ msgstr "Mime type must be ${docx_mimetype} for proposal documents."
 msgid "msg_filename_required"
 msgstr "Empty filename not supported"
 
+#. Default: "An item cannot be moved into itself or one of its subitems."
+#: ./opengever/api/move.py
+msgid "msg_move_destination_inside_source"
+msgstr "An item cannot be moved into itself or one of its subitems."
+
+#. Default: "This item is located inside another item that is being moved."
+#: ./opengever/api/move.py
+msgid "msg_move_item_inside_other_source"
+msgstr "This item is located inside another item that is being moved."
+
+#. Default: "Items cannot be moved into a destination that is currently being moved."
+#: ./opengever/api/move.py
+msgid "msg_move_destination_locked"
+msgstr "Items cannot be moved into a destination that is currently being moved."
+
 #. Default: "Inputs not valid"
 #: ./opengever/api/errors.py
 msgid "msg_inputs_not_valid"

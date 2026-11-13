@@ -59,6 +59,7 @@ GEVER-Mandanten abgefragt werden.
               "activity": true,
               "archival_file_conversion": false,
               "archival_file_conversion_blacklist": [],
+              "background_tasks": false,
               "changed_for_end_date": true,
               "contacts": false,
               "disposition_disregard_retention_period": false,
