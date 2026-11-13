@@ -90,19 +90,33 @@ class MoveObjectsTask(BaseBackgroundTask):
                         u'Paste into %s failed, skipping move_objects: %s' % (
                             destination_uid, exc))
         finally:
-            if object_uids:
-                catalog = api.portal.get_tool('portal_catalog')
-                for object_uid in object_uids:
-                    results = catalog.unrestrictedSearchResults(UID=object_uid)
-                    if not results:
-                        logger.warning(
-                            u'Could not find object %s to unlock after '
-                            u'move_objects' % object_uid)
-                        continue
-                    for brain in results:
-                        obj = brain._unrestrictedGetObject()
-                        if obj is not None and ITTWLockable.providedBy(obj) and ILockable(obj).locked():
-                            ILockable(obj).unlock(MOVE_LOCK)
+            self._release_locks(object_uids)
+
+    def cleanup_after_failure(self, task):
+        """Release MOVE_LOCK once the task failed for good.
+
+        The worker aborted the transaction, which also rolled back the
+        release in the `finally` of `execute()`. While retries remain, the
+        lock is kept so the objects cannot be queued for another move.
+        """
+        args = self.get_arguments(task)
+        self._release_locks(args.get(u'object_uids') or [])
+
+    def _release_locks(self, object_uids):
+        if not object_uids:
+            return
+        catalog = api.portal.get_tool('portal_catalog')
+        for object_uid in object_uids:
+            results = catalog.unrestrictedSearchResults(UID=object_uid)
+            if not results:
+                logger.warning(
+                    u'Could not find object %s to unlock after '
+                    u'move_objects' % object_uid)
+                continue
+            for brain in results:
+                obj = brain._unrestrictedGetObject()
+                if obj is not None and ITTWLockable.providedBy(obj) and ILockable(obj).locked():
+                    ILockable(obj).unlock(MOVE_LOCK)
 
 
 register_task_type(TASK_TYPE, MoveObjectsTask)

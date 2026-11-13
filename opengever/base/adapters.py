@@ -1,5 +1,6 @@
 from Acquisition import aq_base
 from opengever.api.not_reported_exceptions import Forbidden as NotReportedForbidden
+from opengever.api.not_reported_exceptions import ResourceLockedError as NotReportedResourceLockedError
 from opengever.base import _
 from opengever.base.behaviors.translated_title import ITranslatedTitle
 from opengever.base.behaviors.utils import split_string_by_numbers
@@ -9,6 +10,7 @@ from opengever.base.interfaces import IReferenceNumberPrefix
 from opengever.base.interfaces import IReferenceNumberSettings
 from opengever.base.protect import unprotected_write
 from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.locking.utils import has_move_lock
 from opengever.repository.events import RepositoryPrefixUnlocked
 from persistent.dict import PersistentDict
 from plone import api
@@ -254,4 +256,7 @@ class DefaultMovabilityChecker(object):
             raise NotReportedForbidden(
                 _('move_object_disallowed',
                   default=u'You are not allowed to move this object'))
-        return
+        if has_move_lock(self.context):
+            raise NotReportedResourceLockedError(
+                _(u'msg_object_is_being_moved',
+                  default=u'This item is already being moved.'))

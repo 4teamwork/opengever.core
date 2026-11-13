@@ -182,7 +182,7 @@ class MoveItemsForm(form.Form):
                 except ResourceLockedError:
                     msg = _(
                         'label_not_movable_since_locked',
-                        default=u'Document ${name} is locked and '
+                        default=u'Item ${name} is locked and '
                                 u'therefore not movable.',
                         mapping=dict(name=obj.title))
                     IStatusMessage(self.request).addStatusMessage(msg, type='error')

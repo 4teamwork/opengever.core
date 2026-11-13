@@ -718,10 +718,10 @@ msgstr "Das Dokument «${name}» befindet sich in einem Antrag und ist nicht ver
 msgid "label_not_movable_since_inside_task"
 msgstr "Das Dokument «${name}» befindet sich in einer Aufgabe und ist nicht verschiebbar. Verschieben Sie die Aufgabe."
 
-#. Default: "Document ${name} is locked and therefore not movable."
+#. Default: "Item ${name} is locked and therefore not movable."
 #: ./opengever/dossier/move_items.py
 msgid "label_not_movable_since_locked"
-msgstr "Das Dokument «${name}» ist gesperrt und ist nicht verschiebbar."
+msgstr "Das Element «${name}» ist gesperrt und ist nicht verschiebbar."
 
 #. Default: "Object ${name} cannot be moved because you do not have the permissions."
 #: ./opengever/dossier/move_items.py

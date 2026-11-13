@@ -2,13 +2,16 @@ from AccessControl import Unauthorized
 from AccessControl.SecurityManagement import getSecurityManager
 from datetime import datetime
 from ftw.testbrowser import browsing
+from mock import patch
 from OFS.CopySupport import CopyError
 from OFS.CopySupport import ResourceLockedError
 from opengever.base.model import create_session
 from opengever.bgtasks.model import BackgroundTask
+from opengever.bgtasks.model import TASK_STATUS_FAILED
 from opengever.bgtasks.model import TASK_STATUS_PENDING
 from opengever.bgtasks.move import MoveObjectsTask
 from opengever.bgtasks.move import TASK_TYPE
+from opengever.bgtasks.worker import BackgroundTaskWorker
 from opengever.dossier.tests.test_move_items import MoveItemsHelper
 from opengever.locking.lock import MOVE_LOCK
 from opengever.ogds.base.interfaces import IAdminUnitConfiguration
@@ -16,6 +19,7 @@ from opengever.testing import IntegrationTestCase
 from plone import api
 from plone.locking.interfaces import ILockable
 import json
+import logging
 import transaction
 
 
@@ -326,4 +330,39 @@ class TestMoveObjectsTask(IntegrationTestCase):
         handler = MoveObjectsTask()
         handler.execute(task, self._no_op_commit_checkpoint)
 
+        self.assertFalse(ILockable(moving_obj).locked())
+
+    def _execute_with_unexpected_paste_error(self, moving_obj, retries):
+        clipboard = self.subdossier.manage_cutObjects(moving_obj.getId())
+        ILockable(moving_obj).lock(MOVE_LOCK)
+        task = self._make_task(
+            self.empty_dossier.UID(), clipboard, self.administrator.getId(),
+            object_uids=[moving_obj.UID()])
+        task.retries = retries
+        task_id = task.task_id
+
+        with patch('opengever.bgtasks.move.paste_clipboard',
+                   side_effect=RuntimeError('boom')):
+            worker = BackgroundTaskWorker(log=logging.getLogger('test'))
+            worker.execute_task(task)
+
+        # Commits are savepoints in integration tests: aborting discards
+        # whatever the worker did not commit.
+        transaction.abort()
+        return create_session().query(BackgroundTask).get(task_id)
+
+    def test_unexpected_paste_error_keeps_lock_while_retries_remain(self):
+        moving_obj = self.subdocument
+        task = self._execute_with_unexpected_paste_error(moving_obj, retries=0)
+
+        self.assertEqual(TASK_STATUS_PENDING, task.status)
+        self.assertEqual(1, task.retries)
+        self.assertTrue(ILockable(moving_obj).locked())
+
+    def test_unexpected_paste_error_releases_lock_when_retries_exhausted(self):
+        moving_obj = self.subdocument
+        task = self._execute_with_unexpected_paste_error(moving_obj, retries=3)
+
+        self.assertEqual(TASK_STATUS_FAILED, task.status)
+        self.assertEqual(4, task.retries)
         self.assertFalse(ILockable(moving_obj).locked())

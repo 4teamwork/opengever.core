@@ -493,6 +493,11 @@ msgstr "Aucun objet ne peut être ajouté; le presse-papier est vide."
 msgid "msg_no_items_available"
 msgstr "Il n'y a pas d'objets disponibles."
 
+#. Default: "This item is already being moved."
+#: ./opengever/base/adapters.py
+msgid "msg_object_is_being_moved"
+msgstr "Cet élément est déjà en cours de déplacement."
+
 #. Default: "Can't paste items, the context does not allow pasting items."
 #: ./opengever/base/browser/paste.py
 msgid "msg_pasting_not_allowed"
