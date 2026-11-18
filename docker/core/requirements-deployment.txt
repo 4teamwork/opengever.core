@@ -2,3 +2,4 @@ ftw.monitor==1.2.0
 ftw.raven==1.2.0
 ftw.slacker==1.1.0
 ftw.zopemaster==1.4.1
+zc.beforestorage==0.5.1
