@@ -135,13 +135,16 @@ class PropertySheetSchemaDefinition(object):
 
         return cls(name, SchemaClass, assignments=assignments, docprops=docprops)
 
-    def __init__(self, name, schema_class, assignments=None, docprops=[]):
+    def __init__(self, name, schema_class, assignments=None, docprops=[],
+                 read_group_mapping=None, write_group_mapping=None):
         self.name = name
         self.schema_class = schema_class
         if assignments is None:
             assignments = tuple()
         self.assignments = assignments
         self.docprops = docprops
+        self.read_group_mapping = read_group_mapping or {}
+        self.write_group_mapping = write_group_mapping or {}
 
         for field in self.get_fields():
             self._init_field(field[1])
@@ -208,7 +211,8 @@ class PropertySheetSchemaDefinition(object):
     def add_field(self, field_type, name, title, description, required,
                   values=None, default=None, default_factory=None,
                   default_expression=None, default_from_member=None,
-                  available_as_docproperty=False):
+                  available_as_docproperty=False, read_group=None,
+                  write_group=None):
         if field_type not in self.FACTORIES:
             raise InvalidFieldType("Field type '{}' is invalid.".format(field_type))
 
@@ -347,6 +351,11 @@ class PropertySheetSchemaDefinition(object):
             # takes care of this for us.
             attach_member_property_default_factory(field, default_from_member)
 
+        if read_group is not None:
+            self.read_group_mapping[name] = read_group
+        if write_group is not None:
+            self.write_group_mapping[name] = write_group
+
         schema = IEditableSchema(self.schema_class)
         schema.addField(field)
         self._init_field(field)
@@ -415,6 +424,10 @@ class PropertySheetSchemaDefinition(object):
         definition_data['schema'] = serialized_schema
         definition_data['assignments'] = PersistentList(self.assignments)
         definition_data['docprops'] = PersistentList(self.docprops)
+        definition_data['read_group_mapping'] = PersistentMapping(
+            self.read_group_mapping)
+        definition_data['write_group_mapping'] = PersistentMapping(
+            self.write_group_mapping)
         storage[self.name] = definition_data
 
     @classmethod
@@ -423,7 +436,16 @@ class PropertySheetSchemaDefinition(object):
         serialized_schema = definition_data['schema']
         assignments = definition_data['assignments']
         docprops = definition_data.get('docprops', [])
+        read_group_mapping = definition_data.get('read_group_mapping', {})
+        write_group_mapping = definition_data.get('write_group_mapping', {})
         model = loadString(serialized_schema, policy=u'propertysheets')
         schema_class = model.schemata[name]
 
-        return cls(name, schema_class, assignments=assignments, docprops=docprops)
+        return cls(
+            name,
+            schema_class,
+            assignments=assignments,
+            docprops=docprops,
+            read_group_mapping=read_group_mapping,
+            write_group_mapping=write_group_mapping,
+        )
