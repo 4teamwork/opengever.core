@@ -16,6 +16,9 @@ variable "OGTESTSERVER_IMAGE" {
 variable "OGSOLR_IMAGE" {
   default = "docker.io/4teamwork/ogsolr"
 }
+variable "OGHTTPD_IMAGE" {
+  default = "docker.io/4teamwork/oghttpd"
+}
 variable "GIT_TAG" {
   default = ""
 }
@@ -32,6 +35,12 @@ variable "OGSOLR_VERSION" {
   default = "9.10.1"
 }
 variable "OGSOLR_VERSION_SUFFIX" {
+  default = ""
+}
+variable "OGHTTPD_VERSION" {
+  default = "2.4.71"
+}
+variable "OGHTTPD_VERSION_SUFFIX" {
   default = ""
 }
 
@@ -94,6 +103,21 @@ target "ogsolr" {
   context = "."
   tags = [
     "${OGSOLR_IMAGE}:${OGSOLR_VERSION}${OGSOLR_VERSION_SUFFIX}",
+  ]
+  platforms = [
+    "linux/amd64",
+    "linux/arm64",
+  ]
+}
+
+target "oghttpd" {
+  args = {
+    HTTPD_VERSION = "${OGHTTPD_VERSION}",
+  }
+  dockerfile = "./docker/httpd/Dockerfile"
+  context = "."
+  tags = [
+    "${OGHTTPD_IMAGE}:${OGHTTPD_VERSION}${OGHTTPD_VERSION_SUFFIX}",
   ]
   platforms = [
     "linux/amd64",
