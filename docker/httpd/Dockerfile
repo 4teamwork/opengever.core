@@ -1,4 +1,6 @@
-FROM httpd:2.4-alpine
+ARG HTTPD_VERSION=2.4.71
+
+FROM httpd:${HTTPD_VERSION}-alpine
 
 RUN apk add --no-cache esh curl
 
