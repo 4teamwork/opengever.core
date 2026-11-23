@@ -19,6 +19,9 @@ variable "OGSOLR_IMAGE" {
 variable "OGHTTPD_IMAGE" {
   default = "docker.io/4teamwork/oghttpd"
 }
+variable "OGMTA_IMAGE" {
+  default = "docker.io/4teamwork/ogmta"
+}
 variable "GIT_TAG" {
   default = ""
 }
@@ -42,6 +45,9 @@ variable "OGHTTPD_VERSION" {
 }
 variable "OGHTTPD_VERSION_SUFFIX" {
   default = ""
+}
+variable "OGMTA_VERSION" {
+  default = "2026.1.0"
 }
 
 group "default" {
@@ -118,6 +124,18 @@ target "oghttpd" {
   context = "."
   tags = [
     "${OGHTTPD_IMAGE}:${OGHTTPD_VERSION}${OGHTTPD_VERSION_SUFFIX}",
+  ]
+  platforms = [
+    "linux/amd64",
+    "linux/arm64",
+  ]
+}
+
+target "ogmta" {
+  dockerfile = "./docker/mta/Dockerfile"
+  context = "."
+  tags = [
+    "${OGMTA_IMAGE}:${OGMTA_VERSION}",
   ]
   platforms = [
     "linux/amd64",

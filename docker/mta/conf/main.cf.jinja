@@ -9,7 +9,7 @@
 # For common configuration examples, see BASIC_CONFIGURATION_README
 # and STANDARD_CONFIGURATION_README. To find these documents, use
 # the command "postconf html_directory readme_directory", or go to
-# http://www.postfix.org/BASIC_CONFIGURATION_README.html etc.
+# https://www.postfix.org/BASIC_CONFIGURATION_README.html etc.
 #
 # For best results, change no more than 2-3 parameters at a time,
 # and test if Postfix still works after every change.
@@ -31,7 +31,7 @@
 #
 # The level below is what should be used with new (not upgrade) installs.
 #
-compatibility_level = 3.9
+compatibility_level = 3.11
 
 # SOFT BOUNCE
 #
@@ -146,7 +146,6 @@ myorigin = {{ config.myorigin }}
 inet_interfaces = {{ config.inet_interfaces }}
 {% endif %}
 
-
 # The proxy_interfaces parameter specifies the network interface
 # addresses that this mail system receives mail on by way of a
 # proxy or network address translation unit. This setting extends
@@ -193,7 +192,7 @@ inet_interfaces = {{ config.inet_interfaces }}
 #mydestination = $myhostname, localhost.$mydomain, localhost
 #mydestination = $myhostname, localhost.$mydomain, localhost, $mydomain
 #mydestination = $myhostname, localhost.$mydomain, localhost, $mydomain,
-#	mail.$mydomain, www.$mydomain, ftp.$mydomain
+#       mail.$mydomain, www.$mydomain, ftp.$mydomain
 
 # REJECTING MAIL FOR UNKNOWN LOCAL USERS
 #
@@ -640,17 +639,17 @@ debug_peer_level = 2
 # set up your XAUTHORITY environment variable before starting Postfix.
 #
 debugger_command =
-	 PATH=/bin:/usr/bin:/usr/local/bin:/usr/X11R6/bin
-	 ddd $daemon_directory/$process_name $process_id & sleep 5
+         PATH=/bin:/usr/bin:/usr/local/bin:/usr/X11R6/bin
+         ddd $daemon_directory/$process_name $process_id & sleep 5
 
 # If you can't use X, use this to capture the call stack when a
 # daemon crashes. The result is in a file in the configuration
 # directory, and is named after the process name and the process ID.
 #
 # debugger_command =
-#	PATH=/bin:/usr/bin:/usr/local/bin; export PATH; (echo cont;
-#	echo where) | gdb $daemon_directory/$process_name $process_id 2>&1
-#	>$config_directory/$process_name.$process_id.log & sleep 5
+#       PATH=/bin:/usr/bin:/usr/local/bin; export PATH; (echo cont;
+#       echo where) | gdb $daemon_directory/$process_name $process_id 2>&1
+#       >$config_directory/$process_name.$process_id.log & sleep 5
 #
 # Another possibility is to run gdb under a detached screen session.
 # To attach to the screen session, su root and run "screen -r
@@ -658,9 +657,9 @@ debugger_command =
 # sessions (from "screen -list").
 #
 # debugger_command =
-#	PATH=/bin:/usr/bin:/sbin:/usr/sbin; export PATH; screen
-#	-dmS $process_name gdb $daemon_directory/$process_name
-#	$process_id & sleep 1
+#       PATH=/bin:/usr/bin:/sbin:/usr/sbin; export PATH; screen
+#       -dmS $process_name gdb $daemon_directory/$process_name
+#       $process_id & sleep 1
 
 # INSTALL-TIME CONFIGURATION INFORMATION
 #
@@ -703,9 +702,16 @@ sample_directory = /etc/postfix
 # readme_directory: The location of the Postfix README files.
 #
 readme_directory = /usr/share/doc/postfix/readme
-inet_protocols = {{ config.inet_protocols }}
-meta_directory = /etc/postfix
+
+# shlib_directory: The location of the Postfix *.so library files and
+# database plugins.
 shlib_directory = /usr/lib/postfix
+
+# meta_directory: The location of non-executable files that are shared
+# between multiple Postfix instances.
+meta_directory = /etc/postfix
+
+inet_protocols = {{ config.inet_protocols }}
 
 maillog_file = /dev/stdout
 
