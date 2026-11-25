@@ -32,6 +32,10 @@ class DocumentMovabiliyChecker(DefaultMovabilityChecker):
             raise NotReportedForbidden(
                 _(u'msg_doc_inside_closed_dossier',
                   default=u'Documents inside a closed dossier cannot be moved.'))
+        if self.context.is_checked_out():
+            raise NotReportedForbidden(
+                _(u'msg_checked_out_doc_cant_be_moved',
+                  default=u'Checked out documents cannot be moved.'))
         if ILockable(self.context).locked():
             raise NotReportedResourceLockedError(
                 _('msg_locked_doc_cant_be_moved',

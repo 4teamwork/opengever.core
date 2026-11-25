@@ -634,6 +634,23 @@ class TestMove(IntegrationTestCase):
                          browser.json['translated_message'])
 
     @browsing
+    def test_checked_out_document_is_rejected_before_queuing(self, browser):
+        self.activate_feature('bgtasks')
+        self.login(self.regular_user, browser)
+        self.checkout_document(self.document)
+        with browser.expect_http_error(code=403):
+            self.move(browser, self.empty_dossier,
+                      [self.document.absolute_url(),
+                       self.subdocument.absolute_url()])
+
+        fields = browser.json['additional_metadata']['fields']
+        self.assertEqual([self.document.absolute_url()],
+                         [f['field'] for f in fields])
+        self.assertEqual([u'Checked out documents cannot be moved.'],
+                         [f['translated_message'] for f in fields])
+        self.assert_nothing_locked_or_queued(self.subdocument)
+
+    @browsing
     def test_single_resolved_source_returns_plain_error(self, browser):
         self.login(self.regular_user, browser)
         ILockable(self.document).lock()

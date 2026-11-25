@@ -743,6 +743,11 @@ msgstr "Das Dokument wurde finalisiert und kann deshalb nicht mehr bearbeitet we
 msgid "msg_cancel_checkout_on_mail_not_possible"
 msgstr "Das Dokument `${title}` konnte nicht ausgecheckt werden, da Mails den Check-in-/Check-out-Prozess nicht unterstützen."
 
+#. Default: "Checked out documents cannot be moved."
+#: ./opengever/document/move.py
+msgid "msg_checked_out_doc_cant_be_moved"
+msgstr "Ausgecheckte Dokumente können nicht verschoben werden."
+
 #. Default: "Documents inside a closed dossier cannot be moved."
 #: ./opengever/document/move.py
 msgid "msg_doc_inside_closed_dossier"
