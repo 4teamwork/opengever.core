@@ -651,6 +651,17 @@ class TestMove(IntegrationTestCase):
         self.assert_nothing_locked_or_queued(self.subdocument)
 
     @browsing
+    def test_checked_out_and_locked_document_reports_lock(self, browser):
+        self.login(self.regular_user, browser)
+        self.checkout_document(self.document)
+        ILockable(self.document).lock()
+        with browser.expect_http_error(code=423):
+            self.move(browser, self.empty_dossier, self.document.absolute_url())
+
+        self.assertEqual(u'Locked documents cannot be moved.',
+                         browser.json['translated_message'])
+
+    @browsing
     def test_single_resolved_source_returns_plain_error(self, browser):
         self.login(self.regular_user, browser)
         ILockable(self.document).lock()
