@@ -740,6 +740,11 @@ msgstr "Ce document ne peut pas être modifié car il a été finalisé."
 msgid "msg_cancel_checkout_on_mail_not_possible"
 msgstr "Le document `${title}` n'a pas pu être verrouillé, car les e-mails ne sont pas supportés par le processus de check-in / check-out."
 
+#. Default: "Checked out documents cannot be moved."
+#: ./opengever/document/move.py
+msgid "msg_checked_out_doc_cant_be_moved"
+msgstr "Les documents en checkout ne peuvent pas être déplacés."
+
 #. Default: "Documents inside a closed dossier cannot be moved."
 #: ./opengever/document/move.py
 msgid "msg_doc_inside_closed_dossier"
