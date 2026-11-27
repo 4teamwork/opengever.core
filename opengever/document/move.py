@@ -36,6 +36,10 @@ class DocumentMovabiliyChecker(DefaultMovabilityChecker):
             raise NotReportedResourceLockedError(
                 _('msg_locked_doc_cant_be_moved',
                   default=u'Locked documents cannot be moved.'))
+        if self.context.is_checked_out():
+            raise NotReportedForbidden(
+                _(u'msg_checked_out_doc_cant_be_moved',
+                  default=u'Checked out documents cannot be moved.'))
 
         if is_within_repository(self.context):
             if is_within_templates(target):

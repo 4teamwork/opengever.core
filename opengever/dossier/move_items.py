@@ -172,6 +172,10 @@ class MoveItemsForm(form.Form):
                             default=u'Document ${name} is in a dossier template '
                             'and hence cannot be made into a template document.',
                             mapping=dict(name=obj.title))
+                    elif exc.message == u'msg_checked_out_doc_cant_be_moved':
+                        # Reported like the paste error it replaces.
+                        failed_objects.append(obj.title)
+                        continue
                     else:
                         raise Exception(
                             'Failed to determine the reason for unmovable object. '

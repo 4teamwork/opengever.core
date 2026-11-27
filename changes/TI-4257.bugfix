@@ -1,1 +1,1 @@
-Release the move lock when a background move task aborts on an unexpected error, and reject moving items that are already being moved. [TI-4257]
+Release the move lock when a background move task aborts on an unexpected error, reject moving items that are already being moved, and reject moving checked-out documents before the move is queued. [TI-4257]

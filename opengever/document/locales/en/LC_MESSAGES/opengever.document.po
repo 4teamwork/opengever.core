@@ -876,6 +876,11 @@ msgstr "This document cannot be modified because it has been finalized."
 msgid "msg_cancel_checkout_on_mail_not_possible"
 msgstr "Could not cancel checkout for document ${title}, emails do not support the checkout process."
 
+#. Default: "Checked out documents cannot be moved."
+#: ./opengever/document/move.py
+msgid "msg_checked_out_doc_cant_be_moved"
+msgstr "Checked out documents cannot be moved."
+
 #. Default: "Documents inside a closed dossier cannot be moved."
 #: ./opengever/document/move.py
 msgid "msg_doc_inside_closed_dossier"
