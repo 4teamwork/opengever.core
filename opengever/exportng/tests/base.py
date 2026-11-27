@@ -19,7 +19,7 @@ class SyncerTestMixin(object):
     Combine with `IntegrationTestCase` and implement the hooks below:
 
     - `syncer_class_name`: name of the syncer class in `opengever.exportng.catalog`.
-    - `expected_rows()`: `{objexternalkey: {column: value}}` for every object
+    - `expected_rows()`: `{row_key: {column: value}}` for every row
       that has to be exported. Contains all mapped columns, without the
       system columns (`_modified_at`, `_deleted`, ...).
     - `object_to_modify()` / `modify(obj)`: modify an exported object so that
@@ -67,6 +67,14 @@ class SyncerTestMixin(object):
 
     # Helpers
 
+    def row_key(self, row):
+        """Key of a row in `expected_rows()` and `fetch_rows()`."""
+        return row['objexternalkey']
+
+    def keys_of(self, obj):
+        """Keys of all rows exported for `obj`."""
+        return [obj.UID()]
+
     def new_syncer(self):
         from opengever.exportng import catalog
         return getattr(catalog, self.syncer_class_name)()
@@ -83,7 +91,7 @@ class SyncerTestMixin(object):
         from opengever.exportng.db import engine
         table = self.metadata.tables[self.new_syncer().table]
         with engine.connect() as conn:
-            return {row.objexternalkey: dict(row.items())
+            return {self.row_key(dict(row.items())): dict(row.items())
                     for row in conn.execute(table.select()).fetchall()}
 
     def data_of(self, row):
@@ -129,20 +137,21 @@ class SyncerTestMixin(object):
         before = self.fetch_rows()
 
         obj = self.object_to_modify()
-        key = obj.UID()
+        keys = self.keys_of(obj)
         with freeze(MODIFIED):
             self.modify(obj)
         self.sync(SYNC_2)
 
         after = self.fetch_rows()
         self.assertItemsEqual(before.keys(), after.keys())
-        for other in set(before) - set([key]):
+        for other in set(before) - set(keys):
             self.assertEqual(before[other], after[other], other)
 
-        expected = dict(self.data_of(before[key]), **self.modified_columns)
-        self.assertEqual(expected, self.data_of(after[key]))
-        self.assertGreater(after[key]['_modified_at'], before[key]['_modified_at'])
-        self.assertFalse(after[key]['_deleted'])
+        for key in keys:
+            expected = dict(self.data_of(before[key]), **self.modified_columns)
+            self.assertEqual(expected, self.data_of(after[key]))
+            self.assertGreater(after[key]['_modified_at'], before[key]['_modified_at'])
+            self.assertFalse(after[key]['_deleted'])
 
         # The modification is not exported again
         self.sync(SYNC_3)
@@ -153,16 +162,17 @@ class SyncerTestMixin(object):
         before = self.fetch_rows()
 
         obj = self.object_to_delete()
-        key = obj.UID()
+        keys = self.keys_of(obj)
         self.delete(obj)
         self.sync(SYNC_2)
 
         after = self.fetch_rows()
         # Rows are kept, only flagged
         self.assertItemsEqual(before.keys(), after.keys())
-        self.assertTrue(after[key]['_deleted'])
-        self.assertEqual(self.data_of(before[key]), self.data_of(after[key]))
-        for other in set(before) - set([key]):
+        for key in keys:
+            self.assertTrue(after[key]['_deleted'])
+            self.assertEqual(self.data_of(before[key]), self.data_of(after[key]))
+        for other in set(before) - set(keys):
             self.assertEqual(before[other], after[other], other)
 
         # Consecutive syncs keep it deleted
