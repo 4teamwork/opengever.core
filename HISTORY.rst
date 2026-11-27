@@ -10,6 +10,22 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2026.6.1 (2026-11-27)
+---------------------
+
+New features:
+
+
+- Add background_tasks feature flag to @config, fix @move status handling and validate all move sources before locking or queuing. [TI-4257] [TI-4257]
+- Make the group attribute (title or id) used by the white-/black-list prefix filter in the sharing view configurable. [TI-4272]
+
+
+Bug fixes:
+
+
+- Release the move lock when a background move task aborts on an unexpected error, reject moving items that are already being moved, and reject moving checked-out documents before the move is queued. [TI-4257] [TI-4257]
+
+
 2026.6.0 (2026-11-05)
 ---------------------
 
