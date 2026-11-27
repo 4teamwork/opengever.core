@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
 from mock import patch
-from opengever.exportng import catalog
 from opengever.exportng.tests.base import SyncerTestMixin
 from opengever.testing import IntegrationTestCase
 import shutil
@@ -74,6 +73,7 @@ class TestTaskSyncer(SyncerTestMixin, IntegrationTestCase):
         # required field in real data.
         self.meeting_subtask.task_type = 'correction'
         # The serializer remembers dossiers with tasks in a module global.
+        from opengever.exportng import catalog
         catalog.tasks_by_dossier.clear()
         self.data_dir = tempfile.mkdtemp()
         self.addCleanup(shutil.rmtree, self.data_dir)
