@@ -490,6 +490,9 @@ class OpengeverSharingView(SharingView):
 
         registry = getUtility(IRegistry)
         sharing_config = registry.forInterface(ISharingConfiguration)
+        black_list = re.compile(sharing_config.black_list_prefix)
+        white_list = re.compile(sharing_config.white_list_prefix)
+        filter_attribute = sharing_config.group_filter_attribute
 
         results = []
         for principal in all_principals:
@@ -499,11 +502,10 @@ class OpengeverSharingView(SharingView):
                     results.append(principal)
 
             # groups
-            elif re.search(sharing_config.black_list_prefix, principal.get('title')):
-                if re.search(sharing_config.white_list_prefix, principal.get('title')):
-                    results.append(principal)
             else:
-                results.append(principal)
+                value = principal.get(filter_attribute)
+                if not black_list.search(value) or white_list.search(value):
+                    results.append(principal)
         return results
 
     def groupmembers_url(self, groupid):

@@ -551,6 +551,37 @@ class TestOpengeverSharing(IntegrationTestCase):
         self.assertIn('11111111-4368-1040-8650-4d25b64301d5', ids)
 
     @browsing
+    def test_group_filter_matches_on_groupid_if_configured(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        create(Builder('ogds_group')
+               .having(groupid='ACL-SVC-GEVER-Testgruppe',
+                       groupname='ACL-SVC-GEVER-Testgruppe',
+                       title='Testgruppe Administratoren'))
+        create(Builder('ogds_group')
+               .having(groupid='Andere-Testgruppe',
+                       groupname='Andere-Testgruppe',
+                       title='ACL-SVC-GEVER Testgruppe'))
+
+        ogds_service().session.flush()
+
+        api.portal.set_registry_record(
+            name='black_list_prefix', value=u'^.', interface=ISharingConfiguration)
+        api.portal.set_registry_record(
+            name='white_list_prefix', value=u'^ACL-SVC-GEVER', interface=ISharingConfiguration)
+        api.portal.set_registry_record(
+            name='group_filter_attribute', value=u'id', interface=ISharingConfiguration)
+
+        query = {'search': 'Testgruppe'}
+        browser.open(self.empty_dossier,
+                     view='@sharing?{}'.format(urlencode(query)),
+                     method='Get', headers={'Accept': 'application/json'})
+
+        ids = [item.get('id') for item in browser.json['items']]
+        self.assertIn('ACL-SVC-GEVER-Testgruppe', ids)
+        self.assertNotIn('Andere-Testgruppe', ids)
+
+    @browsing
     def test_sharing_view_handles_inactive_group(self, browser):
         self.login(self.administrator, browser=browser)
 

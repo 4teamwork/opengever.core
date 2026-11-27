@@ -1,0 +1,4 @@
+<registry>
+  <records interface="opengever.sharing.interfaces.ISharingConfiguration"
+           only="group_filter_attribute" />
+</registry>
