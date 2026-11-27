@@ -24,6 +24,7 @@ from plone import api
 from plone.dexterity.utils import iterSchemata
 from Products.CMFEditions.utilities import dereference
 from six.moves import range
+from sqlalchemy import and_
 from sqlalchemy import bindparam
 from sqlalchemy.sql.expression import false
 from zope.schema import getFields
@@ -188,6 +189,8 @@ class CatalogSyncer(object):
 
     catalog_key = 'UID'
     sql_key = 'objexternalkey'
+    # Second column identifying a row, for serializers with `has_many`.
+    sql_secondary_key = None
     additional_tables = []
 
     def __init__(self, query=None):
@@ -296,7 +299,15 @@ class CatalogSyncer(object):
         for key in modified:
             item = self.catalog_items[key]
             serializer = self.serializer(item)
-            updates.append(rename_dict_key(serializer.data(), self.sql_key, 'b_key'))
+            if serializer.has_many:
+                rows = serializer.data()
+            else:
+                rows = [serializer.data()]
+            for row in rows:
+                rename_dict_key(row, self.sql_key, 'b_key')
+                if self.sql_secondary_key:
+                    row['b_secondary_key'] = row[self.sql_secondary_key]
+                updates.append(row)
             counter += 1
             if counter % 100 == 0:
                 logger.info(
@@ -309,7 +320,12 @@ class CatalogSyncer(object):
         if updates:
             table = metadata.tables[self.table]
             with engine.connect() as conn:
-                conn.execute(table.update().where(getattr(table.c, self.sql_key) == bindparam('b_key')), updates)
+                condition = getattr(table.c, self.sql_key) == bindparam('b_key')
+                if self.sql_secondary_key:
+                    condition = and_(
+                        condition,
+                        getattr(table.c, self.sql_secondary_key) == bindparam('b_secondary_key'))
+                conn.execute(table.update().where(condition), updates)
         logger.info('Updated %s: %s', self.table, len(modified))
 
     def delete_objects(self, deleted):
@@ -775,7 +791,7 @@ class TaskSerializer(CatalogItemSerializer):
             else None
         )
         activity = {
-            'objexternalkey': self.uid,
+            'objexternalkey': self.obj.UID(),
             'objname': self.obj.Title(),
             'actinstdefinition': self.taks_type_mapping[self.obj.task_type],
             'objcreatedby': self.creator(),
@@ -891,6 +907,7 @@ class TaskSyncer(CatalogSyncer):
         'portal_type': 'opengever.task.task',
     }
     serializer = TaskSerializer
+    sql_secondary_key = 'objectid'
 
     def add_objects(self, added):
         self.serializer.base_path = get_data_dir('tasks')

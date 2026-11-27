@@ -6,7 +6,6 @@ from opengever.exportng.tests.base import SyncerTestMixin
 from opengever.testing import IntegrationTestCase
 import shutil
 import tempfile
-import unittest
 
 
 RESPONSIBLE = u'robert.ziegler@gever.local'
@@ -66,7 +65,7 @@ class TestTaskSyncer(SyncerTestMixin, IntegrationTestCase):
         'procinstactivities': [activity(
             u'createtasks000000000000000000012', u'Foo Bar', u'2016-08-31T18:23:33',
             actinstdefinition=TYPE_INFORMATION,
-            actinstenddeadline=None)],
+            actinstenddeadline=u'2016-09-07T23:59:59.999999')],
     }
 
     def setUp(self):
@@ -209,11 +208,3 @@ class TestTaskSyncer(SyncerTestMixin, IntegrationTestCase):
 
     def object_to_delete(self):
         return self.inactive_task
-
-    @unittest.expectedFailure
-    def test_consecutive_sync_updates_only_modified_objects(self):
-        # Known bug: `TaskSyncer.update_objects` does not work. The
-        # serializer's `data()` returns a list (one row per document) and
-        # `activities()` relies on state set in `ignore()`, which is only
-        # called when adding objects.
-        super(TestTaskSyncer, self).test_consecutive_sync_updates_only_modified_objects()
