@@ -40,6 +40,13 @@ class ISharingConfiguration(Interface):
         "displayed in the sharing view. For example another client group.",
         default=u"^$")
 
+    group_filter_attribute = schema.Choice(
+        title=u'group filter attribute',
+        description=u'The group attribute the white and black list prefix '
+        'patterns are matched against in the sharing view.',
+        values=[u'title', u'id'],
+        default=u'title')
+
 
 class IDisabledPermissionCheck(Interface):
     """Marker interface for disabled permisison check when fetching
